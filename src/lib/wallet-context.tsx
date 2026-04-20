@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
 import { Contract } from 'ethers'
 import { useAccount } from 'wagmi'

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 export const LandingPage = () => {
   const [isClient, setIsClient] = useState(false)
@@ -62,6 +63,16 @@ export const LandingPage = () => {
                 <div className="text-xs text-cyan-400 font-medium hidden sm:block">Self-Sovereign Wallet</div>
               </div>
             </div>
+            <div className="min-w-fit">
+              {isClient && (
+                <ConnectButton
+                  showBalance={{ smallScreen: false, largeScreen: true }}
+                  chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
+                  accountStatus="avatar"
+                  label="Connect"
+                />
+              )}
+            </div>
           </div>
         </header>
 
@@ -94,8 +105,12 @@ export const LandingPage = () => {
             <div className="pt-6 sm:pt-8 flex gap-3 sm:gap-4 flex-col sm:flex-row justify-center">
               {isClient && (
                 <>
-                  {/* @ts-expect-error w3m-connect-button is a web component */}
-                  <w3m-connect-button />
+                  <ConnectButton
+                    showBalance={{ smallScreen: false, largeScreen: true }}
+                    chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
+                    accountStatus="avatar"
+                    label="Connect Wallet"
+                  />
                   <button type="button" className="px-6 sm:px-10 py-3 sm:py-4 rounded-lg sm:rounded-xl border-2 border-cyan-500/50 hover:border-cyan-400 text-white font-bold text-sm sm:text-base transition-all duration-300 bg-cyan-500/5 hover:bg-cyan-500/10 backdrop-blur-sm hover:shadow-lg cursor-pointer w-full sm:w-auto">
                     📖 View Docs
                   </button>

@@ -40,7 +40,7 @@ export default function Home() {
       <div className="relative z-10">
         {/* Header */}
         <header className="sticky top-0 z-40 border-b border-white/5 bg-slate-950/80 backdrop-blur-xl">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="max-w-full mx-auto px-3 sm:px-4 py-3 sm:py-4">
             <div className="flex items-center justify-between gap-2 sm:gap-4">
               <MyWalletLogo size="sm" variant="icon" />
               <WalletConnect />
