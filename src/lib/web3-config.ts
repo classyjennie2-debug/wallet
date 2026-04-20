@@ -1,8 +1,15 @@
 import { http, createConfig } from 'wagmi'
+import { injected, walletConnect } from 'wagmi/connectors'
 import { mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia } from 'wagmi/chains'
+
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || 'default-project-id'
 
 export const wagmiConfig = createConfig({
   chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
+  connectors: [
+    injected(),
+    walletConnect({ projectId }),
+  ],
   transports: {
     [mainnet.id]: http(),
     [polygon.id]: http(),
