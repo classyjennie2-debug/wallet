@@ -1,27 +1,13 @@
 'use client'
 
-import { useWeb3Modal } from '@web3modal/react'
 import { useState, useEffect } from 'react'
 
 export const LandingPage = () => {
-  const { open } = useWeb3Modal()
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
   }, [])
-
-  const handleConnectWallet = () => {
-    try {
-      if (open) {
-        open({ view: 'Connect' })
-      } else {
-        console.warn('Web3Modal open function is not available')
-      }
-    } catch (error) {
-      console.error('Error opening Web3Modal:', error)
-    }
-  }
 
   const wallets = [
     { name: 'MetaMask', symbol: '🦊', gradient: 'from-orange-500 to-yellow-500' },
@@ -106,17 +92,15 @@ export const LandingPage = () => {
 
             {/* CTA Buttons */}
             <div className="pt-6 sm:pt-8 flex gap-3 sm:gap-4 flex-col sm:flex-row justify-center">
-              <button
-                type="button"
-                onClick={handleConnectWallet}
-                disabled={!isClient}
-                className="px-6 sm:px-10 py-3 sm:py-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
-              >
-                🔌 Connect Wallet
-              </button>
-              <button type="button" className="px-6 sm:px-10 py-3 sm:py-4 rounded-lg sm:rounded-xl border-2 border-cyan-500/50 hover:border-cyan-400 text-white font-bold text-sm sm:text-base transition-all duration-300 bg-cyan-500/5 hover:bg-cyan-500/10 backdrop-blur-sm hover:shadow-lg cursor-pointer w-full sm:w-auto">
-                📖 View Docs
-              </button>
+              {isClient && (
+                <>
+                  {/* @ts-expect-error w3m-connect-button is a web component */}
+                  <w3m-connect-button />
+                  <button type="button" className="px-6 sm:px-10 py-3 sm:py-4 rounded-lg sm:rounded-xl border-2 border-cyan-500/50 hover:border-cyan-400 text-white font-bold text-sm sm:text-base transition-all duration-300 bg-cyan-500/5 hover:bg-cyan-500/10 backdrop-blur-sm hover:shadow-lg cursor-pointer w-full sm:w-auto">
+                    📖 View Docs
+                  </button>
+                </>
+              )}
             </div>
           </div>
 
@@ -297,14 +281,12 @@ export const LandingPage = () => {
               <h2 className="text-4xl md:text-5xl font-black text-white">Ready to Take Control?</h2>
               <p className="text-gray-300 text-lg">Connect your wallet and start managing your crypto portfolio securely today.</p>
               <div className="pt-4">
-                <button
-                  type="button"
-                  onClick={handleConnectWallet}
-                  disabled={!isClient}
-                  className="inline-block px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  🚀 Connect Wallet Now
-                </button>
+                {isClient && (
+                  <>
+                    {/* @ts-expect-error w3m-connect-button is a web component */}
+                    <w3m-connect-button />
+                  </>
+                )}
               </div>
             </div>
           </div>
