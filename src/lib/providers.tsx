@@ -5,7 +5,7 @@ import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, Theme, lightTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
-import { wagmiConfig } from './web3-config'
+import { createSSRConfig, createClientConfig } from './web3-config'
 import { WalletProvider } from './wallet-context'
 import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
@@ -36,9 +36,16 @@ function getQueryClient() {
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => getQueryClient())
   const [isClient, setIsClient] = useState(false)
+  const [config, setConfig] = useState(() => {
+    // Use SSR config for initial render
+    return createSSRConfig() as any
+  })
 
   useEffect(() => {
     setIsClient(true)
+    // Switch to full config with WalletConnect on client-side
+    const clientConfig = createClientConfig()
+    setConfig(clientConfig as any)
   }, [])
 
   const content = (
@@ -61,7 +68,7 @@ export function Providers({ children }: { children: ReactNode }) {
   }) as unknown as Theme
 
   return (
-    <WagmiProvider config={wagmiConfig}>
+    <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         {isClient ? (
           <RainbowKitProvider theme={customTheme}>
