@@ -57,15 +57,19 @@ export default function Home() {
         <header className="sticky top-0 z-40 border-b border-purple-900/50 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
           <div className="max-w-full mx-auto px-3 sm:px-4 py-2 sm:py-4">
             <div className="flex items-center justify-between gap-2 sm:gap-4">
-              <div className="flex items-center gap-2">
-                <div className="relative w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center shadow-lg border border-purple-400/30">
-                  <span className="text-lg font-bold text-white">💎</span>
-                </div>
-                <MyWalletLogo size="sm" />
-              </div>
-              <div className="flex-1 sm:flex-none">
-                <WalletConnect />
-              </div>
+                  <div className="flex items-center gap-2">
+                    <div className="block md:hidden">
+                      <MyWalletLogo size="sm" variant="icon" />
+                    </div>
+                    <div className="hidden md:block">
+                      <MyWalletLogo size="md" variant="full" />
+                    </div>
+                  </div>
+                  <div className="flex-1 sm:flex-none flex justify-end">
+                    <div className="w-full sm:w-auto">
+                      <WalletConnect />
+                    </div>
+                  </div>
             </div>
           </div>
         </header>
