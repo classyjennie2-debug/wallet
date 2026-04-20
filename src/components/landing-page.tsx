@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { MobileWalletHelper } from './mobile-wallet-helper'
 
 export const LandingPage = () => {
   const [isClient, setIsClient] = useState(false)
@@ -360,6 +361,9 @@ export const LandingPage = () => {
             </div>
           </div>
         </footer>
+
+        {/* Mobile Wallet Detection Helper */}
+        <MobileWalletHelper />
       </div>
     </div>
   )

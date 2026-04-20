@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
+import { MobileWalletHelper } from '@/components/mobile-wallet-helper'
 import { DashboardV2 } from '@/components/dashboard-v2'
 import { DeadCoinDetector } from '@/components/dead-coin-detector'
 import { TokenSwap } from '@/components/token-swap'
@@ -209,6 +210,9 @@ export default function Home() {
             </p>
           </div>
         </footer>
+
+        {/* Mobile Wallet Detection Helper */}
+        <MobileWalletHelper />
       </div>
     </main>
   )

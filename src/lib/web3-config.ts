@@ -1,5 +1,5 @@
 import { http, createConfig } from 'wagmi'
-import { injected, walletConnect } from 'wagmi/connectors'
+import { injected, walletConnect, coinbaseWallet } from 'wagmi/connectors'
 import { mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia } from 'wagmi/chains'
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || 'default-project-id'
@@ -8,7 +8,8 @@ export const wagmiConfig = createConfig({
   chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
   connectors: [
     injected({
-      shimDisconnect: true,
+      shimDisconnect: false,
+      target: 'metaMask',
     }),
     walletConnect({
       projectId,
@@ -16,6 +17,11 @@ export const wagmiConfig = createConfig({
       qrModalOptions: {
         themeMode: 'dark',
       },
+    }),
+    coinbaseWallet({
+      appName: 'MyWallet.Help',
+      appLogoUrl: 'https://mywallet.help/logo.png',
+      darkMode: true,
     }),
   ],
   transports: {

@@ -23,6 +23,13 @@
   }
 }
 
+html, body {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -31,20 +38,6 @@ body {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overscroll-behavior-y: contain;
-}
-
-html {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-}
-
-body {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
   -webkit-user-select: none;
   user-select: none;
 }
