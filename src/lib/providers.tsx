@@ -20,6 +20,7 @@ createWeb3Modal({
   enableAnalytics: false,
   enableOnramp: false,
   themeMode: 'dark' as const,
+  featuredWalletIds: [], // Disable wallet list API call
 })
 
 export function Providers({ children }: { children: ReactNode }) {
