@@ -1,7 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
-import { Contract } from 'ethers'
+import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react'
 import { useAccount } from 'wagmi'
 
 export interface Token {
@@ -34,11 +33,20 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [tokens, setTokens] = useState<Token[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
+
+  // Clear error and tokens when wallet disconnects
+  useEffect(() => {
+    if (!isConnected) {
+      setTokens([])
+      setError(null)
+    }
+  }, [isConnected])
 
   const fetchTokens = useCallback(async () => {
     if (!address) {
       setError('Wallet not connected')
+      setTokens([])
       return
     }
 
@@ -51,6 +59,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       setTokens([])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch tokens')
+      setTokens([])
     } finally {
       setLoading(false)
     }

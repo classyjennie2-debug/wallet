@@ -15,7 +15,8 @@ import { PortfolioRiskScore } from '@/components/portfolio-risk-score'
 import { NFTPortfolio } from '@/components/nft-portfolio'
 import { TokenAllowanceManager } from '@/components/token-allowance-manager'
 import { SecurityAudit } from '@/components/security-audit'
-import { WalletRecovery } from '@/components/wallet-recovery'
+import { WalletRestoration } from '@/components/wallet-restoration'
+import { PortfolioOverview } from '@/components/portfolio-overview'
 
 type Tab = 'dashboard' | 'charts' | 'history' | 'risk' | 'nft' | 'allowances' | 'security' | 'recovery' | 'swap' | 'send' | 'analysis'
 
@@ -36,7 +37,7 @@ export default function Home() {
     { id: 'nft', label: 'NFTs', icon: '🖼️', color: 'from-purple-500 to-pink-500' },
     { id: 'allowances', label: 'Approvals', icon: '🔐', color: 'from-yellow-500 to-orange-500' },
     { id: 'security', label: 'Security', icon: '🛡️', color: 'from-red-500 to-pink-500' },
-    { id: 'recovery', label: 'Recovery', icon: '🔑', color: 'from-indigo-500 to-purple-500' },
+    { id: 'recovery', label: 'Restoration', icon: '🔄', color: 'from-indigo-500 to-purple-500' },
     { id: 'swap', label: 'Swap', icon: '⚡', color: 'from-purple-500 to-pink-500' },
     { id: 'send', label: 'Send', icon: '📤', color: 'from-teal-500 to-emerald-500' },
     { id: 'analysis', label: 'Scan', icon: '🔍', color: 'from-orange-500 to-yellow-500' },
@@ -106,8 +107,9 @@ export default function Home() {
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8 pb-20 sm:pb-24 safe-area-bottom">
           {activeTab === 'dashboard' && (
-            <div className="animate-in fade-in-50">
+            <div className="animate-in fade-in-50 space-y-6">
               <DashboardV2 onNavigate={setActiveTab} />
+              <PortfolioOverview />
             </div>
           )}
 
@@ -174,10 +176,10 @@ export default function Home() {
           {activeTab === 'recovery' && (
             <div className="animate-in fade-in-50">
               <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Wallet Recovery</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Recover your wallet securely</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">Wallet Restoration</h1>
+                <p className="text-gray-400 text-xs sm:text-sm mt-1">Recover your wallet securely using your backup</p>
               </div>
-              <WalletRecovery />
+              <WalletRestoration />
             </div>
           )}
 

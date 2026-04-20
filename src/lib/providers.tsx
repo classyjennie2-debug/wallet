@@ -1,14 +1,28 @@
-'use client'
+﻿'use client'
 
-import { ReactNode, useState, useEffect } from 'react'
-import { WagmiProvider } from 'wagmi'
+import { ReactNode, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { RainbowKitProvider, Theme, lightTheme } from '@rainbow-me/rainbowkit'
-import '@rainbow-me/rainbowkit/styles.css'
-import { createSSRConfig, createClientConfig } from './web3-config'
 import { WalletProvider } from './wallet-context'
 import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
+import { WagmiProvider } from 'wagmi'
+import { createConfig, http } from 'wagmi'
+import { mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia } from 'wagmi/chains'
+
+// Create wagmi config
+const wagmiConfig = createConfig({
+  chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
+  transports: {
+    [mainnet.id]: http(),
+    [polygon.id]: http(),
+    [arbitrum.id]: http(),
+    [base.id]: http(),
+    [sepolia.id]: http(),
+    [polygonMumbai.id]: http(),
+    [arbitrumSepolia.id]: http(),
+    [baseSepolia.id]: http(),
+  },
+})
 
 // Create a stable query client instance
 const createQueryClient = () =>
@@ -35,48 +49,17 @@ function getQueryClient() {
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => getQueryClient())
-  const [isClient, setIsClient] = useState(false)
-  const [config, setConfig] = useState<any>(() => {
-    // Use SSR config for initial render
-    return createSSRConfig()
-  })
-
-  useEffect(() => {
-    setIsClient(true)
-    // Switch to full config with WalletConnect on client-side
-    const clientConfig = createClientConfig()
-    setConfig(clientConfig)
-  }, [])
-
-  const content = (
-    <ErrorBoundary>
-      <AlertProvider>
-        <WalletProvider>
-          {children}
-        </WalletProvider>
-      </AlertProvider>
-    </ErrorBoundary>
-  )
-
-  // Mobile-first theme for RainbowKit
-  const customTheme = lightTheme({
-    accentColor: '#0891b2',
-    accentColorForeground: 'white',
-    borderRadius: 'large',
-    fontStack: 'system',
-    overlayBlur: 'small',
-  }) as unknown as Theme
 
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        {isClient ? (
-          <RainbowKitProvider theme={customTheme}>
-            {content}
-          </RainbowKitProvider>
-        ) : (
-          content
-        )}
+        <ErrorBoundary>
+          <AlertProvider>
+            <WalletProvider>
+              {children}
+            </WalletProvider>
+          </AlertProvider>
+        </ErrorBoundary>
       </QueryClientProvider>
     </WagmiProvider>
   )

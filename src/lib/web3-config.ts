@@ -1,70 +1,23 @@
-import { http, createConfig } from 'wagmi'
-import { injected, walletConnect, coinbaseWallet } from 'wagmi/connectors'
 import { mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia } from 'wagmi/chains'
 
-const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || 'default-project-id'
+export const SUPPORTED_CHAINS = [
+  mainnet,
+  polygon,
+  arbitrum,
+  base,
+  sepolia,
+  polygonMumbai,
+  arbitrumSepolia,
+  baseSepolia,
+]
 
-// Create config without walletConnect for SSR compatibility
-export function createSSRConfig() {
-  return createConfig({
-    chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
-    connectors: [
-      injected({
-        shimDisconnect: false,
-        target: 'metaMask',
-      }),
-      coinbaseWallet({
-        appName: 'MyWallet.Help',
-        appLogoUrl: 'https://mywallet.help/logo.png',
-        darkMode: true,
-      }),
-    ],
-    transports: {
-      [mainnet.id]: http(),
-      [polygon.id]: http(),
-      [arbitrum.id]: http(),
-      [base.id]: http(),
-      [sepolia.id]: http(),
-      [polygonMumbai.id]: http(),
-      [arbitrumSepolia.id]: http(),
-      [baseSepolia.id]: http(),
-    },
-  })
-}
+export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
 
-// Create full config with WalletConnect for client-side
-export function createClientConfig() {
-  return createConfig({
-    chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
-    connectors: [
-      injected({
-        shimDisconnect: false,
-        target: 'metaMask',
-      }),
-      walletConnect({
-        projectId,
-        showQrModal: true,
-        qrModalOptions: {
-          themeMode: 'dark',
-        },
-      }),
-      coinbaseWallet({
-        appName: 'MyWallet.Help',
-        appLogoUrl: 'https://mywallet.help/logo.png',
-        darkMode: true,
-      }),
-    ],
-    transports: {
-      [mainnet.id]: http(),
-      [polygon.id]: http(),
-      [arbitrum.id]: http(),
-      [base.id]: http(),
-      [sepolia.id]: http(),
-      [polygonMumbai.id]: http(),
-      [arbitrumSepolia.id]: http(),
-      [baseSepolia.id]: http(),
-    },
-  })
+if (!projectId && typeof window !== 'undefined') {
+  console.warn(
+    'NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID is not set. Wallet connection may be limited. ' +
+    'Get one at https://cloud.walletconnect.com'
+  )
 }
 
 export const NETWORKS = [

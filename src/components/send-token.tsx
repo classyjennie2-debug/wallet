@@ -61,7 +61,7 @@ export const SendToken = () => {
 
   return (
     <div className="max-w-md mx-auto w-full">
-      <div className="rounded-2xl p-6 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 backdrop-blur-sm space-y-4">
+      <div className="rounded-2xl p-6 bg-gradient-to-br from-purple-600/10 to-blue-600/5 border border-purple-600/30 backdrop-blur-sm space-y-4">
         {/* Token Selection */}
         <div>
           <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Token</label>
