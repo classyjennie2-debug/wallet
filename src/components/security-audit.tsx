@@ -15,47 +15,7 @@ interface SecurityAudit {
 }
 
 export const SecurityAudit = () => {
-  const [audits] = useState<SecurityAudit[]>([
-    {
-      id: '1',
-      token: 'USDC',
-      address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-      status: 'verified',
-      checks: [
-        { name: 'Contract Verified', passed: true },
-        { name: 'Audited by Firm', passed: true },
-        { name: 'No Mint Function', passed: true },
-        { name: 'No Pause Function', passed: true },
-      ],
-      lastAudited: '2024-01-15'
-    },
-    {
-      id: '2',
-      token: 'DAI',
-      address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-      status: 'verified',
-      checks: [
-        { name: 'Contract Verified', passed: true },
-        { name: 'Audited by Firm', passed: true },
-        { name: 'No Mint Function', passed: false },
-        { name: 'No Pause Function', passed: true },
-      ],
-      lastAudited: '2024-01-20'
-    },
-    {
-      id: '3',
-      token: 'SHIB',
-      address: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
-      status: 'warning',
-      checks: [
-        { name: 'Contract Verified', passed: true },
-        { name: 'Audited by Firm', passed: false },
-        { name: 'No Mint Function', passed: false },
-        { name: 'No Pause Function', passed: false },
-      ],
-      lastAudited: '2023-06-10'
-    },
-  ])
+  const [audits, setAudits] = useState<SecurityAudit[]>([])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -93,51 +53,52 @@ export const SecurityAudit = () => {
 
       {/* Audits List */}
       <div className="space-y-4">
-        {audits.map((audit) => {
-          const passedCount = audit.checks.filter(c => c.passed).length
-          const passPercentage = Math.round((passedCount / audit.checks.length) * 100)
+        {audits.length > 0 ? (
+          audits.map((audit) => {
+            const passedCount = audit.checks.filter(c => c.passed).length
+            const passPercentage = Math.round((passedCount / audit.checks.length) * 100)
 
-          return (
-            <div
-              key={audit.id}
-              className={`relative overflow-hidden rounded-lg border bg-gradient-to-br ${getStatusColor(audit.status)}`}
-            >
-              <div className="p-4 sm:p-6 space-y-4">
-                {/* Header */}
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-2xl">{getStatusIcon(audit.status)}</span>
-                      <p className="font-bold text-white text-lg">{audit.token}</p>
+            return (
+              <div
+                key={audit.id}
+                className={`relative overflow-hidden rounded-lg border bg-gradient-to-br ${getStatusColor(audit.status)}`}
+              >
+                <div className="p-4 sm:p-6 space-y-4">
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-2xl">{getStatusIcon(audit.status)}</span>
+                        <p className="font-bold text-white text-lg">{audit.token}</p>
+                      </div>
+                      <p className="text-xs text-gray-400 font-mono break-all">{audit.address}</p>
                     </div>
-                    <p className="text-xs text-gray-400 font-mono break-all">{audit.address}</p>
+                    <div className={`px-3 py-1 rounded-lg font-bold text-xs border ${getStatusBadge(audit.status)} capitalize whitespace-nowrap`}>
+                      {audit.status}
+                    </div>
                   </div>
-                  <div className={`px-3 py-1 rounded-lg font-bold text-xs border ${getStatusBadge(audit.status)} capitalize whitespace-nowrap`}>
-                    {audit.status}
-                  </div>
-                </div>
 
-                {/* Security Score */}
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <p className="text-sm font-semibold text-gray-300">Security Score</p>
-                    <p className="text-lg font-bold text-white">{passPercentage}%</p>
+                  {/* Security Score */}
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <p className="text-sm font-semibold text-gray-300">Security Score</p>
+                      <p className="text-lg font-bold text-white">{passPercentage}%</p>
+                    </div>
+                    <div className="w-full h-2 bg-black/30 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full bg-gradient-to-r ${
+                          passPercentage === 100 ? 'from-emerald-500 to-teal-500' :
+                          passPercentage >= 75 ? 'from-yellow-500 to-orange-500' :
+                          'from-red-500 to-orange-500'
+                        }`}
+                        style={{ width: `${passPercentage}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <div className="w-full h-2 bg-black/30 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full bg-gradient-to-r ${
-                        passPercentage === 100 ? 'from-emerald-500 to-teal-500' :
-                        passPercentage >= 75 ? 'from-yellow-500 to-orange-500' :
-                        'from-red-500 to-orange-500'
-                      }`}
-                      style={{ width: `${passPercentage}%` }}
-                    ></div>
-                  </div>
-                </div>
 
-                {/* Checks */}
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Security Checks</p>
+                  {/* Checks */}
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Security Checks</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {audit.checks.map((check, i) => (
                       <div key={i} className="flex items-center gap-2 text-xs">
@@ -158,8 +119,15 @@ export const SecurityAudit = () => {
                 </div>
               </div>
             </div>
-          )
-        })}
+            )
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center py-16 px-4 rounded-lg bg-white/5 border border-white/10">
+            <div className="text-5xl mb-4">🛡️</div>
+            <h2 className="text-xl font-bold text-slate-100 mb-2">No Audits Found</h2>
+            <p className="text-slate-400 text-center max-w-md">Connect your wallet to see security audits for your tokens.</p>
+          </div>
+        )}
       </div>
 
       {/* Recommendations */}

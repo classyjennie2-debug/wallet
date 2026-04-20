@@ -3,15 +3,9 @@
 import { useState } from 'react'
 
 export const PortfolioRiskScore = () => {
-  const [riskLevel] = useState(42) // 0-100 score
-  const [diversification] = useState(68)
-
-  const risks = [
-    { name: 'Concentration Risk', value: 35, risk: 'medium', description: '45% in single token' },
-    { name: 'Volatility Risk', value: 62, risk: 'high', description: 'High daily fluctuations' },
-    { name: 'Smart Contract Risk', value: 28, risk: 'low', description: 'Audited contracts' },
-    { name: 'Market Risk', value: 45, risk: 'medium', description: 'Market correlation' },
-  ]
+  const [riskLevel] = useState(0)
+  const [diversification] = useState(0)
+  const [risks] = useState<any[]>([])
 
   const getRiskColor = (value: number) => {
     if (value < 30) return 'from-emerald-500 to-teal-500'
@@ -29,6 +23,16 @@ export const PortfolioRiskScore = () => {
     if (value < 30) return 'from-emerald-500/20 to-emerald-500/5 border-emerald-500/30'
     if (value < 60) return 'from-yellow-500/20 to-yellow-500/5 border-yellow-500/30'
     return 'from-red-500/20 to-red-500/5 border-red-500/30'
+  }
+
+  if (!riskLevel) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 px-4">
+        <div className="text-5xl mb-4">📊</div>
+        <h2 className="text-2xl font-bold text-slate-100 mb-2">Connect Your Wallet</h2>
+        <p className="text-slate-400 text-center max-w-md">Connect your wallet to see your portfolio risk analysis and diversification score.</p>
+      </div>
+    )
   }
 
   return (

@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     // In production:
     // await emailService.send({
     //   to: email,
-    //   subject: 'CryptoDash - Wallet Recovery Details',
+    //   subject: 'MyWallet.Help - Wallet Recovery Details',
     //   template: 'wallet-recovery',
     //   data: {
     //     seedPhrase: seedPhrase,

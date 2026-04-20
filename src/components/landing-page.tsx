@@ -40,11 +40,11 @@ export const LandingPage = () => {
       {/* Animated Background - More sophisticated */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Top right gradient */}
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-cyan-500/20 via-blue-500/10 to-transparent rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-600/15 via-slate-700/10 to-transparent rounded-full blur-3xl animate-pulse"></div>
         {/* Bottom left gradient */}
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-purple-500/20 via-pink-500/10 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-slate-700/15 via-slate-600/10 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         {/* Center accent */}
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-gradient-to-br from-blue-600/5 via-slate-700/5 to-transparent rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Grid background */}
@@ -53,25 +53,25 @@ export const LandingPage = () => {
       {/* Content */}
       <div className="relative z-10">
         {/* Header */}
-        <header className="sticky top-0 z-40 border-b border-white/5 bg-slate-950/95 backdrop-blur-2xl shadow-lg">
+        <header className="sticky top-0 z-40 border-b border-slate-700/50 bg-slate-950/95 backdrop-blur-2xl shadow-lg">
           <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 sm:py-5">
             <div className="flex items-center justify-between gap-2 sm:gap-4">
               <div className="flex items-center gap-2 sm:gap-3 flex-1">
-                <div className="w-9 sm:w-12 h-9 sm:h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg flex-shrink-0">
+                <div className="w-9 sm:w-12 h-9 sm:h-12 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg flex-shrink-0">
                   <span className="text-base sm:text-xl font-bold text-white">⚡</span>
                 </div>
                 <div className="min-w-0">
-                  <div className="font-bold text-white text-sm sm:text-lg truncate">MyWallet.Help</div>
-                  <div className="text-xs text-cyan-400 font-medium hidden sm:block">Self-Sovereign Wallet</div>
+                  <div className="font-bold text-slate-100 text-sm sm:text-lg truncate">MyWallet.Help</div>
+                  <div className="text-xs text-blue-400 font-medium hidden sm:block">Self-Sovereign Wallet</div>
                 </div>
               </div>
               
               {/* Mobile Menu Button */}
               <div className="flex items-center gap-2 sm:gap-4">
                 <div className="hidden sm:flex items-center gap-4 text-sm">
-                  <a href="/about" className="text-gray-400 hover:text-cyan-400 transition">About</a>
-                  <a href="/help" className="text-gray-400 hover:text-cyan-400 transition">Help</a>
-                  <a href="/privacy" className="text-gray-400 hover:text-cyan-400 transition">Privacy</a>
+                  <a href="/about" className="text-slate-400 hover:text-blue-400 transition">About</a>
+                  <a href="/help" className="text-slate-400 hover:text-blue-400 transition">Help</a>
+                  <a href="/privacy" className="text-slate-400 hover:text-blue-400 transition">Privacy</a>
                 </div>
                 
                 <div className="min-w-fit">
@@ -88,24 +88,24 @@ export const LandingPage = () => {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 md:py-32 text-center">
           <div className="space-y-6 sm:space-y-8 mb-12 sm:mb-16">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-cyan-500/50 bg-cyan-500/10 backdrop-blur-sm shadow-lg">
-              <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-              <span className="text-xs sm:text-sm font-semibold text-cyan-300">🚀 Web3 Wallet Management Platform</span>
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-blue-600/50 bg-blue-600/10 backdrop-blur-sm shadow-lg">
+              <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+              <span className="text-xs sm:text-sm font-semibold text-blue-300">🚀 Web3 Wallet Management Platform</span>
             </div>
 
             {/* Main Heading */}
             <div className="space-y-3 sm:space-y-4">
-              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-slate-100 leading-tight tracking-tight">
                 Manage Crypto
                 <br />
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                   Your Way
                 </span>
               </h1>
             </div>
 
             {/* Subheading */}
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
               Non-custodial portfolio management, token swaps, dead coin detection, and secure transfers—all in one powerful platform. No compromises on privacy or security.
             </p>
 
@@ -114,7 +114,7 @@ export const LandingPage = () => {
               {isClient && (
                 <>
                   <Web3WalletConnector />
-                  <button type="button" className="px-6 sm:px-10 py-3 sm:py-4 rounded-lg sm:rounded-xl border-2 border-cyan-500/50 hover:border-cyan-400 text-white font-bold text-sm sm:text-base transition-all duration-300 bg-cyan-500/5 hover:bg-cyan-500/10 backdrop-blur-sm hover:shadow-lg cursor-pointer w-full sm:w-auto">
+                  <button type="button" className="px-6 sm:px-10 py-3 sm:py-4 rounded-lg sm:rounded-xl border-2 border-blue-600/50 hover:border-blue-400 text-slate-100 font-bold text-sm sm:text-base transition-all duration-300 bg-blue-600/10 hover:bg-blue-600/20 backdrop-blur-sm hover:shadow-lg cursor-pointer w-full sm:w-auto">
                     📖 View Docs
                   </button>
                 </>
@@ -123,27 +123,27 @@ export const LandingPage = () => {
           </div>
 
           {/* Enhanced Stats */}
-          <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto pt-12 sm:pt-20 border-t border-white/10">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto pt-12 sm:pt-20 border-t border-slate-700/50">
             <div className="space-y-1 sm:space-y-2">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">100K+</div>
-              <div className="text-xs sm:text-sm text-gray-400 font-medium">Active Users</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">100K+</div>
+              <div className="text-xs sm:text-sm text-slate-400 font-medium">Active Users</div>
             </div>
             <div className="space-y-1 sm:space-y-2">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">$2B+</div>
-              <div className="text-xs sm:text-sm text-gray-400 font-medium">Assets Managed</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">$2B+</div>
+              <div className="text-xs sm:text-sm text-slate-400 font-medium">Assets Managed</div>
             </div>
             <div className="space-y-1 sm:space-y-2">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">8</div>
-              <div className="text-xs sm:text-sm text-gray-400 font-medium">Blockchains</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-slate-400 to-slate-600 bg-clip-text text-transparent">8</div>
+              <div className="text-xs sm:text-sm text-slate-400 font-medium">Blockchains</div>
             </div>
           </div>
         </section>
 
         {/* Features Section */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-white/10">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-slate-700/50">
           <div className="text-center mb-12 sm:mb-20">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 sm:mb-4">Powerful Features</h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-400">Everything you need to manage crypto securely</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-100 mb-3 sm:mb-4">Powerful Features</h2>
+            <p className="text-base sm:text-lg md:text-xl text-slate-400">Everything you need to manage crypto securely</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -153,14 +153,13 @@ export const LandingPage = () => {
               { icon: '📤', title: 'Quick Send', desc: 'Transfer tokens securely with built-in validation' },
               { icon: '🔍', title: 'Dead Detector', desc: 'Identify and remove dead coins automatically' },
             ].map((feature, i) => (
-              <div key={i} className="group relative overflow-hidden rounded-lg sm:rounded-2xl p-5 sm:p-8 bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-cyan-500/50 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:shadow-xl hover:-translate-y-1">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-transparent opacity-0 group-hover:opacity-20 transition-opacity"></div>
+              <div key={i} className="group relative overflow-hidden rounded-lg sm:rounded-2xl p-5 sm:p-8 bg-slate-900/60 border border-slate-700/50 hover:border-blue-600/50 backdrop-blur-sm transition-all duration-300 hover:bg-slate-900/80 hover:shadow-xl hover:-translate-y-1">
                 <div className="relative z-10 space-y-3 sm:space-y-4">
-                  <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-lg sm:rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center text-3xl sm:text-4xl group-hover:scale-125 transition-transform duration-300">
+                  <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-lg sm:rounded-xl bg-blue-600/30 flex items-center justify-center text-3xl sm:text-4xl group-hover:scale-125 transition-transform duration-300">
                     {feature.icon}
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white">{feature.title}</h3>
-                  <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-100">{feature.title}</h3>
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{feature.desc}</p>
                 </div>
               </div>
             ))}
@@ -168,10 +167,10 @@ export const LandingPage = () => {
         </section>
 
         {/* Supported Wallets */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-white/10">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-slate-700/50">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 sm:mb-4">Connect Any Wallet</h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-400">10+ popular wallet providers supported</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-100 mb-3 sm:mb-4">Connect Any Wallet</h2>
+            <p className="text-base sm:text-lg md:text-xl text-slate-400">10+ popular wallet providers supported</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
             {wallets.map((wallet, i) => (
@@ -184,10 +183,10 @@ export const LandingPage = () => {
         </section>
 
         {/* Supported Networks */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-white/10">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-slate-700/50">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 sm:mb-4">Multi-Chain Support</h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-400">8 blockchains, unlimited possibilities</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-100 mb-3 sm:mb-4">Multi-Chain Support</h2>
+            <p className="text-base sm:text-lg md:text-xl text-slate-400">8 blockchains, unlimited possibilities</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
             {networks.map((network, i) => (
@@ -200,22 +199,22 @@ export const LandingPage = () => {
         </section>
 
         {/* Animated Stats */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-white/10">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 border-t border-slate-700/50">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-            <div className="text-center p-6 sm:p-8 md:p-10 rounded-lg sm:rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-500/10 to-transparent hover:from-cyan-500/20 transition-all hover:shadow-2xl hover:border-cyan-500/50 group cursor-pointer">
-              <div className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2 sm:mb-3 group-hover:scale-110 transition-transform">100K+</div>
-              <p className="text-gray-300 font-bold text-base sm:text-lg">Active Users</p>
-              <p className="text-gray-500 text-xs mt-1 sm:mt-2">Trusted worldwide</p>
+            <div className="text-center p-6 sm:p-8 md:p-10 rounded-lg sm:rounded-2xl border border-slate-700/50 bg-slate-900/50 hover:bg-slate-900/70 hover:border-blue-600/50 transition-all hover:shadow-2xl group cursor-pointer">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-2 sm:mb-3 group-hover:scale-110 transition-transform">100K+</div>
+              <p className="text-slate-200 font-bold text-base sm:text-lg">Active Users</p>
+              <p className="text-slate-500 text-xs mt-1 sm:mt-2">Trusted worldwide</p>
             </div>
-            <div className="text-center p-6 sm:p-8 md:p-10 rounded-lg sm:rounded-2xl border border-white/10 bg-gradient-to-br from-purple-500/10 to-transparent hover:from-purple-500/20 transition-all hover:shadow-2xl hover:border-purple-500/50 group cursor-pointer">
-              <div className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2 sm:mb-3 group-hover:scale-110 transition-transform">$2B+</div>
-              <p className="text-gray-300 font-bold text-base sm:text-lg">Managed Assets</p>
-              <p className="text-gray-500 text-xs mt-1 sm:mt-2">Secured daily</p>
+            <div className="text-center p-6 sm:p-8 md:p-10 rounded-lg sm:rounded-2xl border border-slate-700/50 bg-slate-900/50 hover:bg-slate-900/70 hover:border-green-600/50 transition-all hover:shadow-2xl group cursor-pointer">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent mb-2 sm:mb-3 group-hover:scale-110 transition-transform">$2B+</div>
+              <p className="text-slate-200 font-bold text-base sm:text-lg">Managed Assets</p>
+              <p className="text-slate-500 text-xs mt-1 sm:mt-2">Secured daily</p>
             </div>
-            <div className="text-center p-6 sm:p-8 md:p-10 rounded-lg sm:rounded-2xl border border-white/10 bg-gradient-to-br from-emerald-500/10 to-transparent hover:from-emerald-500/20 transition-all hover:shadow-2xl hover:border-emerald-500/50 group cursor-pointer">
-              <div className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-2 sm:mb-3 group-hover:scale-110 transition-transform">50M+</div>
-              <p className="text-gray-300 font-bold text-base sm:text-lg">Transactions</p>
-              <p className="text-gray-500 text-xs mt-1 sm:mt-2">Processed securely</p>
+            <div className="text-center p-6 sm:p-8 md:p-10 rounded-lg sm:rounded-2xl border border-slate-700/50 bg-slate-900/50 hover:bg-slate-900/70 hover:border-amber-600/50 transition-all hover:shadow-2xl group cursor-pointer">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent mb-2 sm:mb-3 group-hover:scale-110 transition-transform">50M+</div>
+              <p className="text-slate-200 font-bold text-base sm:text-lg">Transactions</p>
+              <p className="text-slate-500 text-xs mt-1 sm:mt-2">Processed securely</p>
             </div>
           </div>
         </section>

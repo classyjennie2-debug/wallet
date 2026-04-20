@@ -13,44 +13,7 @@ interface NFT {
 }
 
 export const NFTPortfolio = () => {
-  const [nfts] = useState<NFT[]>([
-    {
-      id: '1',
-      name: 'Cosmic Voyager #042',
-      collection: 'Space Collective',
-      image: '🚀',
-      floorPrice: 2.5,
-      rarity: 'rare',
-      chain: 'Ethereum'
-    },
-    {
-      id: '2',
-      name: 'Digital Dreams #128',
-      collection: 'Art Masters',
-      image: '🎨',
-      floorPrice: 1.2,
-      rarity: 'uncommon',
-      chain: 'Polygon'
-    },
-    {
-      id: '3',
-      name: 'Ancient Dragon #007',
-      collection: 'Mythical Beasts',
-      image: '🐉',
-      floorPrice: 5.8,
-      rarity: 'legendary',
-      chain: 'Ethereum'
-    },
-    {
-      id: '4',
-      name: 'Pixel Artist #256',
-      collection: 'Retro Wave',
-      image: '🎮',
-      floorPrice: 0.8,
-      rarity: 'common',
-      chain: 'Base'
-    },
-  ])
+  const [nfts] = useState<NFT[]>([])
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {

@@ -8,7 +8,7 @@ import { DashboardV2 } from '@/components/dashboard-v2'
 import { DeadCoinDetector } from '@/components/dead-coin-detector'
 import { TokenSwap } from '@/components/token-swap'
 import { SendToken } from '@/components/send-token'
-import { LandingPage } from '@/components/landing-page'
+import { LandingPageV2 as LandingPage } from '@/components/landing-page-v2'
 import { PriceCharts } from '@/components/price-charts'
 import { TransactionHistory } from '@/components/transaction-history'
 import { PortfolioRiskScore } from '@/components/portfolio-risk-score'
@@ -48,20 +48,29 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-900/20 to-slate-950">
-      {/* Animated Background */}
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+      {/* Premium Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -ml-48 -mb-48"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-purple-600/20 via-blue-600/10 to-transparent rounded-full blur-3xl -mr-48 -mt-48 animate-pulse"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-500/10 via-pink-500/5 to-transparent rounded-full blur-3xl -ml-48 -mb-48 animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+        <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-transparent rounded-full blur-3xl" style={{ animationDelay: '3s' }}></div>
       </div>
+
+      {/* Subtle grid */}
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px] pointer-events-none"></div>
 
       {/* Content */}
       <div className="relative z-10">
-        {/* Header */}
-        <header className="sticky top-0 z-40 border-b border-white/5 bg-slate-950/80 backdrop-blur-xl">
+        {/* Premium Header */}
+        <header className="sticky top-0 z-40 border-b border-purple-900/50 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
           <div className="max-w-full mx-auto px-3 sm:px-4 py-2 sm:py-4">
             <div className="flex items-center justify-between gap-2 sm:gap-4">
-              <MyWalletLogo size="sm" variant="icon" />
+              <div className="flex items-center gap-2">
+                <div className="relative w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center shadow-lg border border-purple-400/30">
+                  <span className="text-lg font-bold text-white">💎</span>
+                </div>
+                <MyWalletLogo size="sm" />
+              </div>
               <div className="flex-1 sm:flex-none">
                 <WalletConnect />
               </div>
@@ -69,8 +78,8 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Navigation - Mobile Optimized */}
-        <nav className="sticky top-12 sm:top-16 z-30 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl">
+        {/* Navigation - Premium Styling */}
+        <nav className="sticky top-12 sm:top-16 z-30 border-b border-purple-900/50 bg-slate-950/50 backdrop-blur-xl">
           <div className="max-w-full mx-auto px-1 sm:px-4">
             <div className="flex gap-0.5 sm:gap-2 overflow-x-auto scrollbar-hide pb-1 sm:pb-0" role="tablist">
               {tabs.map((tab) => (
@@ -79,8 +88,8 @@ export default function Home() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center justify-center gap-1 px-2 sm:px-4 py-2 sm:py-3 font-medium text-xs sm:text-sm whitespace-nowrap transition-all border-b-2 rounded-t-lg touch-target ${
                     activeTab === tab.id
-                      ? `border-transparent bg-gradient-to-r ${tab.color} bg-clip-text text-transparent`
-                      : 'border-transparent text-gray-400 hover:text-gray-300 active:text-gray-200'
+                      ? 'border-purple-500 text-purple-300 bg-purple-600/10'
+                      : 'border-transparent text-slate-400 hover:text-purple-300 active:text-purple-200'
                   }`}
                   role="tab"
                   aria-selected={activeTab === tab.id}
@@ -98,7 +107,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8 pb-20 sm:pb-24 safe-area-bottom">
           {activeTab === 'dashboard' && (
             <div className="animate-in fade-in-50">
-              <DashboardV2 />
+              <DashboardV2 onNavigate={setActiveTab} />
             </div>
           )}
 

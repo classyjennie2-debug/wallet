@@ -8,20 +8,9 @@ export const PriceCharts = () => {
   const [timeframe, setTimeframe] = useState<'1D' | '7D' | '30D'>('7D')
 
   useEffect(() => {
-    // Simulate chart data
-    const generateChartData = () => {
-      const data = []
-      let price = 2500
-      for (let i = 0; i < 30; i++) {
-        price += (Math.random() - 0.5) * 200
-        data.push({
-          time: `Day ${i + 1}`,
-          price: Math.max(1000, price)
-        })
-      }
-      setChartData(data)
-    }
-    generateChartData()
+    // Price data will be fetched from actual price API when needed
+    // For now, show empty state
+    setChartData([])
   }, [selectedToken, timeframe])
 
   const tokens = ['ETH', 'BTC', 'USDT', 'USDC', 'DAI']
@@ -75,28 +64,36 @@ export const PriceCharts = () => {
       </div>
 
       {/* Chart */}
-      <div className="relative overflow-hidden rounded-lg sm:rounded-xl p-6 bg-gradient-to-br from-white/5 to-white/3 border border-white/10">
-        <div className="flex items-end justify-between gap-1" style={{ height: '300px' }}>
-          {chartData.map((data, i) => {
-            const height = ((data.price - minPrice) / range) * 100 || 5
-            return (
-              <div
-                key={i}
-                className="flex-1 bg-gradient-to-t from-cyan-500/80 to-blue-500/40 rounded-t-lg hover:from-cyan-400 hover:to-blue-400 transition-all group relative"
-                style={{ height: `${height}%` }}
-              >
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  ${data.price.toFixed(0)}
+      {chartData.length > 0 ? (
+        <div className="relative overflow-hidden rounded-lg sm:rounded-xl p-6 bg-gradient-to-br from-white/5 to-white/3 border border-white/10">
+          <div className="flex items-end justify-between gap-1" style={{ height: '300px' }}>
+            {chartData.map((data, i) => {
+              const height = ((data.price - minPrice) / range) * 100 || 5
+              return (
+                <div
+                  key={i}
+                  className="flex-1 bg-gradient-to-t from-cyan-500/80 to-blue-500/40 rounded-t-lg hover:from-cyan-400 hover:to-blue-400 transition-all group relative"
+                  style={{ height: `${height}%` }}
+                >
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    ${data.price.toFixed(0)}
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
+          <div className="text-center mt-4 text-sm text-gray-400">
+            <p>{selectedToken} Price Chart - {timeframe}</p>
+            <p className="mt-1 text-xs">Range: ${minPrice.toFixed(0)} - ${maxPrice.toFixed(0)}</p>
+          </div>
         </div>
-        <div className="text-center mt-4 text-sm text-gray-400">
-          <p>{selectedToken} Price Chart - {timeframe}</p>
-          <p className="mt-1 text-xs">Range: ${minPrice.toFixed(0)} - ${maxPrice.toFixed(0)}</p>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-16 px-4 rounded-lg bg-white/5 border border-white/10">
+          <div className="text-5xl mb-4">📈</div>
+          <h2 className="text-xl font-bold text-slate-100 mb-2">No Price Data</h2>
+          <p className="text-slate-400 text-center max-w-md">Price charts will be available once you connect your wallet and track token prices.</p>
         </div>
-      </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

@@ -157,12 +157,12 @@ export default function About() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="relative overflow-hidden rounded-lg p-4 bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/30">
                 <p className="text-sm text-gray-400 mb-1">Email</p>
-                <p className="font-mono text-cyan-400">support@cryptodash.io</p>
+                <p className="font-mono text-cyan-400">support@mywallet.help</p>
               </div>
               
               <div className="relative overflow-hidden rounded-lg p-4 bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/30">
                 <p className="text-sm text-gray-400 mb-1">GitHub</p>
-                <p className="font-mono text-purple-400">github.com/cryptodash</p>
+                <p className="font-mono text-purple-400">github.com/mywallet-help</p>
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@ export default function About() {
           {/* Footer */}
           <div className="text-center pt-8 border-t border-white/10">
             <p className="text-gray-400 text-sm">
-              CryptoDash © 2024. Built with ❤️ for the crypto community.
+              MyWallet.Help © 2024. Built with ❤️ for the crypto community.
             </p>
           </div>
         </div>

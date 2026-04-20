@@ -21,54 +21,9 @@ export const TransactionHistory = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
   useEffect(() => {
-    // Simulate transaction data
-    const mockTransactions: Transaction[] = [
-      {
-        id: '1',
-        type: 'receive',
-        token: 'ETH',
-        amount: '2.5',
-        from: '0x123...abc',
-        to: '0x456...def',
-        date: new Date(Date.now() - 3600000).toISOString(),
-        status: 'completed',
-        usdValue: 5000
-      },
-      {
-        id: '2',
-        type: 'send',
-        token: 'USDC',
-        amount: '1000',
-        from: '0x456...def',
-        to: '0x789...xyz',
-        date: new Date(Date.now() - 7200000).toISOString(),
-        status: 'completed',
-        usdValue: 1000
-      },
-      {
-        id: '3',
-        type: 'swap',
-        token: 'DAI',
-        amount: '500',
-        from: '0x456...def',
-        to: '0x456...def',
-        date: new Date(Date.now() - 86400000).toISOString(),
-        status: 'completed',
-        usdValue: 500
-      },
-      {
-        id: '4',
-        type: 'receive',
-        token: 'USDT',
-        amount: '250',
-        from: '0xabc...123',
-        to: '0x456...def',
-        date: new Date(Date.now() - 172800000).toISOString(),
-        status: 'pending',
-        usdValue: 250
-      },
-    ]
-    setTransactions(mockTransactions)
+    // Transactions will be fetched from blockchain when wallet is connected
+    // For now, show empty state
+    setTransactions([])
   }, [])
 
   const filtered = filter === 'all' ? transactions : transactions.filter(t => t.type === filter)

@@ -11,37 +11,7 @@ interface Allowance {
 }
 
 export const TokenAllowanceManager = () => {
-  const [allowances, setAllowances] = useState<Allowance[]>([
-    {
-      id: '1',
-      token: 'USDC',
-      spender: 'Uniswap V3 Router',
-      amount: 'Unlimited',
-      riskLevel: 'high'
-    },
-    {
-      id: '2',
-      token: 'ETH',
-      spender: 'OpenSea',
-      amount: '50 ETH',
-      riskLevel: 'high'
-    },
-    {
-      id: '3',
-      token: 'DAI',
-      spender: 'Aave',
-      amount: '10000 DAI',
-      riskLevel: 'medium'
-    },
-    {
-      id: '4',
-      token: 'USDT',
-      spender: 'Curve',
-      amount: '5000 USDT',
-      riskLevel: 'low'
-    },
-  ])
-
+  const [allowances, setAllowances] = useState<Allowance[]>([])
   const [revoking, setRevoking] = useState<string | null>(null)
 
   const handleRevoke = (id: string) => {

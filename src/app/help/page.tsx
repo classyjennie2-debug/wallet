@@ -3,15 +3,15 @@ import React from 'react'
 export default function Help() {
   const faqs = [
     {
-      question: 'What is CryptoDash?',
-      answer: 'CryptoDash is a comprehensive cryptocurrency wallet dashboard that helps you manage, track, and analyze your crypto assets across multiple blockchain networks. It provides portfolio tracking, price charts, security audits, NFT management, and more.'
+      question: 'What is MyWallet.Help?',
+      answer: 'MyWallet.Help is a comprehensive cryptocurrency wallet dashboard that helps you manage, track, and analyze your crypto assets across multiple blockchain networks. It provides portfolio tracking, price charts, security audits, NFT management, and more.'
     },
     {
       question: 'Is my private key stored on your servers?',
-      answer: 'No. CryptoDash never stores or accesses your private keys. We use wallet connection protocols (RainbowKit) that keep your keys securely in your wallet. You maintain complete control of your assets.'
+      answer: 'No. MyWallet.Help never stores or accesses your private keys. We use wallet connection protocols (RainbowKit) that keep your keys securely in your wallet. You maintain complete control of your assets.'
     },
     {
-      question: 'Which wallets does CryptoDash support?',
+      question: 'Which wallets does MyWallet.Help support?',
       answer: 'We support 20+ wallet providers including MetaMask, Trust Wallet, Rainbow, Coinbase Wallet, Ledger, Trezor, WalletConnect, and many more through RainbowKit integration.'
     },
     {
@@ -20,10 +20,10 @@ export default function Help() {
     },
     {
       question: 'How do I connect my wallet?',
-      answer: 'Click the "Connect Wallet" button in the header. Select your wallet from the list, approve the connection in your wallet app, and you\'ll be connected to CryptoDash.'
+      answer: 'Click the "Connect Wallet" button in the header. Select your wallet from the list, approve the connection in your wallet app, and you\'ll be connected to MyWallet.Help.'
     },
     {
-      question: 'Is CryptoDash safe to use?',
+      question: 'Is MyWallet.Help safe to use?',
       answer: 'Yes. We implement industry-standard security practices including HTTPS encryption, no server-side storage of sensitive data, and regular security audits. Your assets remain under your control at all times.'
     },
     {
@@ -47,12 +47,12 @@ export default function Help() {
       answer: 'Price data is updated in real-time when connected to the blockchain. Historical data is fetched from reliable API sources. Charts show data from the last 7 days to 1 year.'
     },
     {
-      question: 'Can I trade directly from CryptoDash?',
+      question: 'Can I trade directly from MyWallet.Help?',
       answer: 'Yes, use the Token Swap feature to exchange tokens directly from the dashboard. Swaps are routed through the best liquidity sources to get optimal prices.'
     },
     {
       question: 'Is there a mobile app?',
-      answer: 'CryptoDash is fully responsive and works great on mobile browsers. We recommend using it with a mobile wallet app like MetaMask Mobile or Trust Wallet.'
+      answer: 'MyWallet.Help is fully responsive and works great on mobile browsers. We recommend using it with a mobile wallet app like MetaMask Mobile or Trust Wallet.'
     },
     {
       question: 'How do I view my NFT collection?',
@@ -60,7 +60,7 @@ export default function Help() {
     },
     {
       question: 'What if I forget my wallet password?',
-      answer: 'CryptoDash doesn\'t store passwords. Use the Wallet Recovery feature with your seed phrase. Never give your seed phrase to anyone - recovery is always under your control.'
+      answer: 'MyWallet.Help doesn\'t store passwords. Use the Wallet Recovery feature with your seed phrase. Never give your seed phrase to anyone - recovery is always under your control.'
     },
     {
       question: 'Do you collect my personal data?',
@@ -68,11 +68,11 @@ export default function Help() {
     },
     {
       question: 'How do I report a security issue?',
-      answer: 'Please email support@cryptodash.io with details. We take security seriously and respond promptly to all reports.'
+      answer: 'Please email support@mywallet.help with details. We take security seriously and respond promptly to all reports.'
     },
     {
-      question: 'Is CryptoDash available globally?',
-      answer: 'Yes, CryptoDash is available globally. However, some features may be restricted in certain jurisdictions due to local regulations.'
+      question: 'Is MyWallet.Help available globally?',
+      answer: 'Yes, MyWallet.Help is available globally. However, some features may be restricted in certain jurisdictions due to local regulations.'
     },
   ]
 
@@ -111,7 +111,7 @@ export default function Help() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Documentation */}
-              <a href="https://docs.cryptodash.io" target="_blank" rel="noopener noreferrer"
+              <a href="https://docs.mywallet.help" target="_blank" rel="noopener noreferrer"
                 className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/30 hover:border-blue-500/50 transition-all hover:-translate-y-1"
               >
                 <div className="text-3xl mb-3">📚</div>
@@ -120,7 +120,7 @@ export default function Help() {
               </a>
 
               {/* Community Discord */}
-              <a href="https://discord.gg/cryptodash" target="_blank" rel="noopener noreferrer"
+              <a href="https://discord.gg/mywallet-help" target="_blank" rel="noopener noreferrer"
                 className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/30 hover:border-purple-500/50 transition-all hover:-translate-y-1"
               >
                 <div className="text-3xl mb-3">💬</div>
@@ -129,7 +129,7 @@ export default function Help() {
               </a>
 
               {/* GitHub Issues */}
-              <a href="https://github.com/cryptodash/issues" target="_blank" rel="noopener noreferrer"
+              <a href="https://github.com/mywallet-help/issues" target="_blank" rel="noopener noreferrer"
                 className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-gray-500/10 to-gray-500/5 border border-gray-500/30 hover:border-gray-500/50 transition-all hover:-translate-y-1"
               >
                 <div className="text-3xl mb-3">🐛</div>
@@ -138,12 +138,12 @@ export default function Help() {
               </a>
 
               {/* Email Support */}
-              <a href="mailto:support@cryptodash.io"
+              <a href="mailto:support@mywallet.help"
                 className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:-translate-y-1"
               >
                 <div className="text-3xl mb-3">📧</div>
                 <h3 className="font-bold text-white mb-2">Email Support</h3>
-                <p className="text-sm text-gray-400">support@cryptodash.io</p>
+                <p className="text-sm text-gray-400">support@mywallet.help</p>
               </a>
             </div>
           </div>
@@ -155,7 +155,7 @@ export default function Help() {
             <div className="space-y-3">
               <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30">
                 <p className="text-red-300 font-semibold text-sm mb-1">🔴 Never Share Your Seed Phrase</p>
-                <p className="text-gray-300 text-sm">Anyone with your seed phrase can access your funds. CryptoDash will never ask for it.</p>
+                <p className="text-gray-300 text-sm">Anyone with your seed phrase can access your funds. MyWallet.Help will never ask for it.</p>
               </div>
 
               <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">

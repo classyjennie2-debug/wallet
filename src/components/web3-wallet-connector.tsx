@@ -79,22 +79,22 @@ export function Web3WalletConnector() {
   }
 
   if (!isMounted) {
-    return <div className="h-12 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg animate-pulse" />
+    return <div className="h-12 bg-gradient-to-r from-purple-600/30 to-blue-600/30 rounded-lg animate-pulse" />
   }
 
   if (isConnected && address) {
     return (
       <div className="flex items-center gap-3">
         {/* Network Info */}
-        <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-white/5 rounded-lg border border-white/10">
-          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-white/5 rounded-lg border border-purple-600/30 hover:border-purple-600/50 transition">
+          <span className="w-2 h-2 rounded-full bg-purple-400"></span>
           <span className="text-sm text-gray-300">{chain?.name || 'Unknown'}</span>
         </div>
 
         {/* Account Info */}
         <button
           onClick={() => setShowModal(true)}
-          className="relative group px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg font-semibold transition-all flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
+          className="relative group px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2 shadow-lg hover:shadow-purple-600/50 hover:scale-105"
         >
           <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
           <span>{formatAddress(address)}</span>
@@ -121,7 +121,7 @@ export function Web3WalletConnector() {
       {/* Connect Button */}
       <button
         onClick={() => setShowModal(true)}
-        className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 w-full sm:w-auto"
+        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-purple-600/50 hover:scale-105 w-full sm:w-auto"
       >
         Connect Wallet
       </button>
@@ -136,7 +136,7 @@ export function Web3WalletConnector() {
           />
 
           {/* Modal */}
-          <div className="relative w-full sm:w-96 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-t-3xl sm:rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div className="relative w-full sm:w-96 bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 rounded-t-3xl sm:rounded-2xl border border-purple-900/50 p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
             {/* Close Button */}
             <button
               onClick={() => setShowModal(false)}
@@ -150,7 +150,7 @@ export function Web3WalletConnector() {
             {/* Header */}
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-white mb-2">Connect Wallet</h2>
-              <p className="text-gray-400">Choose your preferred wallet to connect to MyWallet.Help</p>
+              <p className="text-slate-400 text-sm">Choose your preferred wallet to connect securely</p>
             </div>
 
             {/* Error Message */}
@@ -169,8 +169,8 @@ export function Web3WalletConnector() {
                   disabled={isConnecting || isPending}
                   className={`w-full p-4 rounded-lg border-2 transition-all group ${
                     selectedWallet === wallet.id
-                      ? 'border-cyan-500 bg-cyan-500/10'
-                      : 'border-white/10 bg-white/5 hover:border-cyan-500/50 hover:bg-white/10'
+                      ? 'border-purple-500 bg-purple-500/10'
+                      : 'border-purple-900/30 bg-white/5 hover:border-purple-500/50 hover:bg-white/10'
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   <div className="flex items-start gap-3">
@@ -180,7 +180,7 @@ export function Web3WalletConnector() {
                         <p className="font-semibold text-white">{wallet.name}</p>
                         {selectedWallet === wallet.id && (
                           <div className="animate-spin">
-                            <svg className="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <circle cx="12" cy="12" r="10" fill="none" strokeWidth="2" opacity="0.25"></circle>
                               <path fill="none" strokeWidth="2" d="M12 2a10 10 0 0 1 10 10"></path>
                             </svg>
@@ -190,7 +190,7 @@ export function Web3WalletConnector() {
                       <p className="text-sm text-gray-400">{wallet.description}</p>
                     </div>
                     {selectedWallet !== wallet.id && (
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-cyan-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-gray-400 group-hover:text-purple-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     )}
@@ -200,16 +200,16 @@ export function Web3WalletConnector() {
             </div>
 
             {/* Info Box */}
-            <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-              <p className="text-sm text-blue-300">
+            <div className="mt-6 p-4 bg-purple-600/10 border border-purple-600/30 rounded-lg">
+              <p className="text-sm text-purple-300">
                 <span className="font-semibold">💡 Tip:</span> Don't have a wallet? Install MetaMask browser extension or use your mobile wallet with WalletConnect.
               </p>
             </div>
 
             {/* Terms */}
-            <p className="mt-6 text-xs text-gray-500 text-center">
+            <p className="mt-6 text-xs text-slate-500 text-center">
               By connecting, you agree to our{' '}
-              <a href="/terms" className="text-cyan-400 hover:underline">
+              <a href="/terms" className="text-purple-400 hover:text-purple-300 underline">
                 Terms of Service
               </a>
             </p>

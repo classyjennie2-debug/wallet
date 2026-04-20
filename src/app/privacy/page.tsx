@@ -112,7 +112,7 @@ export default function Privacy() {
           <div className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/30">
             <h2 className="text-xl font-bold text-purple-300 mb-3">Contact Us</h2>
             <p className="text-gray-300">
-              If you have any questions about this Privacy Policy or our privacy practices, please contact us at: <span className="font-mono text-cyan-400">privacy@cryptodash.io</span>
+              If you have any questions about this Privacy Policy or our privacy practices, please contact us at: <span className="font-mono text-cyan-400">privacy@mywallet.help</span>
             </p>
           </div>
 
