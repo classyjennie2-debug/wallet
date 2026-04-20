@@ -1,26 +1,39 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+
+export interface ImportedToken {
+  chainId: number
+  address: string
+}
 
 export interface TokenData {
+  chainId: number
+  chainName: string
+  chainSymbol: string
   address: string
   symbol: string
   name: string
   decimals: number
   logoURI?: string
+  balanceRaw: string
   balance: string
   value: string
   price: number
+  isNative: boolean
+  isLikelySpam: boolean
 }
 
 export interface Portfolio {
   tokens: TokenData[]
   totalValue: string
   lastUpdated: string
+  warnings: string[]
 }
 
-export const useTokens = (walletAddress: string | undefined) => {
+export const useTokens = (walletAddress: string | undefined, imports: ImportedToken[] = []) => {
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const importsKey = useMemo(() => JSON.stringify(imports), [imports])
 
   const fetchTokens = useCallback(async () => {
     if (!walletAddress) {
@@ -35,7 +48,7 @@ export const useTokens = (walletAddress: string | undefined) => {
       const response = await fetch('/api/fetch-tokens', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address: walletAddress })
+        body: JSON.stringify({ address: walletAddress, imports }),
       })
 
       if (!response.ok) {
@@ -50,17 +63,16 @@ export const useTokens = (walletAddress: string | undefined) => {
     } finally {
       setLoading(false)
     }
-  }, [walletAddress])
+  }, [walletAddress, imports])
 
   useEffect(() => {
     fetchTokens()
 
-    // Refetch every 30 seconds if wallet is connected
     if (walletAddress) {
       const interval = setInterval(fetchTokens, 30000)
       return () => clearInterval(interval)
     }
-  }, [walletAddress, fetchTokens])
+  }, [walletAddress, fetchTokens, importsKey])
 
   return { portfolio, loading, error, refetch: fetchTokens }
 }

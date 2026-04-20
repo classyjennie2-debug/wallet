@@ -51,18 +51,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
-      {/* Premium Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-purple-600/20 via-blue-600/10 to-transparent rounded-full blur-3xl -mr-48 -mt-48 animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-500/10 via-pink-500/5 to-transparent rounded-full blur-3xl -ml-48 -mb-48 animate-pulse" style={{ animationDelay: '1.5s' }}></div>
-        <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-transparent rounded-full blur-3xl" style={{ animationDelay: '3s' }}></div>
-      </div>
-
-      {/* Subtle grid */}
-      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:80px_80px] pointer-events-none"></div>
-
-      {/* Content */}
+    <main className="min-h-screen bg-slate-950">
       <div className="relative z-10">
         {/* Premium Header */}
         <header className="sticky top-0 z-40 border-b border-purple-900/50 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
@@ -231,4 +220,3 @@ export default function Home() {
     </main>
   )
 }
-

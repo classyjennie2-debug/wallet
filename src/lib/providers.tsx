@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WalletProvider } from './wallet-context'
 import { AlertProvider } from './alert-context'
@@ -80,32 +80,24 @@ function getQueryClient() {
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => getQueryClient())
-  const isServer = typeof window === 'undefined'
+  const [mounted, setMounted] = useState(false)
 
-  if (isServer) {
-    return (
-      <WagmiProvider config={serverWagmiConfig}>
-        <QueryClientProvider client={queryClient}>
-          <WalletProvider>
-            <ErrorBoundary>
-              <AlertProvider>{children}</AlertProvider>
-            </ErrorBoundary>
-          </WalletProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
-    )
-  }
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const appTree = (
+    <WalletProvider>
+      <ErrorBoundary>
+        <AlertProvider>{children}</AlertProvider>
+      </ErrorBoundary>
+    </WalletProvider>
+  )
 
   return (
-    <WagmiProvider config={getWagmiConfig()}>
+    <WagmiProvider config={mounted ? getWagmiConfig() : serverWagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
-          <WalletProvider>
-            <ErrorBoundary>
-              <AlertProvider>{children}</AlertProvider>
-            </ErrorBoundary>
-          </WalletProvider>
-        </RainbowKitProvider>
+        {mounted ? <RainbowKitProvider>{appTree}</RainbowKitProvider> : appTree}
       </QueryClientProvider>
     </WagmiProvider>
   )
