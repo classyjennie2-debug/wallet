@@ -1,9 +1,27 @@
 'use client'
 
 import { useWeb3Modal } from '@web3modal/react'
+import { useState, useEffect } from 'react'
 
 export const LandingPage = () => {
   const { open } = useWeb3Modal()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  const handleConnectWallet = () => {
+    try {
+      if (open) {
+        open({ view: 'Connect' })
+      } else {
+        console.warn('Web3Modal open function is not available')
+      }
+    } catch (error) {
+      console.error('Error opening Web3Modal:', error)
+    }
+  }
 
   const wallets = [
     { name: 'MetaMask', symbol: '🦊', gradient: 'from-orange-500 to-yellow-500' },
@@ -89,12 +107,14 @@ export const LandingPage = () => {
             {/* CTA Buttons */}
             <div className="pt-8 flex gap-4 flex-col sm:flex-row justify-center">
               <button
-                onClick={() => open({ view: 'Connect' })}
-                className="px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl active:scale-95"
+                type="button"
+                onClick={handleConnectWallet}
+                disabled={!isClient}
+                className="px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 🔌 Connect Wallet
               </button>
-              <button className="px-10 py-4 rounded-xl border-2 border-cyan-500/50 hover:border-cyan-400 text-white font-bold transition-all duration-300 bg-cyan-500/5 hover:bg-cyan-500/10 backdrop-blur-sm hover:shadow-lg">
+              <button type="button" className="px-10 py-4 rounded-xl border-2 border-cyan-500/50 hover:border-cyan-400 text-white font-bold transition-all duration-300 bg-cyan-500/5 hover:bg-cyan-500/10 backdrop-blur-sm hover:shadow-lg cursor-pointer">
                 📖 View Docs
               </button>
             </div>
@@ -278,8 +298,10 @@ export const LandingPage = () => {
               <p className="text-gray-300 text-lg">Connect your wallet and start managing your crypto portfolio securely today.</p>
               <div className="pt-4">
                 <button
-                  onClick={() => open({ view: 'Connect' })}
-                  className="inline-block px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl active:scale-95"
+                  type="button"
+                  onClick={handleConnectWallet}
+                  disabled={!isClient}
+                  className="inline-block px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   🚀 Connect Wallet Now
                 </button>
