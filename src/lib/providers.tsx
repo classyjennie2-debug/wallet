@@ -3,7 +3,7 @@
 import { ReactNode, useState, useEffect } from 'react'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { RainbowKitProvider, Theme, lightTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 import { wagmiConfig } from './web3-config'
 import { WalletProvider } from './wallet-context'
@@ -51,11 +51,20 @@ export function Providers({ children }: { children: ReactNode }) {
     </ErrorBoundary>
   )
 
+  // Mobile-first theme for RainbowKit
+  const customTheme = lightTheme({
+    accentColor: '#0891b2',
+    accentColorForeground: 'white',
+    borderRadius: 'large',
+    fontStack: 'system',
+    overlayBlur: 'small',
+  }) as unknown as Theme
+
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         {isClient ? (
-          <RainbowKitProvider>
+          <RainbowKitProvider theme={customTheme}>
             {content}
           </RainbowKitProvider>
         ) : (

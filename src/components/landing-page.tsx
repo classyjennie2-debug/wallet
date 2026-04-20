@@ -53,25 +53,37 @@ export const LandingPage = () => {
       <div className="relative z-10">
         {/* Header */}
         <header className="sticky top-0 z-40 border-b border-white/5 bg-slate-950/95 backdrop-blur-2xl shadow-lg">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-5 flex items-center justify-between">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg">
-                <span className="text-lg sm:text-xl font-bold text-white">⚡</span>
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2 sm:py-5">
+            <div className="flex items-center justify-between gap-2 sm:gap-4">
+              <div className="flex items-center gap-2 sm:gap-3 flex-1">
+                <div className="w-9 sm:w-12 h-9 sm:h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg flex-shrink-0">
+                  <span className="text-base sm:text-xl font-bold text-white">⚡</span>
+                </div>
+                <div className="min-w-0">
+                  <div className="font-bold text-white text-sm sm:text-lg truncate">MyWallet.Help</div>
+                  <div className="text-xs text-cyan-400 font-medium hidden sm:block">Self-Sovereign Wallet</div>
+                </div>
               </div>
-              <div>
-                <div className="font-bold text-white text-base sm:text-lg">MyWallet.Help</div>
-                <div className="text-xs text-cyan-400 font-medium hidden sm:block">Self-Sovereign Wallet</div>
+              
+              {/* Mobile Menu Button */}
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="hidden sm:flex items-center gap-4 text-sm">
+                  <a href="/about" className="text-gray-400 hover:text-cyan-400 transition">About</a>
+                  <a href="/help" className="text-gray-400 hover:text-cyan-400 transition">Help</a>
+                  <a href="/privacy" className="text-gray-400 hover:text-cyan-400 transition">Privacy</a>
+                </div>
+                
+                <div className="min-w-fit">
+                  {isClient && (
+                    <ConnectButton
+                      showBalance={{ smallScreen: false, largeScreen: true }}
+                      chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
+                      accountStatus="avatar"
+                      label="Connect"
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="min-w-fit">
-              {isClient && (
-                <ConnectButton
-                  showBalance={{ smallScreen: false, largeScreen: true }}
-                  chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
-                  accountStatus="avatar"
-                  label="Connect"
-                />
-              )}
             </div>
           </div>
         </header>
@@ -297,10 +309,7 @@ export const LandingPage = () => {
               <p className="text-gray-300 text-lg">Connect your wallet and start managing your crypto portfolio securely today.</p>
               <div className="pt-4">
                 {isClient && (
-                  <>
-                    {/* @ts-expect-error w3m-connect-button is a web component */}
-                    <w3m-connect-button />
-                  </>
+                  <ConnectButton />
                 )}
               </div>
             </div>
@@ -314,33 +323,33 @@ export const LandingPage = () => {
               <div>
                 <h3 className="text-white font-black mb-3 sm:mb-4 text-sm sm:text-lg">Product</h3>
                 <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-400">
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Features</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Security</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Roadmap</a></li>
+                  <li><a href="/about" className="hover:text-cyan-400 transition duration-200">About</a></li>
+                  <li><a href="/help" className="hover:text-cyan-400 transition duration-200">Features</a></li>
+                  <li><a href="/help" className="hover:text-cyan-400 transition duration-200">Help</a></li>
                 </ul>
               </div>
               <div>
                 <h3 className="text-white font-black mb-3 sm:mb-4 text-sm sm:text-lg">Company</h3>
                 <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-400">
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">About</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Blog</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Careers</a></li>
+                  <li><a href="/about" className="hover:text-cyan-400 transition duration-200">About</a></li>
+                  <li><a href="/help" className="hover:text-cyan-400 transition duration-200">FAQ</a></li>
+                  <li><a href="/help" className="hover:text-cyan-400 transition duration-200">Support</a></li>
                 </ul>
               </div>
               <div>
                 <h3 className="text-white font-black mb-3 sm:mb-4 text-sm sm:text-lg">Legal</h3>
                 <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-400">
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Privacy</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Terms</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Security</a></li>
+                  <li><a href="/privacy" className="hover:text-cyan-400 transition duration-200">Privacy</a></li>
+                  <li><a href="/terms" className="hover:text-cyan-400 transition duration-200">Terms</a></li>
+                  <li><a href="/help" className="hover:text-cyan-400 transition duration-200">Security</a></li>
                 </ul>
               </div>
               <div>
                 <h3 className="text-white font-black mb-3 sm:mb-4 text-sm sm:text-lg">Community</h3>
                 <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-400">
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Discord</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">Twitter</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition duration-200">GitHub</a></li>
+                  <li><a href="/help" className="hover:text-cyan-400 transition duration-200">Discord</a></li>
+                  <li><a href="/help" className="hover:text-cyan-400 transition duration-200">Twitter</a></li>
+                  <li><a href="/help" className="hover:text-cyan-400 transition duration-200">GitHub</a></li>
                 </ul>
               </div>
             </div>

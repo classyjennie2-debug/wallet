@@ -11,16 +11,16 @@ export const WalletConnect = () => {
   }, [])
 
   return (
-    <div className="min-w-fit">
+    <div className="w-full sm:w-auto">
       {isMounted ? (
         <ConnectButton
           showBalance={{ smallScreen: false, largeScreen: true }}
           chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
           accountStatus="avatar"
-          label="Connect"
+          label="Connect Wallet"
         />
       ) : (
-        <div className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg">
+        <div className="w-full px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg text-center text-sm">
           Loading...
         </div>
       )}

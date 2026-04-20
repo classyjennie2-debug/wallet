@@ -7,8 +7,16 @@ const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || 'default-
 export const wagmiConfig = createConfig({
   chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
   connectors: [
-    injected(),
-    walletConnect({ projectId }),
+    injected({
+      shimDisconnect: true,
+    }),
+    walletConnect({
+      projectId,
+      showQrModal: true,
+      qrModalOptions: {
+        themeMode: 'dark',
+      },
+    }),
   ],
   transports: {
     [mainnet.id]: http(),
