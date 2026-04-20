@@ -36,16 +36,16 @@ function getQueryClient() {
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => getQueryClient())
   const [isClient, setIsClient] = useState(false)
-  const [config, setConfig] = useState(() => {
+  const [config, setConfig] = useState<any>(() => {
     // Use SSR config for initial render
-    return createSSRConfig() as any
+    return createSSRConfig()
   })
 
   useEffect(() => {
     setIsClient(true)
     // Switch to full config with WalletConnect on client-side
     const clientConfig = createClientConfig()
-    setConfig(clientConfig as any)
+    setConfig(clientConfig)
   }, [])
 
   const content = (

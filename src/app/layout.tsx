@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "@/lib/providers";
@@ -38,6 +39,34 @@ export default function RootLayout({
       </head>
       <body className="bg-slate-950 text-white">
         <Providers>{children}</Providers>
+        
+        {/* Suppress non-critical third-party errors in console */}
+        <Script 
+          id="suppress-analytics-errors"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const origError = console.error;
+                console.error = function(...args) {
+                  const message = args[0]?.toString?.() || '';
+                  // Suppress Analytics SDK and other non-critical errors
+                  if (message.includes('Analytics SDK') || message.includes('Failed to fetch')) {
+                    return;
+                  }
+                  origError.apply(console, args);
+                };
+                
+                // Suppress unhandled promise rejections from Analytics SDK
+                window.addEventListener('unhandledrejection', (event) => {
+                  if (event.reason?.message?.includes('Failed to fetch')) {
+                    event.preventDefault();
+                  }
+                });
+              })();
+            `
+          }}
+        />
       </body>
     </html>
   );

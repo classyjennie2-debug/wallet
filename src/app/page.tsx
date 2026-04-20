@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
 import { MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
-import { MobileWalletHelper } from '@/components/mobile-wallet-helper'
 import { DashboardV2 } from '@/components/dashboard-v2'
 import { DeadCoinDetector } from '@/components/dead-coin-detector'
 import { TokenSwap } from '@/components/token-swap'
@@ -23,6 +22,11 @@ type Tab = 'dashboard' | 'charts' | 'history' | 'risk' | 'nft' | 'allowances' | 
 export default function Home() {
   const { isConnected } = useAccount()
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const tabs: { id: Tab; label: string; icon: string; color: string }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊', color: 'from-cyan-500 to-blue-500' },
@@ -38,8 +42,8 @@ export default function Home() {
     { id: 'analysis', label: 'Scan', icon: '🔍', color: 'from-orange-500 to-yellow-500' },
   ]
 
-  // Show landing page if not connected
-  if (!isConnected) {
+  // Render landing page on SSR and until wallet is connected after hydration
+  if (!isMounted || !isConnected) {
     return <LandingPage />
   }
 
@@ -210,9 +214,6 @@ export default function Home() {
             </p>
           </div>
         </footer>
-
-        {/* Mobile Wallet Detection Helper */}
-        <MobileWalletHelper />
       </div>
     </main>
   )

@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { MobileWalletHelper } from './mobile-wallet-helper'
+import { Web3WalletConnector } from './web3-wallet-connector'
+
 
 export const LandingPage = () => {
   const [isClient, setIsClient] = useState(false)
@@ -76,12 +76,7 @@ export const LandingPage = () => {
                 
                 <div className="min-w-fit">
                   {isClient && (
-                    <ConnectButton
-                      showBalance={{ smallScreen: false, largeScreen: true }}
-                      chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
-                      accountStatus="avatar"
-                      label="Connect"
-                    />
+                    <Web3WalletConnector />
                   )}
                 </div>
               </div>
@@ -118,12 +113,7 @@ export const LandingPage = () => {
             <div className="pt-6 sm:pt-8 flex gap-3 sm:gap-4 flex-col sm:flex-row justify-center">
               {isClient && (
                 <>
-                  <ConnectButton
-                    showBalance={{ smallScreen: false, largeScreen: true }}
-                    chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
-                    accountStatus="avatar"
-                    label="Connect Wallet"
-                  />
+                  <Web3WalletConnector />
                   <button type="button" className="px-6 sm:px-10 py-3 sm:py-4 rounded-lg sm:rounded-xl border-2 border-cyan-500/50 hover:border-cyan-400 text-white font-bold text-sm sm:text-base transition-all duration-300 bg-cyan-500/5 hover:bg-cyan-500/10 backdrop-blur-sm hover:shadow-lg cursor-pointer w-full sm:w-auto">
                     📖 View Docs
                   </button>
@@ -310,7 +300,7 @@ export const LandingPage = () => {
               <p className="text-gray-300 text-lg">Connect your wallet and start managing your crypto portfolio securely today.</p>
               <div className="pt-4">
                 {isClient && (
-                  <ConnectButton />
+                  <Web3WalletConnector />
                 )}
               </div>
             </div>
@@ -361,9 +351,6 @@ export const LandingPage = () => {
             </div>
           </div>
         </footer>
-
-        {/* Mobile Wallet Detection Helper */}
-        <MobileWalletHelper />
       </div>
     </div>
   )
