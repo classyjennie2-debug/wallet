@@ -5,8 +5,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WalletProvider } from './wallet-context'
 import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
-import { createConfig, WagmiProvider, http } from 'wagmi'
-import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { WagmiProvider, createConfig, configureChains } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia } from 'wagmi/chains'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -18,40 +19,27 @@ if (!projectId && process.env.NODE_ENV !== 'production') {
 }
 
 const supportedChains = [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia] as const
-const transports = {
-  [mainnet.id]: http(),
-  [polygon.id]: http(),
-  [arbitrum.id]: http(),
-  [base.id]: http(),
-  [sepolia.id]: http(),
-  [polygonMumbai.id]: http(),
-  [arbitrumSepolia.id]: http(),
-  [baseSepolia.id]: http(),
-}
+const { chains, publicClient } = configureChains(supportedChains, [publicProvider()])
+
+const { connectors } = getDefaultWallets({
+  appName: 'MyWallet.Help',
+  projectId: projectId ?? undefined,
+  chains,
+})
 
 const serverWagmiConfig = createConfig({
-  chains: supportedChains,
-  transports,
+  autoConnect: false,
+  connectors,
+  publicClient,
   ssr: true,
 })
 
-let clientWagmiConfig: ReturnType<typeof getDefaultConfig<typeof supportedChains, Record<(typeof supportedChains)[number]['id'], ReturnType<typeof http>>>> | undefined
-
 function getWagmiConfig() {
-  if (!clientWagmiConfig) {
-    clientWagmiConfig = getDefaultConfig({
-      appName: 'MyWallet.Help',
-      appDescription: 'Professional wallet recovery and issue resolution platform',
-      appUrl: 'https://mywallet.help',
-      appIcon: 'https://mywallet.help/logo.png',
-      projectId: projectId ?? 'missing-project-id',
-      ssr: false,
-      chains: supportedChains,
-      transports,
-    })
-  }
-
-  return clientWagmiConfig
+  return createConfig({
+    autoConnect: true,
+    connectors,
+    publicClient,
+  })
 }
 
 const createQueryClient = () =>

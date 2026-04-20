@@ -6,13 +6,8 @@ import { MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
 import { DashboardV2 } from '@/components/dashboard-v2'
 import { DeadCoinDetector } from '@/components/dead-coin-detector'
-import { TokenSwap } from '@/components/token-swap'
-import { SendToken } from '@/components/send-token'
 import { LandingPageV2 as LandingPage } from '@/components/landing-page-v2'
-import { PriceCharts } from '@/components/price-charts'
 import { TransactionHistory } from '@/components/transaction-history'
-import { PortfolioRiskScore } from '@/components/portfolio-risk-score'
-import { NFTPortfolio } from '@/components/nft-portfolio'
 import { TokenAllowanceManager } from '@/components/token-allowance-manager'
 import { SecurityAudit } from '@/components/security-audit'
 import { WalletRestoration } from '@/components/wallet-restoration'
@@ -20,7 +15,7 @@ import { PortfolioOverview } from '@/components/portfolio-overview'
 
 export const dynamic = 'force-dynamic'
 
-type Tab = 'dashboard' | 'charts' | 'history' | 'risk' | 'nft' | 'allowances' | 'security' | 'recovery' | 'swap' | 'send' | 'analysis'
+type Tab = 'dashboard' | 'history' | 'security' | 'recovery'
 
 export default function Home() {
   const { isConnected } = useAccount()
@@ -31,18 +26,11 @@ export default function Home() {
     setIsMounted(true)
   }, [])
 
-  const tabs: { id: Tab; label: string; icon: string; color: string }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊', color: 'from-cyan-500 to-blue-500' },
-    { id: 'charts', label: 'Charts', icon: '📈', color: 'from-emerald-500 to-teal-500' },
-    { id: 'history', label: 'History', icon: '📜', color: 'from-blue-500 to-cyan-500' },
-    { id: 'risk', label: 'Risk', icon: '⚠️', color: 'from-orange-500 to-red-500' },
-    { id: 'nft', label: 'NFTs', icon: '🖼️', color: 'from-purple-500 to-pink-500' },
-    { id: 'allowances', label: 'Approvals', icon: '🔐', color: 'from-yellow-500 to-orange-500' },
-    { id: 'security', label: 'Security', icon: '🛡️', color: 'from-red-500 to-pink-500' },
-    { id: 'recovery', label: 'Restoration', icon: '🔄', color: 'from-indigo-500 to-purple-500' },
-    { id: 'swap', label: 'Swap', icon: '⚡', color: 'from-purple-500 to-pink-500' },
-    { id: 'send', label: 'Send', icon: '📤', color: 'from-teal-500 to-emerald-500' },
-    { id: 'analysis', label: 'Scan', icon: '🔍', color: 'from-orange-500 to-yellow-500' },
+  const tabs: { id: Tab; label: string; icon: string; color?: string }[] = [
+    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'history', label: 'History', icon: '📜' },
+    { id: 'security', label: 'Security', icon: '🛡️' },
+    { id: 'recovery', label: 'Recovery', icon: '🔄' },
   ]
 
   // Render landing page on SSR and until wallet is connected after hydration
@@ -103,18 +91,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8 pb-20 sm:pb-24 safe-area-bottom">
           {activeTab === 'dashboard' && (
             <div className="animate-in fade-in-50 space-y-6">
-              <DashboardV2 onNavigate={setActiveTab} />
+              <DashboardV2 onNavigate={(t) => setActiveTab(t)} />
               <PortfolioOverview />
-            </div>
-          )}
-
-          {activeTab === 'charts' && (
-            <div className="animate-in fade-in-50">
-              <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Price Charts</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Track token prices over time</p>
-              </div>
-              <PriceCharts />
             </div>
           )}
 
@@ -128,83 +106,30 @@ export default function Home() {
             </div>
           )}
 
-          {activeTab === 'risk' && (
-            <div className="animate-in fade-in-50">
-              <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Portfolio Risk Score</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Analyze your portfolio risk metrics</p>
-              </div>
-              <PortfolioRiskScore />
-            </div>
-          )}
-
-          {activeTab === 'nft' && (
-            <div className="animate-in fade-in-50">
-              <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">NFT Portfolio</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">View your NFT collection</p>
-              </div>
-              <NFTPortfolio />
-            </div>
-          )}
-
-          {activeTab === 'allowances' && (
-            <div className="animate-in fade-in-50">
-              <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Token Allowances</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Manage contract approvals</p>
-              </div>
-              <TokenAllowanceManager />
-            </div>
-          )}
-
           {activeTab === 'security' && (
-            <div className="animate-in fade-in-50">
+            <div className="animate-in fade-in-50 space-y-6">
               <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Security Audit</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Check contract security status</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">Security & Tools</h1>
+                <p className="text-gray-400 text-xs sm:text-sm mt-1">Contract checks, dead-coin scanner, and allowance manager</p>
               </div>
-              <SecurityAudit />
+              <div className="space-y-6">
+                <SecurityAudit />
+                <DeadCoinDetector />
+                <TokenAllowanceManager />
+              </div>
             </div>
           )}
 
           {activeTab === 'recovery' && (
-            <div className="animate-in fade-in-50">
+            <div className="animate-in fade-in-50 space-y-6">
               <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Wallet Restoration</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Recover your wallet securely using your backup</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">Recovery & Guidance</h1>
+                <p className="text-gray-400 text-xs sm:text-sm mt-1">Wallet restoration, connection troubleshooting, and upgrade guides</p>
               </div>
-              <WalletRestoration />
-            </div>
-          )}
-
-          {activeTab === 'swap' && (
-            <div className="animate-in fade-in-50">
-              <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Swap Tokens</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Exchange your crypto instantly</p>
+              <div className="space-y-6">
+                <WalletRestoration />
+                {/* connection troubleshooter / guides could be added here */}
               </div>
-              <TokenSwap />
-            </div>
-          )}
-
-          {activeTab === 'send' && (
-            <div className="animate-in fade-in-50">
-              <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Send Tokens</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Transfer to any address</p>
-              </div>
-              <SendToken />
-            </div>
-          )}
-
-          {activeTab === 'analysis' && (
-            <div className="animate-in fade-in-50">
-              <div className="mb-4 sm:mb-6">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">Dead Coin Scanner</h1>
-                <p className="text-gray-400 text-xs sm:text-sm mt-1">Identify and remove worthless tokens</p>
-              </div>
-              <DeadCoinDetector />
             </div>
           )}
         </div>

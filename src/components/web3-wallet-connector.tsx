@@ -1,28 +1,69 @@
 'use client'
 
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-
 export function Web3WalletConnector() {
-  if (typeof window === 'undefined') {
-    return (
-      <button
-        type="button"
-        disabled
-        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg opacity-80 w-full sm:w-auto"
-      >
-        Connect Wallet
-      </button>
-    )
-  }
-
   return (
-    <ConnectButton
-      accountStatus="avatar"
-      chainStatus="icon"
-      showBalance={{
-        smallScreen: false,
-        largeScreen: true,
+    <ConnectButton.Custom>
+      {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
+        const connected = mounted && account && chain
+
+        const truncate = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
+
+        if (!mounted) {
+          return (
+            <button
+              type="button"
+              disabled
+              className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold opacity-80"
+            >
+              Connect Wallet
+            </button>
+          )
+        }
+
+        if (!connected) {
+          return (
+            <button
+              onClick={openConnectModal}
+              className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold transition"
+            >
+              Connect Wallet
+            </button>
+          )
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={openChainModal}
+              className="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/6 text-sm text-white/90 hover:bg-white/10"
+            >
+              {chain?.hasIcon && chain?.iconUrl ? (
+                // wagmi/rainbowkit provide iconUrl for chains
+                // render it if available, otherwise show a placeholder
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={chain.iconUrl} alt={chain.name ?? 'chain'} className="w-5 h-5 rounded-sm" />
+              ) : (
+                <span className="w-5 h-5 inline-block bg-white/10 rounded-sm" />
+              )}
+              <span className="font-medium">{chain?.name}</span>
+            </button>
+
+            <button
+              onClick={openAccountModal}
+              className="flex items-center gap-3 px-3 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium w-full sm:w-auto"
+            >
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold">
+                {account?.address ? account.address[2]?.toUpperCase() : ''}
+              </div>
+              <div className="text-left">
+                <div className="text-sm sm:text-base">{account?.displayName ?? truncate(account?.address ?? '')}</div>
+                <div className="text-xs text-white/70 hidden sm:block">{account?.displayBalance ?? ''}</div>
+              </div>
+            </button>
+          </div>
+        )
       }}
-    />
+    </ConnectButton.Custom>
   )
 }
