@@ -11,15 +11,6 @@ export const SUPPORTED_CHAINS = [
   baseSepolia,
 ]
 
-export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
-
-if (!projectId && typeof window !== 'undefined') {
-  console.warn(
-    'NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID is not set. Wallet connection may be limited. ' +
-    'Get one at https://cloud.walletconnect.com'
-  )
-}
-
 export const NETWORKS = [
   { name: 'Ethereum', id: mainnet.id, icon: '🔷', color: '#627EEA' },
   { name: 'Polygon', id: polygon.id, icon: '🟣', color: '#8247E5' },

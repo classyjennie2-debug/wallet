@@ -18,6 +18,8 @@ import { SecurityAudit } from '@/components/security-audit'
 import { WalletRestoration } from '@/components/wallet-restoration'
 import { PortfolioOverview } from '@/components/portfolio-overview'
 
+export const dynamic = 'force-dynamic'
+
 type Tab = 'dashboard' | 'charts' | 'history' | 'risk' | 'nft' | 'allowances' | 'security' | 'recovery' | 'swap' | 'send' | 'analysis'
 
 export default function Home() {
