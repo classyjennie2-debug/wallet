@@ -6,7 +6,6 @@ import { WalletProvider } from './wallet-context'
 import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { WagmiProvider, createConfig, http } from 'wagmi'
-import { metaMask, walletConnect } from '@wagmi/connectors'
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia } from 'wagmi/chains'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -16,10 +15,6 @@ const supportedChains = [mainnet, polygon, arbitrum, base, sepolia, polygonMumba
 // Create wagmi config with simple http transports per-chain
 const wagmiConfig = createConfig({
   chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
-  connectors: [
-    metaMask(),
-    walletConnect({ projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID, showQrModal: true }),
-  ],
   transports: {
     [mainnet.id]: http(),
     [polygon.id]: http(),
