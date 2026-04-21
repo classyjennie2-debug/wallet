@@ -5,42 +5,27 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WalletProvider } from './wallet-context'
 import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
-import { WagmiProvider, createConfig, configureChains } from 'wagmi'
-import { publicProvider } from 'wagmi/providers/public'
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { WagmiProvider, createConfig, http } from 'wagmi'
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia } from 'wagmi/chains'
 import '@rainbow-me/rainbowkit/styles.css'
 
-const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
+const supportedChains = [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia]
 
-if (!projectId && process.env.NODE_ENV !== 'production') {
-  // WalletConnect can only work with a project id.
-  console.warn('NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID is not set; WalletConnect will not work.')
-}
-
-const supportedChains = [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia] as const
-const { chains, publicClient } = configureChains(supportedChains, [publicProvider()])
-
-const { connectors } = getDefaultWallets({
-  appName: 'MyWallet.Help',
-  projectId: projectId ?? undefined,
-  chains,
+// Create wagmi config with simple http transports per-chain
+const wagmiConfig = createConfig({
+  chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
+  transports: {
+    [mainnet.id]: http(),
+    [polygon.id]: http(),
+    [arbitrum.id]: http(),
+    [base.id]: http(),
+    [sepolia.id]: http(),
+    [polygonMumbai.id]: http(),
+    [arbitrumSepolia.id]: http(),
+    [baseSepolia.id]: http(),
+  },
 })
-
-const serverWagmiConfig = createConfig({
-  autoConnect: false,
-  connectors,
-  publicClient,
-  ssr: true,
-})
-
-function getWagmiConfig() {
-  return createConfig({
-    autoConnect: true,
-    connectors,
-    publicClient,
-  })
-}
 
 const createQueryClient = () =>
   new QueryClient({
@@ -68,10 +53,10 @@ function getQueryClient() {
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => getQueryClient())
-  const [mounted, setMounted] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    setIsClient(true)
   }, [])
 
   const appTree = (
@@ -82,11 +67,24 @@ export function Providers({ children }: { children: ReactNode }) {
     </WalletProvider>
   )
 
-  return (
-    <WagmiProvider config={mounted ? getWagmiConfig() : serverWagmiConfig}>
+  // During SSR, don't mount RainbowKit (it relies on window)
+  if (!isClient) {
+    return (
       <QueryClientProvider client={queryClient}>
-        {mounted ? <RainbowKitProvider>{appTree}</RainbowKitProvider> : appTree}
+        <WagmiProvider config={wagmiConfig}>
+          {appTree}
+        </WagmiProvider>
       </QueryClientProvider>
-    </WagmiProvider>
+    )
+  }
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider config={wagmiConfig}>
+        <RainbowKitProvider>
+          {appTree}
+        </RainbowKitProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
   )
 }

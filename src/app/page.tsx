@@ -91,7 +91,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8 pb-20 sm:pb-24 safe-area-bottom">
           {activeTab === 'dashboard' && (
             <div className="animate-in fade-in-50 space-y-6">
-              <DashboardV2 onNavigate={(t) => setActiveTab(t)} />
+              <DashboardV2 onNavigate={(t) => setActiveTab(t as Tab)} />
               <PortfolioOverview />
             </div>
           )}
