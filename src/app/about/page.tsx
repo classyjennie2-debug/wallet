@@ -7,7 +7,7 @@ export default function About() {
         <div className="space-y-8">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white">About CryptoDash</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white">About MyWallet.Help</h1>
             <p className="text-gray-400 text-lg">The Ultimate Crypto Wallet Dashboard</p>
           </div>
 
@@ -15,7 +15,7 @@ export default function About() {
           <div className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/30">
             <h2 className="text-2xl font-bold text-cyan-300 mb-3">Our Mission</h2>
             <p className="text-gray-300 leading-relaxed">
-              CryptoDash is dedicated to making cryptocurrency management simple, secure, and accessible to everyone. We believe that managing digital assets should be intuitive, transparent, and empowering.
+              MyWallet.Help is dedicated to making cryptocurrency management simple, secure, and accessible to everyone. We believe that managing digital assets should be intuitive, transparent, and empowering.
             </p>
           </div>
 
