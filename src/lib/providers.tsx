@@ -18,8 +18,7 @@ const wagmiConfig = createConfig({
   chains: [mainnet, polygon, arbitrum, base, sepolia, polygonMumbai, arbitrumSepolia, baseSepolia],
   connectors: [
     metaMask(),
-    // Prefer mobile deep links by disabling the QR modal when possible.
-    walletConnect({ projectId: (process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? '') as string, showQrModal: false }),
+    walletConnect({ projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID, showQrModal: true }),
   ],
   transports: {
     [mainnet.id]: http(),
@@ -32,10 +31,6 @@ const wagmiConfig = createConfig({
     [baseSepolia.id]: http(),
   },
 })
-
-if (!process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID) {
-  console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set — WalletConnect mobile deep links may not work properly')
-}
 
 const createQueryClient = () =>
   new QueryClient({
