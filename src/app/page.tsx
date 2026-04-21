@@ -1,4 +1,4 @@
-'use client'
+ 'use client'
 
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
@@ -12,6 +12,7 @@ import { TokenAllowanceManager } from '@/components/token-allowance-manager'
 import { SecurityAudit } from '@/components/security-audit'
 import { WalletRestoration } from '@/components/wallet-restoration'
 import { PortfolioOverview } from '@/components/portfolio-overview'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,6 +38,16 @@ export default function Home() {
   if (!isMounted || !isConnected) {
     return <LandingPage />
   }
+
+  // Auto-open connect modal on dashboard load if not connected
+  const { openConnectModal } = useConnectModal()
+  useEffect(() => {
+    if (isMounted && !isConnected && openConnectModal) {
+      // give a slight delay to let UI stabilize
+      const t = setTimeout(() => openConnectModal(), 300)
+      return () => clearTimeout(t)
+    }
+  }, [isMounted, isConnected, openConnectModal])
 
   return (
     <main className="min-h-screen bg-slate-950">
