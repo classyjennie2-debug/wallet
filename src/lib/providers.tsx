@@ -7,7 +7,8 @@ import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import { metaMask, walletConnect, injected } from '@wagmi/connectors'
-import { getDefaultConfig, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { connectorsForWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
 import { SUPPORTED_CHAINS } from './web3-config'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -43,22 +44,52 @@ const transports: Record<number, ReturnType<typeof http>> = {
   [SUPPORTED_CHAINS[7].id]: http(),
 }
 
+function isMobileBrowser() {
+  if (typeof navigator === 'undefined') {
+    return false
+  }
+
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+}
+
 function createWagmiConfig() {
   const isBrowser = typeof window !== 'undefined'
 
   if (projectId && isBrowser) {
-    return getDefaultConfig({
-      appName: APP_NAME,
-      appDescription: APP_DESCRIPTION,
-      appUrl: APP_URL,
-      projectId,
-      wallets: getDefaultWallets({
+    const mobile = isMobileBrowser()
+    const connectors = connectorsForWallets(
+      [
+        {
+          groupName: 'Popular',
+          wallets: [
+            metaMaskWallet,
+            rainbowWallet,
+            coinbaseWallet,
+            baseAccount,
+            trustWallet,
+            ...(mobile ? [] : [walletConnectWallet]),
+          ],
+        },
+        ...(mobile
+          ? []
+          : [
+              {
+                groupName: 'More ways to connect',
+                wallets: [walletConnectWallet],
+              },
+            ]),
+      ],
+      {
         appName: APP_NAME,
         appDescription: APP_DESCRIPTION,
         appUrl: APP_URL,
         projectId,
-      }).wallets,
+      }
+    )
+
+    return createConfig({
       chains: SUPPORTED_CHAINS,
+      connectors,
       transports,
       ssr: true,
     })

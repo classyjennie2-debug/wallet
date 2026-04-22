@@ -49,8 +49,8 @@ export function MobileWalletHelper() {
         </div>
       ) : (
         <div className="pointer-events-auto rounded-lg border border-blue-500/30 bg-blue-500/20 p-3 text-sm text-blue-300">
-          <p className="mb-1 font-semibold">No mobile wallet detected</p>
-          <p className="text-xs opacity-90">Install MetaMask or Trust Wallet, or use WalletConnect with the QR flow.</p>
+          <p className="mb-1 font-semibold">No in-browser wallet detected</p>
+          <p className="text-xs opacity-90">That is normal in Safari or Chrome. Pick MetaMask, Rainbow, Trust Wallet, Coinbase Wallet, or Base Account in the connect modal.</p>
         </div>
       )}
     </div>
