@@ -1,12 +1,15 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+import { useAccount } from 'wagmi'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Web3WalletConnector } from './web3-wallet-connector'
 
 const features = [
-  { label: 'Restore', title: 'Wallet Restoration', desc: 'Validate seed phrases, derivation paths, and restore access safely.' },
-  { label: 'Scan', title: 'Diagnostics & Scanner', desc: 'Dead-coin detection, contract checks, and risk flags.' },
-  { label: 'Guard', title: 'Allowance Manager', desc: 'View and revoke token approvals to reduce risk.' },
-  { label: 'Fix', title: 'Connection Troubleshooter', desc: 'Resolve wallet and network connection issues quickly.' },
+  { label: 'Restore', title: 'Wallet Restoration Hub', desc: 'Recover access safely and validate seed phrase data without exposing private keys.' },
+  { label: 'Scan', title: 'Risk & Contract Scanner', desc: 'Analyze tokens, contracts, and approvals for dead coin risk and hidden vulnerabilities.' },
+  { label: 'Guard', title: 'Allowance Defense', desc: 'Review approvals and revoke unsafe token allowances to protect your funds.' },
+  { label: 'Fix', title: 'Connection Diagnostics', desc: 'Detect and resolve wallet network and connection issues quickly.' },
 ]
 
 const stats = [
@@ -16,6 +19,25 @@ const stats = [
 ]
 
 export const LandingPageV2 = () => {
+  const router = useRouter()
+  const { isConnected } = useAccount()
+  const { openConnectModal } = useConnectModal()
+
+  const handleLaunch = () => {
+    if (isConnected) {
+      router.push('/')
+      return
+    }
+
+    if (openConnectModal) {
+      openConnectModal()
+    }
+  }
+
+  const handleReadDocs = () => {
+    router.push('/docs')
+  }
+
   return (
     <div className="min-h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -65,22 +87,30 @@ export const LandingPageV2 = () => {
 
           <div className="space-y-4">
             <h1 className="text-5xl font-black leading-tight tracking-tight text-white sm:text-6xl md:text-7xl">
-              Your Crypto,
+              Recover Wallets,
               <br />
               <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-purple-300 bg-clip-text text-transparent">
-                Fully Sovereign
+                Secure Your Crypto
               </span>
             </h1>
             <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-300 sm:text-xl">
-              Manage, analyze, and secure your entire crypto portfolio with zero compromises on privacy. Connect any wallet and track everything in one dashboard.
+              Find wallet health issues, remove risky approvals, and recover lost access with a security-first dashboard built for real crypto users.
             </p>
           </div>
 
           <div className="flex flex-col justify-center gap-4 pt-4 sm:flex-row">
-            <button type="button" className="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3 font-semibold text-white transition hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-600/50">
+            <button
+              type="button"
+              onClick={handleLaunch}
+              className="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3 font-semibold text-white transition hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-600/50"
+            >
               Launch Dashboard
             </button>
-            <button type="button" className="rounded-lg border border-purple-600/50 bg-purple-600/10 px-8 py-3 font-semibold text-purple-200 transition hover:bg-purple-600/20">
+            <button
+              type="button"
+              onClick={handleReadDocs}
+              className="rounded-lg border border-purple-600/50 bg-purple-600/10 px-8 py-3 font-semibold text-purple-200 transition hover:bg-purple-600/20"
+            >
               Read Docs
             </button>
           </div>
@@ -108,6 +138,41 @@ export const LandingPageV2 = () => {
         <section className="mx-auto max-w-5xl px-4 py-12 text-center sm:px-6">
           <h3 className="mb-2 text-lg font-semibold text-white">Multi-Chain Support</h3>
           <p className="text-sm text-slate-400">Ethereum, Polygon, Arbitrum, Base, and supported testnets.</p>
+        </section>
+
+        <section className="mx-auto max-w-6xl space-y-6 px-4 py-16 sm:px-6">
+          <div className="rounded-3xl border border-purple-600/20 bg-slate-950/70 p-8 text-center">
+            <h2 className="text-3xl font-bold text-white">A Recovery-First Wallet Experience</h2>
+            <p className="mx-auto mt-4 max-w-3xl text-slate-300">
+              MyWallet.Help is built for people who want more than a portfolio overview. It is a security-first recovery and audit dashboard that helps you find risk, fix wallet issues, and keep your assets under your control.
+            </p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                title: 'Risk detection',
+                description: 'Spot dead coins, unverified contracts, and suspicious approvals before they hurt your wallet.',
+              },
+              {
+                title: 'Recovery tools',
+                description: 'Validate seed data, troubleshoot wallet connections, and restore safe access on-chain.',
+              },
+              {
+                title: 'Approval hygiene',
+                description: 'Review and revoke token allowances to minimize exposure to malicious contracts.',
+              },
+              {
+                title: 'Non-custodial',
+                description: 'Everything runs in your browser and your keys never leave your device.',
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-xl border border-purple-600/20 bg-white/5 p-6 text-left">
+                <h3 className="text-lg font-bold text-white">{item.title}</h3>
+                <p className="mt-2 text-sm text-slate-400">{item.description}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="mx-auto max-w-6xl space-y-12 px-4 py-20 sm:px-6">

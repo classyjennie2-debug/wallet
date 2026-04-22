@@ -2,7 +2,7 @@
 
 import { useWallet } from '@/lib/wallet-context'
 import { useAccount } from 'wagmi'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorHandler } from '@/lib/error-handler'
 
 type Tab = 'dashboard' | 'charts' | 'history' | 'risk' | 'nft' | 'allowances' | 'security' | 'recovery' | 'swap' | 'send' | 'analysis'
@@ -16,6 +16,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
   const { isConnected } = useAccount()
   const { handleError } = useErrorHandler()
   const [tokensExpanded, setTokensExpanded] = useState(false)
+  const hasFetched = useRef(false)
 
   const stats = useMemo(() => ({
     assetsCount: tokens.length,
@@ -24,11 +25,19 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
   }), [tokens])
 
   useEffect(() => {
-    if (isConnected) {
-      fetchTokens().catch((err) => {
-        handleError(err, 'NETWORK_ERROR')
-      })
+    if (!isConnected) {
+      hasFetched.current = false
+      return
     }
+
+    if (hasFetched.current) {
+      return
+    }
+
+    hasFetched.current = true
+    fetchTokens().catch((err) => {
+      handleError(err, 'NETWORK_ERROR')
+    })
   }, [isConnected, fetchTokens, handleError])
 
   if (!isConnected) {

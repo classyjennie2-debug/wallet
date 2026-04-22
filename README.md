@@ -30,6 +30,10 @@ A modern, feature-rich Web3 wallet management application built with Next.js, Ty
 - Alchemy or Infura API key (for RPC endpoints)
 - WalletConnect Project ID (from [Reown Dashboard](https://dashboard.reown.com))
 
+### Documentation
+- Read the website audit and product overview: [docs/website-audit.md](docs/website-audit.md)
+- Access the built-in documentation route in the app at `/docs`
+
 ### Installation
 
 1. **Install dependencies**

@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WalletProvider } from './wallet-context'
 import { AlertProvider } from './alert-context'
@@ -8,7 +8,6 @@ import { ErrorBoundary } from '@/components/error-boundary'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import { metaMask, injected } from '@wagmi/connectors'
 import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
-import { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
 import { SUPPORTED_CHAINS } from './web3-config'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -52,10 +51,12 @@ function isMobileBrowser() {
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 }
 
-function createWagmiConfig() {
+async function createWagmiConfig() {
   const mobile = isMobileBrowser()
 
   if (projectId) {
+    const { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet, walletConnectWallet } = await import('@rainbow-me/rainbowkit/wallets')
+
     const rkConnectors = connectorsForWallets(
       [
         {
@@ -99,13 +100,31 @@ function createWagmiConfig() {
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(createQueryClient)
-  const [wagmiConfig] = useState(createWagmiConfig)
+  const [wagmiConfig, setWagmiConfig] = useState<ReturnType<typeof createConfig> | null>(null)
+
+  useEffect(() => {
+    let active = true
+
+    createWagmiConfig().then((config) => {
+      if (active) {
+        setWagmiConfig(config)
+      }
+    })
+
+    return () => {
+      active = false
+    }
+  }, [])
 
   const appTree = (
     <ErrorBoundary>
       <AlertProvider>{children}</AlertProvider>
     </ErrorBoundary>
   )
+
+  if (!wagmiConfig) {
+    return <div className="min-h-screen bg-slate-950" />
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -42,9 +42,9 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
     <main className="min-h-screen bg-slate-950">
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
-          <div className="mx-auto max-w-full px-3 py-2 sm:px-4 sm:py-4">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-3">
+          <div className="mx-auto w-full max-w-full px-4 py-3 sm:px-4 sm:py-4">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
                 <div className="block md:hidden">
                   <MyWalletLogo size="sm" variant="icon" />
                 </div>
@@ -64,7 +64,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
           </div>
         </header>
 
-        <nav className="sticky top-[72px] z-30 mx-auto w-full max-w-7xl px-3 py-3 sm:px-4 sm:py-4">
+        <nav className="sticky top-[72px] z-30 mx-auto w-full max-w-7xl px-2 py-3 sm:px-4 sm:py-4">
           <div className="overflow-hidden rounded-full border border-white/10 bg-slate-950/90 px-2 py-2 shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)] backdrop-blur-xl">
             <div className="flex gap-2 overflow-x-auto px-1" role="tablist">
               {tabs.map((tab) => (
@@ -72,7 +72,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex min-h-[48px] items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition-all whitespace-nowrap ${
+                  className={`flex min-h-[44px] items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-all whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'bg-gradient-to-r from-purple-500/20 via-slate-900/80 to-cyan-500/20 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
                       : 'text-slate-400 hover:text-white hover:bg-white/5'

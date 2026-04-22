@@ -2,20 +2,29 @@
 
 import { useWallet } from '@/lib/wallet-context'
 import { useAccount } from 'wagmi'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useErrorHandler } from '@/lib/error-handler'
 
 export const Portfolio = () => {
   const { tokens, loading, totalBalance, fetchTokens } = useWallet()
   const { isConnected } = useAccount()
   const { handleError } = useErrorHandler()
+  const hasFetched = useRef(false)
 
   useEffect(() => {
-    if (isConnected) {
-      fetchTokens().catch((err) => {
-        handleError(err, 'NETWORK_ERROR')
-      })
+    if (!isConnected) {
+      hasFetched.current = false
+      return
     }
+
+    if (hasFetched.current) {
+      return
+    }
+
+    hasFetched.current = true
+    fetchTokens().catch((err) => {
+      handleError(err, 'NETWORK_ERROR')
+    })
   }, [isConnected, fetchTokens, handleError])
 
   if (!isConnected) {

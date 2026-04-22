@@ -11,6 +11,7 @@ const chainOptions = [
   { id: 137, label: 'Polygon' },
   { id: 42161, label: 'Arbitrum' },
   { id: 8453, label: 'Base' },
+  { id: 56, label: 'BSC' },
 ]
 const pageSize = 25
 const explorerByChainId: Record<number, string> = {
@@ -18,6 +19,7 @@ const explorerByChainId: Record<number, string> = {
   137: 'https://polygonscan.com',
   42161: 'https://arbiscan.io',
   8453: 'https://basescan.org',
+  56: 'https://bscscan.com',
 }
 const manualImportsKey = 'manual-token-imports'
 
