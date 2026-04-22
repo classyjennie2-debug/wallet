@@ -31,7 +31,7 @@ export default function Terms() {
               <li>• Modifying or copying the materials</li>
               <li>• Using the materials for any commercial purpose or any public display</li>
               <li>• Attempting to decompile or reverse engineer any software contained on the site</li>
-              <li>• Transferring the materials to another person or "mirroring" the materials on any other server</li>
+              <li>• Transferring the materials to another person or &quot;mirroring&quot; the materials on any other server</li>
               <li>• Removing any copyright or other proprietary notations from the materials</li>
               <li>• Transmitting the materials over a network</li>
             </ul>
@@ -41,7 +41,7 @@ export default function Terms() {
           <div className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-red-500/10 to-red-500/5 border border-red-500/30">
             <h2 className="text-xl font-bold text-red-300 mb-3">2. Disclaimer</h2>
             <p className="text-gray-300">
-              The materials on MyWallet.Help are provided on an 'as is' basis. MyWallet.Help makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
+              The materials on MyWallet.Help are provided on an &apos;as is&apos; basis. MyWallet.Help makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
             </p>
           </div>
 
@@ -123,3 +123,4 @@ export default function Terms() {
     </main>
   )
 }
+

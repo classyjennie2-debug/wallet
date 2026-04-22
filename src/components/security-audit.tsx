@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-
 interface SecurityAudit {
   id: string
   token: string
@@ -15,7 +13,7 @@ interface SecurityAudit {
 }
 
 export const SecurityAudit = () => {
-  const [audits, setAudits] = useState<SecurityAudit[]>([])
+  const audits: SecurityAudit[] = []
 
   const getStatusColor = (status: string) => {
     switch (status) {

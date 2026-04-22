@@ -1,17 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export const PriceCharts = () => {
   const [selectedToken, setSelectedToken] = useState('ETH')
-  const [chartData, setChartData] = useState<{ time: string; price: number }[]>([])
   const [timeframe, setTimeframe] = useState<'1D' | '7D' | '30D'>('7D')
-
-  useEffect(() => {
-    // Price data will be fetched from actual price API when needed
-    // For now, show empty state
-    setChartData([])
-  }, [selectedToken, timeframe])
+  const chartData: { time: string; price: number }[] = []
 
   const tokens = ['ETH', 'BTC', 'USDT', 'USDC', 'DAI']
   const maxPrice = Math.max(...chartData.map(d => d.price), 3000)

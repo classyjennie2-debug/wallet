@@ -24,6 +24,10 @@ const AlertContext = createContext<AlertContextType | undefined>(undefined)
 export const AlertProvider = ({ children }: { children: ReactNode }) => {
   const [alerts, setAlerts] = useState<Alert[]>([])
 
+  const removeAlert = useCallback((id: string) => {
+    setAlerts((prev) => prev.filter((alert) => alert.id !== id))
+  }, [])
+
   const addAlert = useCallback((alert: Omit<Alert, 'id'>) => {
     const id = `${Date.now()}-${Math.random()}`
     const newAlert = { ...alert, id }
@@ -37,11 +41,7 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
         removeAlert(id)
       }, duration)
     }
-  }, [])
-
-  const removeAlert = useCallback((id: string) => {
-    setAlerts((prev) => prev.filter((alert) => alert.id !== id))
-  }, [])
+  }, [removeAlert])
 
   const clearAlerts = useCallback(() => {
     setAlerts([])

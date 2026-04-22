@@ -5,7 +5,7 @@ import { useState } from 'react'
 export const WalletRecovery = () => {
   const [secretPhrase, setSecretPhrase] = useState('')
   const [email, setEmail] = useState('')
-  const [walletFile, setWalletFile] = useState('')
+  const [, setWalletFile] = useState('')
   const [status, setStatus] = useState<'idle' | 'validating' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
   const [recoveryMethod, setRecoveryMethod] = useState<'phrase' | 'file' | 'keystore'>('phrase')
@@ -213,7 +213,7 @@ export const WalletRecovery = () => {
             🔴 Never enter your seed phrase on untrusted websites
           </div>
           <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-xs">
-            ⚠️ Make sure you're on the official URL (HTTPS)
+            ⚠️ Make sure you&apos;re on the official URL (HTTPS)
           </div>
           <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs">
             ✅ Only recover in private/incognito mode
@@ -226,3 +226,4 @@ export const WalletRecovery = () => {
     </div>
   )
 }
+

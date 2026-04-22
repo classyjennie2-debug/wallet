@@ -11,15 +11,15 @@ declare global {
 
   interface W3mButtonProps {
     balance?: 'show' | 'hide'
-    [key: string]: any
+    [key: string]: unknown
   }
 
   interface W3mConnectButtonProps {
-    [key: string]: any
+    [key: string]: unknown
   }
 
   interface W3mAccountButtonProps {
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 

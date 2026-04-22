@@ -66,12 +66,19 @@ export const useTokens = (walletAddress: string | undefined, imports: ImportedTo
   }, [walletAddress, imports])
 
   useEffect(() => {
-    fetchTokens()
+    const initialFetch = setTimeout(() => {
+      void fetchTokens()
+    }, 0)
 
     if (walletAddress) {
       const interval = setInterval(fetchTokens, 30000)
-      return () => clearInterval(interval)
+      return () => {
+        clearTimeout(initialFetch)
+        clearInterval(interval)
+      }
     }
+
+    return () => clearTimeout(initialFetch)
   }, [walletAddress, fetchTokens, importsKey])
 
   return { portfolio, loading, error, refetch: fetchTokens }

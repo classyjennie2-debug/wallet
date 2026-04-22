@@ -35,9 +35,23 @@ interface ChainConfig {
   name: string
   symbol: string
   rpcUrl: string
+  fallbackRpcUrl: string
   coingeckoPlatform: string
   nativePriceId: string
   nativeTokenAddress: string
+}
+
+function resolveRpcUrl(candidate: string | undefined, fallbackRpcUrl: string) {
+  if (!candidate) {
+    return fallbackRpcUrl
+  }
+
+  const trimmed = candidate.trim()
+  if (!trimmed || trimmed.includes('your-api-key')) {
+    return fallbackRpcUrl
+  }
+
+  return trimmed
 }
 
 const chainConfigs: ChainConfig[] = [
@@ -45,7 +59,8 @@ const chainConfigs: ChainConfig[] = [
     id: 1,
     name: 'Ethereum',
     symbol: 'ETH',
-    rpcUrl: process.env.NEXT_PUBLIC_ETHEREUM_RPC || 'https://cloudflare-eth.com',
+    fallbackRpcUrl: 'https://cloudflare-eth.com',
+    rpcUrl: resolveRpcUrl(process.env.NEXT_PUBLIC_ETHEREUM_RPC, 'https://cloudflare-eth.com'),
     coingeckoPlatform: 'ethereum',
     nativePriceId: 'ethereum',
     nativeTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -54,7 +69,8 @@ const chainConfigs: ChainConfig[] = [
     id: 137,
     name: 'Polygon',
     symbol: 'MATIC',
-    rpcUrl: process.env.NEXT_PUBLIC_POLYGON_RPC || 'https://polygon-rpc.com',
+    fallbackRpcUrl: 'https://polygon-rpc.com',
+    rpcUrl: resolveRpcUrl(process.env.NEXT_PUBLIC_POLYGON_RPC, 'https://polygon-rpc.com'),
     coingeckoPlatform: 'polygon-pos',
     nativePriceId: 'matic-network',
     nativeTokenAddress: '0x0000000000000000000000000000000000001010',
@@ -63,7 +79,8 @@ const chainConfigs: ChainConfig[] = [
     id: 42161,
     name: 'Arbitrum',
     symbol: 'ETH',
-    rpcUrl: process.env.NEXT_PUBLIC_ARBITRUM_RPC || 'https://arb1.arbitrum.io/rpc',
+    fallbackRpcUrl: 'https://arb1.arbitrum.io/rpc',
+    rpcUrl: resolveRpcUrl(process.env.NEXT_PUBLIC_ARBITRUM_RPC, 'https://arb1.arbitrum.io/rpc'),
     coingeckoPlatform: 'arbitrum-one',
     nativePriceId: 'ethereum',
     nativeTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -72,12 +89,17 @@ const chainConfigs: ChainConfig[] = [
     id: 8453,
     name: 'Base',
     symbol: 'ETH',
-    rpcUrl: process.env.NEXT_PUBLIC_BASE_RPC || 'https://mainnet.base.org',
+    fallbackRpcUrl: 'https://mainnet.base.org',
+    rpcUrl: resolveRpcUrl(process.env.NEXT_PUBLIC_BASE_RPC, 'https://mainnet.base.org'),
     coingeckoPlatform: 'base',
     nativePriceId: 'ethereum',
     nativeTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
   },
 ]
+
+function supportsAlchemyMethods(chain: ChainConfig) {
+  return chain.rpcUrl.includes('alchemy.com') || chain.rpcUrl.includes('alchemyapi.io')
+}
 
 async function jsonRpc<T>(rpcUrl: string, method: string, params: unknown[]): Promise<T> {
   const response = await fetch(rpcUrl, {
@@ -192,26 +214,30 @@ async function fetchChainPortfolio(address: string, chain: ChainConfig, imported
 
   const tokenBalancesByAddress = new Map<string, bigint>()
 
-  try {
-    const result = await jsonRpc<{ tokenBalances?: Array<{ contractAddress?: string; tokenBalance?: string }> }>(
-      chain.rpcUrl,
-      'alchemy_getTokenBalances',
-      [address, 'erc20']
-    )
+  if (supportsAlchemyMethods(chain)) {
+    try {
+      const result = await jsonRpc<{ tokenBalances?: Array<{ contractAddress?: string; tokenBalance?: string }> }>(
+        chain.rpcUrl,
+        'alchemy_getTokenBalances',
+        [address, 'erc20']
+      )
 
-    for (const token of result.tokenBalances ?? []) {
-      if (!token.contractAddress) {
-        continue
-      }
+      for (const token of result.tokenBalances ?? []) {
+        if (!token.contractAddress) {
+          continue
+        }
 
-      const normalizedAddress = getAddress(token.contractAddress)
-      const rawBalance = normalizeTokenBalance(token.tokenBalance)
-      if (rawBalance > BigInt(0)) {
-        tokenBalancesByAddress.set(normalizedAddress, rawBalance)
+        const normalizedAddress = getAddress(token.contractAddress)
+        const rawBalance = normalizeTokenBalance(token.tokenBalance)
+        if (rawBalance > BigInt(0)) {
+          tokenBalancesByAddress.set(normalizedAddress, rawBalance)
+        }
       }
+    } catch {
+      warnings.push(`${chain.name}: token indexing request failed for the configured Alchemy RPC endpoint.`)
     }
-  } catch {
-    warnings.push(`${chain.name}: RPC does not support token indexing method alchemy_getTokenBalances.`)
+  } else {
+    warnings.push(`${chain.name}: ERC-20 auto-discovery requires an Alchemy RPC URL; native balance is still available.`)
   }
 
   const importedForChain = importedTokens
@@ -228,26 +254,35 @@ async function fetchChainPortfolio(address: string, chain: ChainConfig, imported
 
   const metadataEntries = await Promise.all(
     tokenAddresses.map(async (tokenAddress) => {
-      try {
-        const metadata = await jsonRpc<{ symbol?: string; name?: string; decimals?: number; logo?: string | null }>(
-          chain.rpcUrl,
-          'alchemy_getTokenMetadata',
-          [tokenAddress]
-        )
+      if (supportsAlchemyMethods(chain)) {
+        try {
+          const metadata = await jsonRpc<{ symbol?: string; name?: string; decimals?: number; logo?: string | null }>(
+            chain.rpcUrl,
+            'alchemy_getTokenMetadata',
+            [tokenAddress]
+          )
 
-        return [tokenAddress, metadata] as const
-      } catch {
-        const [symbol, name, decimals] = await Promise.all([
-          publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: erc20Abi, functionName: 'symbol' }).catch(() => 'UNKNOWN'),
-          publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: erc20Abi, functionName: 'name' }).catch(() => 'Unknown token'),
-          publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: erc20Abi, functionName: 'decimals' }).catch(() => 18),
-        ])
-
-        return [
-          tokenAddress,
-          { symbol: typeof symbol === 'string' ? symbol : 'UNKNOWN', name: typeof name === 'string' ? name : 'Unknown token', decimals: typeof decimals === 'number' ? decimals : 18, logo: undefined },
-        ] as const
+          return [tokenAddress, metadata] as const
+        } catch {
+          // Fall back to contract reads below.
+        }
       }
+
+      const [symbol, name, decimals] = await Promise.all([
+        publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: erc20Abi, functionName: 'symbol' }).catch(() => 'UNKNOWN'),
+        publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: erc20Abi, functionName: 'name' }).catch(() => 'Unknown token'),
+        publicClient.readContract({ address: tokenAddress as `0x${string}`, abi: erc20Abi, functionName: 'decimals' }).catch(() => 18),
+      ])
+
+      return [
+        tokenAddress,
+        {
+          symbol: typeof symbol === 'string' ? symbol : 'UNKNOWN',
+          name: typeof name === 'string' ? name : 'Unknown token',
+          decimals: typeof decimals === 'number' ? decimals : 18,
+          logo: undefined,
+        },
+      ] as const
     })
   )
 

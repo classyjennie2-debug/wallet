@@ -9,7 +9,7 @@ export const SUPPORTED_CHAINS = [
   polygonMumbai,
   arbitrumSepolia,
   baseSepolia,
-]
+] as const
 
 export const NETWORKS = [
   { name: 'Ethereum', id: mainnet.id, icon: '🔷', color: '#627EEA' },

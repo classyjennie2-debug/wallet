@@ -1,6 +1,7 @@
 'use client'
 
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+
 export function Web3WalletConnector() {
   return (
     <ConnectButton.Custom>
@@ -24,7 +25,15 @@ export function Web3WalletConnector() {
         if (!connected) {
           return (
             <button
-              onClick={openConnectModal}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault()
+                try {
+                  openConnectModal?.()
+                } catch (err) {
+                  console.error('Error opening connect modal:', err)
+                }
+              }}
               className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold transition"
             >
               Connect Wallet
@@ -35,7 +44,14 @@ export function Web3WalletConnector() {
         return (
           <div className="flex items-center gap-2">
             <button
-              onClick={openChainModal}
+              type="button"
+              onClick={() => {
+                try {
+                  openChainModal?.()
+                } catch (err) {
+                  console.error('Error opening chain modal:', err)
+                }
+              }}
               className="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/6 text-sm text-white/90 hover:bg-white/10"
             >
               {chain?.hasIcon && chain?.iconUrl ? (
@@ -50,7 +66,14 @@ export function Web3WalletConnector() {
             </button>
 
             <button
-              onClick={openAccountModal}
+              type="button"
+              onClick={() => {
+                try {
+                  openAccountModal?.()
+                } catch (err) {
+                  console.error('Error opening account modal:', err)
+                }
+              }}
               className="flex items-center gap-3 px-3 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium w-full sm:w-auto"
             >
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold">

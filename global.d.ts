@@ -9,15 +9,32 @@ declare global {
 
   interface W3mButtonProps {
     balance?: 'show' | 'hide'
-    [key: string]: any
+    [key: string]: unknown
   }
 
   interface W3mConnectButtonProps {
-    [key: string]: any
+    [key: string]: unknown
   }
 
   interface W3mAccountButtonProps {
-    [key: string]: any
+    [key: string]: unknown
+  }
+
+  interface EthereumWindow {
+    isMetaMask?: boolean
+    isCoinbaseWallet?: boolean
+    isRabby?: boolean
+    isTrustWallet?: boolean
+    [key: string]: unknown
+  }
+
+  interface Window {
+    ethereum?: EthereumWindow
+    trustwallet?: unknown
+    phantom?: {
+      ethereum?: unknown
+    }
+    okxwallet?: unknown
   }
 }
 

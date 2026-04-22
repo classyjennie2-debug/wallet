@@ -1,11 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+interface RiskItem {
+  name: string
+  value: number
+  description: string
+}
 
 export const PortfolioRiskScore = () => {
-  const [riskLevel] = useState(0)
-  const [diversification] = useState(0)
-  const [risks] = useState<any[]>([])
+  const riskLevel = 0
+  const diversification = 0
+  const risks: RiskItem[] = []
 
   const getRiskColor = (value: number) => {
     if (value < 30) return 'from-emerald-500 to-teal-500'

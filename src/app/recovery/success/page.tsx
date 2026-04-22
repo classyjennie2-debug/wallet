@@ -18,7 +18,7 @@ export default function RecoverySuccess({ searchParams }: Props) {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">Recovery Submitted</h1>
-            <p className="text-sm text-slate-300 mt-1">We've received your restoration request and generated an audit for review.</p>
+            <p className="text-sm text-slate-300 mt-1">We&apos;ve received your restoration request and generated an audit for review.</p>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import { useAlert, type AlertType } from '@/lib/alert-context'
+import { useAlert } from '@/lib/alert-context'
 
 export interface WalletError {
   code: string

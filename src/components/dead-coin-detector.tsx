@@ -17,7 +17,7 @@ export const DeadCoinDetector = () => {
       removeDeadCoin(address)
       showSuccess('Coin Removed', 'Dead coin has been removed from your portfolio tracking')
       setTimeout(() => setRemovingAddress(null), 1500)
-    } catch (error) {
+    } catch {
       setRemovingAddress(null)
     }
   }

@@ -19,6 +19,59 @@ const explorerByChainId: Record<number, string> = {
   42161: 'https://arbiscan.io',
   8453: 'https://basescan.org',
 }
+const manualImportsKey = 'manual-token-imports'
+
+function readStorageItem(key: string) {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  try {
+    const storage = window.localStorage
+    if (!storage || typeof storage.getItem !== 'function') {
+      return null
+    }
+
+    return storage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+function writeStorageItem(key: string, value: string) {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  try {
+    const storage = window.localStorage
+    if (!storage || typeof storage.setItem !== 'function') {
+      return
+    }
+
+    storage.setItem(key, value)
+  } catch {
+    // Ignore storage write failures or incompatible storage implementations.
+  }
+}
+
+function loadImportedTokens() {
+  try {
+    const raw = readStorageItem(manualImportsKey)
+    if (!raw) {
+      return [] as ImportedToken[]
+    }
+
+    const parsed = JSON.parse(raw) as ImportedToken[]
+    if (!Array.isArray(parsed)) {
+      return [] as ImportedToken[]
+    }
+
+    return parsed.filter((item) => Number.isInteger(item.chainId) && typeof item.address === 'string' && isAddress(item.address))
+  } catch {
+    return [] as ImportedToken[]
+  }
+}
 
 function formatUsd(value: number) {
   return new Intl.NumberFormat('en-US', {
@@ -54,52 +107,20 @@ function getAddressExplorerUrl(token: TokenData, walletAddress: string) {
 
 export const PortfolioOverview = () => {
   const { address, isConnected } = useAccount()
-  const [isMounted, setIsMounted] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedChain, setSelectedChain] = useState<number | 'all'>('all')
   const [hideDust, setHideDust] = useState(true)
   const [hideSpam, setHideSpam] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedToken, setSelectedToken] = useState<TokenData | null>(null)
-
-  const [importedTokens, setImportedTokens] = useState<ImportedToken[]>([])
+  const [importedTokens, setImportedTokens] = useState<ImportedToken[]>(loadImportedTokens)
   const [importChainId, setImportChainId] = useState(1)
   const [importAddress, setImportAddress] = useState('')
   const [importError, setImportError] = useState<string | null>(null)
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (!isMounted) {
-      return
-    }
-
-    const raw = window.localStorage.getItem('manual-token-imports')
-    if (!raw) {
-      return
-    }
-
-    try {
-      const parsed = JSON.parse(raw) as ImportedToken[]
-      if (Array.isArray(parsed)) {
-        setImportedTokens(
-          parsed.filter((item) => Number.isInteger(item.chainId) && typeof item.address === 'string' && isAddress(item.address))
-        )
-      }
-    } catch {
-      // Ignore invalid local storage payloads.
-    }
-  }, [isMounted])
-
-  useEffect(() => {
-    if (!isMounted) {
-      return
-    }
-
-    window.localStorage.setItem('manual-token-imports', JSON.stringify(importedTokens))
-  }, [importedTokens, isMounted])
+    writeStorageItem(manualImportsKey, JSON.stringify(importedTokens))
+  }, [importedTokens])
 
   const { portfolio, loading, error, refetch } = useTokens(isConnected ? address : undefined, importedTokens)
 
@@ -143,11 +164,12 @@ export const PortfolioOverview = () => {
 
   const topToken = filteredTokens[0]
   const totalPages = Math.max(1, Math.ceil(filteredTokens.length / pageSize))
+  const visiblePage = Math.min(currentPage, totalPages)
 
   const paginatedTokens = useMemo(() => {
-    const start = (currentPage - 1) * pageSize
+    const start = (visiblePage - 1) * pageSize
     return filteredTokens.slice(start, start + pageSize)
-  }, [filteredTokens, currentPage])
+  }, [filteredTokens, visiblePage])
 
   const perChainTotals = useMemo(() => {
     const totals = new Map<number, { chainName: string; value: number; tokenCount: number }>()
@@ -170,15 +192,7 @@ export const PortfolioOverview = () => {
       .sort((a, b) => b.value - a.value)
   }, [filteredTokens])
 
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [search, selectedChain, hideDust, hideSpam, portfolio?.tokens.length])
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages)
-    }
-  }, [currentPage, totalPages])
+  const resetToFirstPage = () => setCurrentPage(1)
 
   const handleImportToken = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -201,16 +215,14 @@ export const PortfolioOverview = () => {
 
     setImportedTokens((prev) => [...prev, { chainId: importChainId, address: normalizedAddress }])
     setImportAddress('')
+    resetToFirstPage()
   }
 
   const removeImportedToken = (token: ImportedToken) => {
     setImportedTokens((prev) =>
       prev.filter((item) => !(item.chainId === token.chainId && item.address.toLowerCase() === token.address.toLowerCase()))
     )
-  }
-
-  if (!isMounted) {
-    return <div className="h-96 rounded-xl bg-white/5 animate-pulse" />
+    resetToFirstPage()
   }
 
   if (!isConnected || !address) {
@@ -237,6 +249,7 @@ export const PortfolioOverview = () => {
         <p className="text-red-300 font-medium">Unable to load tokens</p>
         <p className="text-red-200/80 text-sm">{error}</p>
         <button
+          type="button"
           onClick={() => refetch()}
           className="px-3 py-2 rounded-md text-sm bg-red-500/20 hover:bg-red-500/30 text-red-100"
         >
@@ -305,24 +318,36 @@ export const PortfolioOverview = () => {
         <div className="grid gap-3 md:grid-cols-2">
           <input
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              setSearch(event.target.value)
+              resetToFirstPage()
+            }}
             placeholder="Search by symbol, token name, or contract"
             className="w-full rounded-md border border-white/15 bg-slate-950 px-3 py-2 text-sm text-white placeholder:text-slate-500"
           />
           <div className="flex gap-2 flex-wrap">
             <button
-              onClick={() => setHideDust((prev) => !prev)}
+              type="button"
+              onClick={() => {
+                setHideDust((prev) => !prev)
+                resetToFirstPage()
+              }}
               className={`px-3 py-2 rounded-md text-xs border ${hideDust ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-200' : 'bg-white/5 border-white/15 text-slate-300'}`}
             >
               Hide dust
             </button>
             <button
-              onClick={() => setHideSpam((prev) => !prev)}
+              type="button"
+              onClick={() => {
+                setHideSpam((prev) => !prev)
+                resetToFirstPage()
+              }}
               className={`px-3 py-2 rounded-md text-xs border ${hideSpam ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-200' : 'bg-white/5 border-white/15 text-slate-300'}`}
             >
               Hide likely spam
             </button>
             <button
+              type="button"
               onClick={() => refetch()}
               disabled={loading}
               className="px-3 py-2 rounded-md text-xs border border-white/15 bg-white/5 text-slate-200 hover:bg-white/10 disabled:opacity-50"
@@ -334,7 +359,11 @@ export const PortfolioOverview = () => {
 
         <div className="flex gap-2 flex-wrap">
           <button
-            onClick={() => setSelectedChain('all')}
+            type="button"
+            onClick={() => {
+              setSelectedChain('all')
+              resetToFirstPage()
+            }}
             className={`px-3 py-1 rounded-full text-xs border ${selectedChain === 'all' ? 'bg-blue-500/25 border-blue-400/50 text-blue-100' : 'bg-white/5 border-white/15 text-slate-300'}`}
           >
             All chains
@@ -342,7 +371,11 @@ export const PortfolioOverview = () => {
           {chains.map((chain) => (
             <button
               key={chain.id}
-              onClick={() => setSelectedChain(chain.id)}
+              type="button"
+              onClick={() => {
+                setSelectedChain(chain.id)
+                resetToFirstPage()
+              }}
               className={`px-3 py-1 rounded-full text-xs border ${selectedChain === chain.id ? 'bg-blue-500/25 border-blue-400/50 text-blue-100' : 'bg-white/5 border-white/15 text-slate-300'}`}
             >
               {chain.name}
@@ -394,24 +427,24 @@ export const PortfolioOverview = () => {
             ))}
             <div className="pt-2 flex items-center justify-between gap-2 text-xs">
               <p className="text-slate-400">
-                Showing {(currentPage - 1) * pageSize + 1}-{Math.min(currentPage * pageSize, filteredTokens.length)} of {filteredTokens.length}
+                Showing {(visiblePage - 1) * pageSize + 1}-{Math.min(visiblePage * pageSize, filteredTokens.length)} of {filteredTokens.length}
               </p>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
+                  disabled={visiblePage === 1}
                   className="px-3 py-1 rounded border border-white/15 bg-white/5 text-slate-200 disabled:opacity-40"
                 >
                   Previous
                 </button>
                 <span className="text-slate-300">
-                  Page {currentPage} / {totalPages}
+                  Page {visiblePage} / {totalPages}
                 </span>
                 <button
                   type="button"
                   onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
+                  disabled={visiblePage === totalPages}
                   className="px-3 py-1 rounded border border-white/15 bg-white/5 text-slate-200 disabled:opacity-40"
                 >
                   Next
@@ -473,7 +506,7 @@ export const PortfolioOverview = () => {
                 <p className="text-lg font-semibold text-white">{selectedToken.symbol}</p>
                 <p className="text-sm text-slate-400">{selectedToken.name}</p>
               </div>
-              <button onClick={() => setSelectedToken(null)} className="text-slate-400 hover:text-white text-sm">
+              <button type="button" onClick={() => setSelectedToken(null)} className="text-slate-400 hover:text-white text-sm">
                 Close
               </button>
             </div>

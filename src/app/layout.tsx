@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "@/lib/providers";
+import { MobileWalletHelper } from "@/components/mobile-wallet-helper";
 
 export const metadata: Metadata = {
   title: "MyWallet.Help - Fix Your Wallet Issues",
@@ -38,9 +39,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="MyWallet.Help" />
       </head>
       <body className="bg-slate-950 text-white">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <MobileWalletHelper />
+        </Providers>
         
-        {/* Suppress non-critical third-party errors in console */}
+        {/* Suppress only known noisy analytics errors without hiding wallet connection failures */}
         <Script 
           id="suppress-analytics-errors"
           strategy="afterInteractive"
@@ -50,16 +54,14 @@ export default function RootLayout({
                 const origError = console.error;
                 console.error = function(...args) {
                   const message = args[0]?.toString?.() || '';
-                  // Suppress Analytics SDK and other non-critical errors
-                  if (message.includes('Analytics SDK') || message.includes('Failed to fetch')) {
+                  if (message.includes('Analytics SDK')) {
                     return;
                   }
                   origError.apply(console, args);
                 };
                 
-                // Suppress unhandled promise rejections from Analytics SDK
                 window.addEventListener('unhandledrejection', (event) => {
-                  if (event.reason?.message?.includes('Failed to fetch')) {
+                  if (event.reason?.message?.includes('Analytics SDK')) {
                     event.preventDefault();
                   }
                 });

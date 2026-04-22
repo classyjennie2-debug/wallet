@@ -1,7 +1,8 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react'
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
 import { useAccount } from 'wagmi'
+import type { Portfolio } from '@/hooks/useTokens'
 
 export interface Token {
   address: string
@@ -35,16 +36,22 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null)
   const { address, isConnected } = useAccount()
 
-  // Clear error and tokens when wallet disconnects
-  useEffect(() => {
-    if (!isConnected) {
-      setTokens([])
-      setError(null)
-    }
-  }, [isConnected])
+  const mapPortfolioTokens = useCallback((portfolio: Portfolio): Token[] => {
+    return portfolio.tokens.map((token) => ({
+      address: token.address,
+      symbol: token.symbol,
+      name: token.name,
+      decimals: token.decimals,
+      balance: token.balance,
+      usdValue: Number(token.value),
+      image: token.logoURI,
+      isDead: token.isLikelySpam,
+      deadReasons: token.isLikelySpam ? ['Token metadata and market pricing could not be verified'] : undefined,
+    }))
+  }, [])
 
   const fetchTokens = useCallback(async () => {
-    if (!address) {
+    if (!isConnected || !address) {
       setError('Wallet not connected')
       setTokens([])
       return
@@ -54,16 +61,25 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     setError(null)
 
     try {
-      // This would be replaced with actual token fetching logic
-      // For now, we'll set up the structure
-      setTokens([])
+      const response = await fetch('/api/fetch-tokens', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address, imports: [] }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch tokens')
+      }
+
+      const portfolio: Portfolio = await response.json()
+      setTokens(mapPortfolioTokens(portfolio))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch tokens')
       setTokens([])
     } finally {
       setLoading(false)
     }
-  }, [address])
+  }, [address, isConnected, mapPortfolioTokens])
 
   const removeDeadCoin = useCallback((address: string) => {
     setTokens((prev) => prev.filter((token) => token.address !== address))
