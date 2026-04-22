@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 function detectMobile() {
   if (typeof navigator === 'undefined') {
@@ -33,6 +34,7 @@ function detectWallets() {
 }
 
 export function MobileWalletHelper() {
+  const pathname = usePathname()
   const isMobile = useMemo(() => detectMobile(), [])
   const detectedWallets = useMemo(() => detectWallets(), [])
   const [visible, setVisible] = useState(true)
@@ -44,7 +46,7 @@ export function MobileWalletHelper() {
     return () => clearTimeout(timer)
   }, [isMobile, visible])
 
-  if (!isMobile || !visible) {
+  if (!isMobile || !visible || pathname === '/' || pathname === '/dashboard') {
     return null
   }
 
