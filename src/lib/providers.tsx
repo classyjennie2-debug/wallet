@@ -64,12 +64,7 @@ function createWagmiConfig() {
             metaMaskWallet,
             rainbowWallet,
             coinbaseWallet,
-            walletConnectWallet({
-              projectId,
-              options: {
-                relayUrl: WALLETCONNECT_RELAY_URL,
-              },
-            }),
+            walletConnectWallet,
             baseAccount,
             trustWallet,
           ],
