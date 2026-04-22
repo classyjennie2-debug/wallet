@@ -123,6 +123,8 @@ export function Providers({ children }: { children: ReactNode }) {
       <WagmiProvider config={wagmiConfig}>
         <RainbowKitProvider
           modalSize="compact"
+          coolMode
+          showRecentTransactions
           theme={darkTheme({
             accentColor: '#22d3ee',
             accentColorForeground: '#0f172a',
@@ -131,6 +133,7 @@ export function Providers({ children }: { children: ReactNode }) {
           })}
           appInfo={{
             appName: APP_NAME,
+            learnMoreUrl: APP_URL,
           }}
         >
           <WalletProvider>{appTree}</WalletProvider>
