@@ -121,8 +121,8 @@ const chainConfigs: ChainConfig[] = [
   },
 ]
 
-function supportsAlchemyMethods(chain: ChainConfig) {
-  return chain.rpcUrl.includes('alchemy.com') || chain.rpcUrl.includes('alchemyapi.io')
+function supportsAlchemyMethods(rpcUrl: string) {
+  return rpcUrl.includes('alchemy.com') || rpcUrl.includes('alchemyapi.io')
 }
 
 async function jsonRpc<T>(rpcUrl: string, method: string, params: unknown[]): Promise<T> {
@@ -236,18 +236,33 @@ function normalizeTokenBalance(balance: string | null | undefined) {
 
 async function fetchChainPortfolio(address: string, chain: ChainConfig, importedTokens: ImportedToken[], nativePriceUsd: number) {
   const warnings: string[] = []
-  const publicClient = createPublicClient({ transport: http(chain.rpcUrl) })
+  const primaryRpcUrl = chain.rpcUrl
+  let effectiveRpcUrl = primaryRpcUrl
+  let publicClient = createPublicClient({ transport: http(effectiveRpcUrl) })
 
-  const nativeBalanceRaw = await publicClient.getBalance({ address: address as `0x${string}` })
+  let nativeBalanceRaw
+  try {
+    nativeBalanceRaw = await publicClient.getBalance({ address: address as `0x${string}` })
+  } catch (error) {
+    if (primaryRpcUrl !== chain.fallbackRpcUrl) {
+      warnings.push(`${chain.name}: configured RPC failed, switching to fallback RPC URL.`)
+      effectiveRpcUrl = chain.fallbackRpcUrl
+      publicClient = createPublicClient({ transport: http(effectiveRpcUrl) })
+      nativeBalanceRaw = await publicClient.getBalance({ address: address as `0x${string}` })
+    } else {
+      throw error
+    }
+  }
+
   const nativeBalance = toDecimalString(nativeBalanceRaw, 18)
   const nativeValue = Number(nativeBalance) * nativePriceUsd
 
   const tokenBalancesByAddress = new Map<string, bigint>()
 
-  if (supportsAlchemyMethods(chain)) {
+  if (supportsAlchemyMethods(effectiveRpcUrl)) {
     try {
       const result = await jsonRpc<{ tokenBalances?: Array<{ contractAddress?: string; tokenBalance?: string }> }>(
-        chain.rpcUrl,
+        effectiveRpcUrl,
         'alchemy_getTokenBalances',
         [address, 'erc20']
       )
@@ -263,6 +278,10 @@ async function fetchChainPortfolio(address: string, chain: ChainConfig, imported
       }
     } catch {
       warnings.push(`${chain.name}: token indexing request failed for the configured Alchemy RPC endpoint.`)
+      if (primaryRpcUrl !== chain.fallbackRpcUrl) {
+        effectiveRpcUrl = chain.fallbackRpcUrl
+        publicClient = createPublicClient({ transport: http(effectiveRpcUrl) })
+      }
     }
   } else {
     warnings.push(`${chain.name}: ERC-20 auto-discovery requires an Alchemy RPC URL; native balance is still available.`)
@@ -282,10 +301,10 @@ async function fetchChainPortfolio(address: string, chain: ChainConfig, imported
 
   const metadataEntries = await Promise.all(
     tokenAddresses.map(async (tokenAddress) => {
-      if (supportsAlchemyMethods(chain)) {
+      if (supportsAlchemyMethods(effectiveRpcUrl)) {
         try {
           const metadata = await jsonRpc<{ symbol?: string; name?: string; decimals?: number; logo?: string | null }>(
-            chain.rpcUrl,
+            effectiveRpcUrl,
             'alchemy_getTokenMetadata',
             [tokenAddress]
           )
@@ -342,7 +361,7 @@ async function fetchChainPortfolio(address: string, chain: ChainConfig, imported
     const rawBalance = tokenBalancesByAddress.get(tokenAddress) ?? BigInt(0)
     const isImportedToken = importedForChainSet.has(tokenAddress.toLowerCase())
 
-    if (rawBalance === BigInt(0) && !isImportedToken && !supportsAlchemyMethods(chain)) {
+    if (rawBalance === BigInt(0) && !isImportedToken && !supportsAlchemyMethods(effectiveRpcUrl)) {
       continue
     }
 
