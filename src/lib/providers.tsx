@@ -8,7 +8,7 @@ import { ErrorBoundary } from '@/components/error-boundary'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import { metaMask, walletConnect, injected } from '@wagmi/connectors'
 import { connectorsForWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
+import { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet } from '@rainbow-me/rainbowkit/wallets'
 import { SUPPORTED_CHAINS } from './web3-config'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -26,6 +26,7 @@ function createQueryClient() {
 const APP_NAME = 'MyWallet.Help'
 const APP_DESCRIPTION = 'Wallet recovery, diagnostics, and portfolio dashboard'
 const APP_URL = 'https://mywallet.help'
+const WALLETCONNECT_RELAY_URL = 'wss://relay.walletconnect.com'
 
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
 
@@ -57,7 +58,7 @@ function createWagmiConfig() {
 
   if (projectId && isBrowser) {
     const mobile = isMobileBrowser()
-    const connectors = connectorsForWallets(
+    const rkConnectors = connectorsForWallets(
       [
         {
           groupName: 'Popular',
@@ -67,29 +68,36 @@ function createWagmiConfig() {
             coinbaseWallet,
             baseAccount,
             trustWallet,
-            ...(mobile ? [] : [walletConnectWallet]),
           ],
         },
-        ...(mobile
-          ? []
-          : [
-              {
-                groupName: 'More ways to connect',
-                wallets: [walletConnectWallet],
-              },
-            ]),
       ],
       {
         appName: APP_NAME,
         appDescription: APP_DESCRIPTION,
         appUrl: APP_URL,
         projectId,
+        walletConnectParameters: {
+          relayUrl: WALLETCONNECT_RELAY_URL,
+        },
       }
     )
 
     return createConfig({
       chains: SUPPORTED_CHAINS,
-      connectors,
+      connectors: [
+        ...rkConnectors,
+        walletConnect({
+          projectId,
+          showQrModal: !mobile,
+          relayUrl: WALLETCONNECT_RELAY_URL,
+          metadata: {
+            name: APP_NAME,
+            description: APP_DESCRIPTION,
+            url: APP_URL,
+            icons: [`${APP_URL}/favicon.ico`],
+          },
+        }),
+      ],
       transports,
       ssr: true,
     })
@@ -105,6 +113,7 @@ function createWagmiConfig() {
             walletConnect({
               projectId,
               showQrModal: true,
+              relayUrl: WALLETCONNECT_RELAY_URL,
               metadata: {
                 name: APP_NAME,
                 description: APP_DESCRIPTION,

@@ -1,6 +1,7 @@
 'use client'
 
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { WalletConnectDirectButton } from './walletconnect-direct-button'
 
 export function Web3WalletConnector() {
   return (
@@ -24,20 +25,23 @@ export function Web3WalletConnector() {
 
         if (!connected) {
           return (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault()
-                try {
-                  openConnectModal?.()
-                } catch (err) {
-                  console.error('Error opening connect modal:', err)
-                }
-              }}
-              className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold transition"
-            >
-              Connect Wallet
-            </button>
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault()
+                  try {
+                    openConnectModal?.()
+                  } catch (err) {
+                    console.error('Error opening connect modal:', err)
+                  }
+                }}
+                className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold transition"
+              >
+                Connect Wallet
+              </button>
+              <WalletConnectDirectButton />
+            </div>
           )
         }
 
