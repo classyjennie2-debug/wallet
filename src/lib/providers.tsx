@@ -54,76 +54,56 @@ function isMobileBrowser() {
 }
 
 function createWagmiConfig() {
-  const isBrowser = typeof window !== 'undefined'
+  const mobile = isMobileBrowser()
 
-  if (projectId && isBrowser) {
-    const mobile = isMobileBrowser()
-    const rkConnectors = connectorsForWallets(
-      [
-        {
-          groupName: 'Popular',
-          wallets: [
-            metaMaskWallet,
-            rainbowWallet,
-            coinbaseWallet,
-            baseAccount,
-            trustWallet,
-          ],
-        },
-      ],
-      {
-        appName: APP_NAME,
-        appDescription: APP_DESCRIPTION,
-        appUrl: APP_URL,
-        projectId,
-        walletConnectParameters: {
-          relayUrl: WALLETCONNECT_RELAY_URL,
-        },
-      }
-    )
-
+  if (!projectId) {
     return createConfig({
       chains: SUPPORTED_CHAINS,
-      connectors: [
-        ...rkConnectors,
-        walletConnect({
-          projectId,
-          showQrModal: !mobile,
-          relayUrl: WALLETCONNECT_RELAY_URL,
-          metadata: {
-            name: APP_NAME,
-            description: APP_DESCRIPTION,
-            url: APP_URL,
-            icons: [`${APP_URL}/favicon.ico`],
-          },
-        }),
-      ],
+      connectors: [injected(), metaMask()],
       transports,
       ssr: true,
     })
   }
 
+  const rkConnectors = connectorsForWallets(
+    [
+      {
+        groupName: 'Popular',
+        wallets: [
+          metaMaskWallet,
+          rainbowWallet,
+          coinbaseWallet,
+          baseAccount,
+          trustWallet,
+        ],
+      },
+    ],
+    {
+      appName: APP_NAME,
+      appDescription: APP_DESCRIPTION,
+      appUrl: APP_URL,
+      projectId,
+      walletConnectParameters: {
+        relayUrl: WALLETCONNECT_RELAY_URL,
+      },
+    }
+  )
+
+  const walletConnectConnector = walletConnect({
+    projectId,
+    showQrModal: !mobile,
+    relayUrl: WALLETCONNECT_RELAY_URL,
+    metadata: {
+      name: APP_NAME,
+      description: APP_DESCRIPTION,
+      url: APP_URL,
+      icons: [`${APP_URL}/favicon.ico`],
+    },
+  })
+
   return createConfig({
     chains: SUPPORTED_CHAINS,
-    connectors: [
-      injected(),
-      metaMask(),
-      ...(projectId
-        ? [
-            walletConnect({
-              projectId,
-              showQrModal: true,
-              relayUrl: WALLETCONNECT_RELAY_URL,
-              metadata: {
-                name: APP_NAME,
-                description: APP_DESCRIPTION,
-                url: APP_URL,
-                icons: [`${APP_URL}/favicon.ico`],
-              },
-            }),
-          ]
-        : []),
-    ],
+    connectors: [...rkConnectors, walletConnectConnector],
     transports,
     ssr: true,
   })
