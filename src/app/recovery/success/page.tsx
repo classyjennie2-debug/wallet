@@ -43,7 +43,7 @@ export default function RecoverySuccess({ searchParams }: Props) {
           <div className="p-4 bg-gradient-to-br from-white/2 to-white/1 border border-white/5 rounded-lg">
             <h3 className="text-sm font-semibold text-white">Next steps</h3>
             <ul className="mt-2 text-xs text-slate-300 space-y-1">
-              <li>• Secure delivery to recovery mailbox</li>
+              <li>• Secure delivery to the recovery queue</li>
               <li>• Manual review by security team (if flagged)</li>
               <li>• Reply to your provided contact if follow-up needed</li>
             </ul>

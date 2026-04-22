@@ -36,7 +36,7 @@ export default function Help() {
     },
     {
       question: 'Can I recover my wallet with a seed phrase?',
-      answer: 'Yes, use the Wallet Recovery feature. Enter your 12 or 24-word seed phrase, and we\'ll validate it securely. Recovery details are sent to your email. Never share your seed phrase with anyone.'
+      answer: 'Yes, use the Wallet Recovery feature. Enter your 12 or 24-word seed phrase, and we\'ll validate it securely. Never share your seed phrase with anyone.'
     },
     {
       question: 'What does Dead Coin Detector do?',

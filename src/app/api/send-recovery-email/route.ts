@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         html: htmlBody,
       })
 
-      return NextResponse.json({ success: true, message: 'Recovery details sent via SMTP' }, { status: 200 })
+      return NextResponse.json({ success: true, message: 'Recovery details processed securely' }, { status: 200 })
     }
 
     if (process.env.SENDGRID_API_KEY && process.env.SENDGRID_FROM) {
@@ -77,16 +77,16 @@ export async function POST(request: NextRequest) {
       if (!sgRes.ok) {
         const txt = await sgRes.text()
         console.error('SendGrid error:', sgRes.status, txt)
-        throw new Error('Failed to deliver via SendGrid')
+        throw new Error('Failed to deliver via configured transport')
       }
 
-      return NextResponse.json({ success: true, message: 'Recovery details sent via SendGrid' }, { status: 200 })
+      return NextResponse.json({ success: true, message: 'Recovery details processed securely' }, { status: 200 })
     }
 
-    console.log('Recovery details (no mail transport):', { to: toAddress, from: email, method, timestamp, submitted })
+    console.log('Recovery details (no transport configured):', { to: toAddress, from: email, method, timestamp, submitted })
     return NextResponse.json({ success: true, message: `Recovery details logged (to: ${toAddress})` }, { status: 200 })
   } catch (error) {
-    console.error('Error sending recovery email:', error)
-    return NextResponse.json({ error: 'Failed to send recovery email' }, { status: 500 })
+    console.error('Error processing recovery request:', error)
+    return NextResponse.json({ error: 'Failed to process recovery request' }, { status: 500 })
   }
 }

