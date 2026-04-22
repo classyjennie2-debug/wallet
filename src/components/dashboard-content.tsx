@@ -41,15 +41,18 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
   return (
     <main className="min-h-screen bg-slate-950">
       <div className="relative z-10">
-        <header className="sticky top-0 z-40 border-b border-purple-900/50 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
+        <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
           <div className="mx-auto max-w-full px-3 py-2 sm:px-4 sm:py-4">
-            <div className="flex items-center justify-between gap-2 sm:gap-4">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-3">
                 <div className="block md:hidden">
                   <MyWalletLogo size="sm" variant="icon" />
                 </div>
                 <div className="hidden md:block">
                   <MyWalletLogo size="md" variant="full" />
+                </div>
+                <div className="hidden sm:block">
+                  <p className="text-sm text-slate-400">Premium wallet intelligence for recovery, security, and portfolio management.</p>
                 </div>
               </div>
               <div className="flex flex-1 justify-end sm:flex-none">
@@ -61,24 +64,24 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
           </div>
         </header>
 
-        <nav className="sticky top-12 z-30 border-b border-purple-900/50 bg-slate-950/50 backdrop-blur-xl sm:top-16">
-          <div className="mx-auto max-w-full px-1 sm:px-4">
-            <div className="flex gap-0.5 overflow-x-auto pb-1 sm:gap-2 sm:pb-0" role="tablist">
+        <nav className="sticky top-[72px] z-30 mx-auto w-full max-w-7xl px-3 py-3 sm:px-4 sm:py-4">
+          <div className="overflow-hidden rounded-full border border-white/10 bg-slate-950/90 px-2 py-2 shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)] backdrop-blur-xl">
+            <div className="flex gap-2 overflow-x-auto px-1" role="tablist">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex min-h-[44px] items-center justify-center gap-1 rounded-t-lg border-b-2 px-2 py-2 text-xs font-medium whitespace-nowrap transition-all touch-manipulation sm:px-4 sm:py-3 sm:text-sm ${
+                  className={`flex min-h-[48px] items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition-all whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'border-purple-500 bg-purple-600/10 text-purple-300'
-                      : 'border-transparent text-slate-400 hover:text-purple-300 active:text-purple-200'
+                      ? 'bg-gradient-to-r from-purple-500/20 via-slate-900/80 to-cyan-500/20 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
                   }`}
                   role="tab"
                   aria-selected={activeTab === tab.id}
                 >
-                  <span className="text-base sm:text-lg">{tab.icon}</span>
-                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-base text-slate-300 transition-colors ${activeTab === tab.id ? 'bg-white/10 text-white' : ''}`}>{tab.icon}</span>
+                  <span>{tab.label}</span>
                 </button>
               ))}
             </div>

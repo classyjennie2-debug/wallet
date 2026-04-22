@@ -96,77 +96,94 @@ export const ERROR_MESSAGES: Record<string, { title: string; message: string }> 
   },
 }
 
+import { useCallback, useMemo } from 'react'
+
 export const useErrorHandler = () => {
   const { addAlert } = useAlert()
 
-  const handleError = (error: unknown, defaultCode: string = ERROR_CODES.UNKNOWN_ERROR) => {
-    let errorCode = defaultCode
-    let originalError: Error | undefined
+  const handleError = useCallback(
+    (error: unknown, defaultCode: string = ERROR_CODES.UNKNOWN_ERROR) => {
+      let errorCode = defaultCode
+      let originalError: Error | undefined
 
-    if (error instanceof Error) {
-      originalError = error
-      // Parse error message for specific codes
-      if (error.message.includes('user rejected')) {
-        errorCode = ERROR_CODES.WALLET_REJECTED
-      } else if (error.message.includes('insufficient balance')) {
-        errorCode = ERROR_CODES.INSUFFICIENT_BALANCE
-      } else if (error.message.includes('invalid address')) {
-        errorCode = ERROR_CODES.INVALID_ADDRESS
+      if (error instanceof Error) {
+        originalError = error
+        // Parse error message for specific codes
+        if (error.message.includes('user rejected')) {
+          errorCode = ERROR_CODES.WALLET_REJECTED
+        } else if (error.message.includes('insufficient balance')) {
+          errorCode = ERROR_CODES.INSUFFICIENT_BALANCE
+        } else if (error.message.includes('invalid address')) {
+          errorCode = ERROR_CODES.INVALID_ADDRESS
+        }
       }
-    }
 
-    const errorInfo = ERROR_MESSAGES[errorCode] || ERROR_MESSAGES[ERROR_CODES.UNKNOWN_ERROR]
+      const errorInfo = ERROR_MESSAGES[errorCode] || ERROR_MESSAGES[ERROR_CODES.UNKNOWN_ERROR]
 
-    addAlert({
-      type: 'error',
-      title: errorInfo.title,
-      message: errorInfo.message,
-      duration: 6000,
-    })
+      addAlert({
+        type: 'error',
+        title: errorInfo.title,
+        message: errorInfo.message,
+        duration: 6000,
+      })
 
-    // Log for debugging
-    console.error(`[${errorCode}]`, error)
+      // Log for debugging
+      console.error(`[${errorCode}]`, error)
 
-    return {
-      code: errorCode,
-      message: errorInfo.message,
-      originalError,
-    } as WalletError
-  }
+      return {
+        code: errorCode,
+        message: errorInfo.message,
+        originalError,
+      } as WalletError
+    },
+    [addAlert]
+  )
 
-  const showSuccess = (title: string, message: string) => {
-    addAlert({
-      type: 'success',
-      title,
-      message,
-      duration: 4000,
-    })
-  }
+  const showSuccess = useCallback(
+    (title: string, message: string) => {
+      addAlert({
+        type: 'success',
+        title,
+        message,
+        duration: 4000,
+      })
+    },
+    [addAlert]
+  )
 
-  const showWarning = (title: string, message: string) => {
-    addAlert({
-      type: 'warning',
-      title,
-      message,
-      duration: 5000,
-    })
-  }
+  const showWarning = useCallback(
+    (title: string, message: string) => {
+      addAlert({
+        type: 'warning',
+        title,
+        message,
+        duration: 5000,
+      })
+    },
+    [addAlert]
+  )
 
-  const showInfo = (title: string, message: string) => {
-    addAlert({
-      type: 'info',
-      title,
-      message,
-      duration: 4000,
-    })
-  }
+  const showInfo = useCallback(
+    (title: string, message: string) => {
+      addAlert({
+        type: 'info',
+        title,
+        message,
+        duration: 4000,
+      })
+    },
+    [addAlert]
+  )
 
-  return {
-    handleError,
-    showSuccess,
-    showWarning,
-    showInfo,
-  }
+  return useMemo(
+    () => ({
+      handleError,
+      showSuccess,
+      showWarning,
+      showInfo,
+    }),
+    [handleError, showSuccess, showWarning, showInfo]
+  )
 }
 
 // Wallet-specific error parsing
