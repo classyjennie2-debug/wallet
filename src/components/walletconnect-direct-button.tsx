@@ -36,16 +36,20 @@ export function WalletConnectDirectButton() {
           setErrorMessage(null)
 
           try {
+            const timeoutMs = isMobile ? 45000 : 12000
+
             await Promise.race([
               connectAsync({ connector: walletConnectConnector }),
               new Promise((_, reject) => {
                 window.setTimeout(() => {
                   reject(
                     new Error(
-                      'WalletConnect could not reach the relay server. Disable VPN/ad blockers, then retry or switch networks.'
+                      isMobile
+                        ? 'WalletConnect is taking longer than expected. Please return to your wallet app to approve the connection and retry if it still does not complete.'
+                        : 'WalletConnect could not reach the relay server. Disable VPN/ad blockers, then retry or switch networks.'
                     )
                   )
-                }, 12000)
+                }, timeoutMs)
               }),
             ])
           } catch (error) {

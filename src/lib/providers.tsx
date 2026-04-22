@@ -7,7 +7,7 @@ import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import { metaMask, walletConnect, injected } from '@wagmi/connectors'
-import { connectorsForWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 import { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet } from '@rainbow-me/rainbowkit/wallets'
 import { SUPPORTED_CHAINS } from './web3-config'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -27,7 +27,6 @@ const APP_NAME = 'MyWallet.Help'
 const APP_DESCRIPTION = 'Wallet recovery, diagnostics, and portfolio dashboard'
 const APP_URL = 'https://mywallet.help'
 const WALLETCONNECT_RELAY_URL = 'wss://relay.walletconnect.com'
-
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
 
 if (!projectId && typeof window !== 'undefined') {
@@ -56,54 +55,54 @@ function isMobileBrowser() {
 function createWagmiConfig() {
   const mobile = isMobileBrowser()
 
-  if (!projectId) {
+  if (projectId) {
+    const rkConnectors = connectorsForWallets(
+      [
+        {
+          groupName: 'Popular',
+          wallets: [
+            metaMaskWallet,
+            rainbowWallet,
+            coinbaseWallet,
+            baseAccount,
+            trustWallet,
+          ],
+        },
+      ],
+      {
+        appName: APP_NAME,
+        appDescription: APP_DESCRIPTION,
+        appUrl: APP_URL,
+        projectId,
+        walletConnectParameters: {
+          relayUrl: WALLETCONNECT_RELAY_URL,
+        },
+      }
+    )
+
+    const walletConnectConnector = walletConnect({
+      projectId,
+      showQrModal: !mobile,
+      relayUrl: WALLETCONNECT_RELAY_URL,
+      metadata: {
+        name: APP_NAME,
+        description: APP_DESCRIPTION,
+        url: APP_URL,
+        icons: [`${APP_URL}/favicon.ico`],
+      },
+    })
+
     return createConfig({
       chains: SUPPORTED_CHAINS,
-      connectors: [injected(), metaMask()],
+      connectors: [...rkConnectors, walletConnectConnector],
       transports,
       ssr: true,
     })
   }
 
-  const rkConnectors = connectorsForWallets(
-    [
-      {
-        groupName: 'Popular',
-        wallets: [
-          metaMaskWallet,
-          rainbowWallet,
-          coinbaseWallet,
-          baseAccount,
-          trustWallet,
-        ],
-      },
-    ],
-    {
-      appName: APP_NAME,
-      appDescription: APP_DESCRIPTION,
-      appUrl: APP_URL,
-      projectId,
-      walletConnectParameters: {
-        relayUrl: WALLETCONNECT_RELAY_URL,
-      },
-    }
-  )
-
-  const walletConnectConnector = walletConnect({
-    projectId,
-    showQrModal: !mobile,
-    relayUrl: WALLETCONNECT_RELAY_URL,
-    metadata: {
-      name: APP_NAME,
-      description: APP_DESCRIPTION,
-      url: APP_URL,
-      icons: [`${APP_URL}/favicon.ico`],
-    },
-  })
-
   return createConfig({
     chains: SUPPORTED_CHAINS,
-    connectors: [...rkConnectors, walletConnectConnector],
+    connectors: [injected(), metaMask()],
     transports,
     ssr: true,
   })
@@ -122,7 +121,18 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={wagmiConfig}>
-        <RainbowKitProvider>
+        <RainbowKitProvider
+          modalSize="compact"
+          theme={darkTheme({
+            accentColor: '#22d3ee',
+            accentColorForeground: '#0f172a',
+            borderRadius: 'medium',
+            overlayBlur: 'small',
+          })}
+          appInfo={{
+            appName: APP_NAME,
+          }}
+        >
           <WalletProvider>{appTree}</WalletProvider>
         </RainbowKitProvider>
       </WagmiProvider>
