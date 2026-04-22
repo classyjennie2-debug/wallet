@@ -168,6 +168,16 @@ export const WalletRestoration = () => {
   const [message, setMessage] = useState('')
   const router = useRouter()
 
+  const resetFlow = () => {
+    setFlowStep('idle')
+    setActiveIssue(null)
+    setSelectedConnection(null)
+    setConnectionInput('')
+    setInputError('')
+    setResultSummary([])
+    setMessage('')
+  }
+
   const activeMessages = useMemo(() => {
     if (flowStep === 'initializing') return initializingSteps
     if (flowStep === 'reviewing') return reviewingSteps
@@ -227,6 +237,16 @@ export const WalletRestoration = () => {
     setConnectionInput('')
     setInputError('')
     setFlowStep('enterSecret')
+  }
+
+  const handleExit = () => {
+    setFlowStep('idle')
+    setActiveIssue(null)
+    setSelectedConnection(null)
+    setConnectionInput('')
+    setInputError('')
+    setResultSummary([])
+    setMessage('')
   }
 
   const handleContinue = () => {
@@ -363,12 +383,24 @@ export const WalletRestoration = () => {
       </div>
 
       {flowStep !== 'idle' && (
-        <div className="pointer-events-none absolute inset-0 z-20 rounded-[32px] bg-slate-950/60 backdrop-blur-sm" />
+        <div className="pointer-events-auto absolute inset-0 z-20 rounded-[32px] bg-slate-950/60 backdrop-blur-sm" onClick={handleExit} />
       )}
 
       {(flowStep === 'initializing' || flowStep === 'chooseConnection' || flowStep === 'enterSecret' || flowStep === 'reviewing' || flowStep === 'success' || flowStep === 'error') && (
         <div className="absolute inset-0 z-30 flex items-center justify-center px-4 py-10">
-          <div className="w-full max-w-3xl rounded-[32px] border border-cyan-400/20 bg-slate-950/95 p-8 text-center shadow-2xl shadow-cyan-500/10">
+          <div
+            className="w-full max-w-lg overflow-y-auto rounded-[32px] border border-cyan-400/20 bg-slate-950/95 p-6 text-center shadow-2xl shadow-cyan-500/10 sm:max-w-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-4 flex justify-end">
+              <button
+                type="button"
+                onClick={handleExit}
+                className="rounded-full border border-white/10 bg-slate-900/80 px-3 py-2 text-xs text-slate-300 transition hover:bg-slate-900"
+              >
+                Close
+              </button>
+            </div>
             {flowStep === 'initializing' && (
               <>
                 <div className="mx-auto mb-7 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/20">

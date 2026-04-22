@@ -88,6 +88,16 @@ export const SecurityAudit = () => {
   const [auditSummary, setAuditSummary] = useState<string[]>([])
   const [statusMessage, setStatusMessage] = useState('')
 
+  const resetFlow = () => {
+    setFlowStep('idle')
+    setActiveOption(null)
+    setSelectedConnection(null)
+    setConnectionInput('')
+    setInputError('')
+    setAuditSummary([])
+    setStatusMessage('')
+  }
+
   const activeMessages = useMemo(() => {
     if (flowStep === 'initializing') return stepStatus.initializing
     if (flowStep === 'reviewing') return stepStatus.reviewing
@@ -138,6 +148,16 @@ export const SecurityAudit = () => {
     setConnectionInput('')
     setInputError('')
     setAuditSummary([])
+  }
+
+  const handleCancel = () => {
+    setFlowStep('idle')
+    setActiveOption(null)
+    setSelectedConnection(null)
+    setConnectionInput('')
+    setInputError('')
+    setAuditSummary([])
+    setStatusMessage('')
   }
 
   const handleConnectionSelect = (type: ConnectionType) => {
@@ -273,10 +293,19 @@ export const SecurityAudit = () => {
       </div>
 
       {flowStep !== 'idle' && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/90 px-4 py-10 backdrop-blur-sm">
-          {flowStep === 'initializing' && (
-            <div className="w-full max-w-xl rounded-3xl border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-2xl shadow-cyan-500/10">
-              <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/10">
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/90 px-4 py-10 backdrop-blur-sm" onClick={resetFlow}>
+          <div className="relative w-full max-w-2xl" onClick={(event) => event.stopPropagation()}>
+            <button
+              type="button"
+              onClick={resetFlow}
+              className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-900/80 text-slate-200 transition hover:bg-slate-900"
+              aria-label="Close security modal"
+            >
+              ×
+            </button>
+            {flowStep === 'initializing' && (
+              <div className="w-full rounded-3xl border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-2xl shadow-cyan-500/10">
+                <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/10">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/10 text-4xl text-cyan-300 animate-spin">🛡️</div>
               </div>
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Security sequence</p>

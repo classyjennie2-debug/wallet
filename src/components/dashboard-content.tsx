@@ -55,16 +55,36 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                   <p className="text-sm text-slate-400">Premium wallet intelligence for recovery, security, and portfolio management.</p>
                 </div>
               </div>
-              <div className="flex flex-1 justify-end sm:flex-none">
+              <div className="flex flex-1 justify-end sm:flex-none items-center gap-3">
+                {activeTab !== 'dashboard' && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('dashboard')}
+                    className="hidden sm:inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/80 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/50 hover:bg-slate-900"
+                  >
+                    ← Back to dashboard
+                  </button>
+                )}
                 <div className="w-full sm:w-auto">
                   <WalletConnect />
                 </div>
               </div>
             </div>
           </div>
+          {activeTab !== 'dashboard' && (
+            <div className="mx-auto w-full max-w-full px-4 pb-3 sm:px-4">
+              <button
+                type="button"
+                onClick={() => setActiveTab('dashboard')}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/80 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-900"
+              >
+                ← Back to dashboard
+              </button>
+            </div>
+          )}
         </header>
 
-        <nav className="sticky top-[72px] z-30 mx-auto w-full max-w-7xl px-2 py-3 sm:px-4 sm:py-4">
+        <nav className="sticky top-[112px] z-30 mx-auto w-full max-w-7xl px-2 py-3 sm:px-4 sm:py-4">
           <div className="overflow-hidden rounded-full border border-white/10 bg-slate-950/90 px-2 py-2 shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)] backdrop-blur-xl">
             <div className="flex gap-2 overflow-x-auto px-1" role="tablist">
               {tabs.map((tab) => (
