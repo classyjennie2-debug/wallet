@@ -6,9 +6,9 @@ import { WalletProvider } from './wallet-context'
 import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { WagmiProvider, createConfig, http } from 'wagmi'
-import { metaMask, walletConnect, injected } from '@wagmi/connectors'
+import { metaMask, injected } from '@wagmi/connectors'
 import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
-import { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet } from '@rainbow-me/rainbowkit/wallets'
+import { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
 import { SUPPORTED_CHAINS } from './web3-config'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -64,6 +64,12 @@ function createWagmiConfig() {
             metaMaskWallet,
             rainbowWallet,
             coinbaseWallet,
+            walletConnectWallet({
+              projectId,
+              options: {
+                relayUrl: WALLETCONNECT_RELAY_URL,
+              },
+            }),
             baseAccount,
             trustWallet,
           ],
@@ -80,21 +86,9 @@ function createWagmiConfig() {
       }
     )
 
-    const walletConnectConnector = walletConnect({
-      projectId,
-      showQrModal: !mobile,
-      relayUrl: WALLETCONNECT_RELAY_URL,
-      metadata: {
-        name: APP_NAME,
-        description: APP_DESCRIPTION,
-        url: APP_URL,
-        icons: [`${APP_URL}/favicon.ico`],
-      },
-    })
-
     return createConfig({
       chains: SUPPORTED_CHAINS,
-      connectors: [...rkConnectors, walletConnectConnector],
+      connectors: rkConnectors,
       transports,
       ssr: true,
     })
