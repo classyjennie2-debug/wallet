@@ -86,9 +86,9 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
     <main className="min-h-screen bg-slate-950">
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
-          <div className="mx-auto w-full max-w-full px-4 py-3 sm:px-4 sm:py-3">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <div className="mx-auto w-full max-w-full px-4 py-2 sm:px-4 sm:py-2">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
                 <div className="flex items-center gap-3">
                   <div className="block md:hidden">
                     <MyWalletLogo size="sm" variant="icon" />
@@ -97,8 +97,8 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                     <MyWalletLogo size="md" variant="full" />
                   </div>
                 </div>
-                <div className="hidden sm:block">
-                  <p className="text-xs text-slate-400">Premium wallet intelligence for recovery, security, and portfolio management.</p>
+                <div className="hidden md:block">
+                  <p className="text-[11px] text-slate-400">Premium wallet intelligence for recovery, security, and portfolio management.</p>
                 </div>
               </div>
 
@@ -120,15 +120,15 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
             </div>
           </div>
 
-          <nav className="hidden sm:block mx-auto w-full max-w-7xl px-2 py-3 sm:px-4 sm:py-4" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-            <div className="overflow-hidden rounded-full border border-white/10 bg-slate-950/90 px-2 py-2 shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)] backdrop-blur-xl">
+          <nav className="hidden sm:block mx-auto w-full max-w-7xl px-2 py-2 sm:px-4 sm:py-3" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+            <div className="overflow-hidden rounded-full border border-white/10 bg-slate-950/90 px-2 py-1 shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)] backdrop-blur-xl">
               <div className="flex gap-2 overflow-x-auto px-1" role="tablist">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex min-h-[44px] items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-all whitespace-nowrap ${
+                    className={`flex min-h-[40px] items-center gap-2 rounded-full px-2.5 py-1.5 text-[13px] font-semibold transition-all whitespace-nowrap ${
                       activeTab === tab.id
                         ? 'bg-gradient-to-r from-purple-500/20 via-slate-900/80 to-cyan-500/20 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
                         : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -136,14 +136,14 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                     role="tab"
                     aria-selected={activeTab === tab.id}
                   >
-                    <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full border text-slate-300 transition-colors ${
+                    <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full border text-slate-300 transition-colors ${
                       activeTab === tab.id ? 'border-white/15 bg-white/10 text-white' : 'border-white/10 bg-white/5'
                     }`}>
                       <AppIcon kind={tab.icon} />
                     </span>
                     <span className="text-left leading-tight">
                       <span>{tab.label}</span>
-                      <span className={`block text-[11px] font-medium ${activeTab === tab.id ? 'text-slate-300' : 'text-slate-500'}`}>{tab.description}</span>
+                      <span className={`block text-[10px] font-medium ${activeTab === tab.id ? 'text-slate-300' : 'text-slate-500'}`}>{tab.description}</span>
                     </span>
                   </button>
                 ))}
@@ -210,14 +210,14 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
           )}
         </div>
 
-        <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-slate-950/95 backdrop-blur-xl p-2 shadow-[0_-8px_24px_-16px_rgba(15,23,42,0.9)] sm:hidden">
-          <div className="mx-auto flex max-w-4xl items-center justify-between gap-2">
+        <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-slate-950/95 backdrop-blur-xl px-2 py-1 shadow-[0_-8px_24px_-16px_rgba(15,23,42,0.9)] sm:hidden">
+          <div className="mx-auto flex max-w-4xl items-center justify-between gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex h-12 min-w-[0] flex-1 flex-col items-center justify-center rounded-2xl px-2 text-xs font-semibold transition ${
+                className={`flex h-9 min-w-[0] flex-1 flex-col items-center justify-center rounded-2xl px-1 text-[10px] font-semibold transition ${
                   activeTab === tab.id
                     ? 'bg-slate-900 text-white shadow-[0_8px_24px_-16px_rgba(0,0,0,0.5)]'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -225,12 +225,12 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                 role="tab"
                 aria-selected={activeTab === tab.id}
               >
-                <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full border ${
+                <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full border ${
                   activeTab === tab.id ? 'border-white/20 bg-white/10 text-white' : 'border-white/10 bg-white/5 text-slate-300'
                 }`}>
                   <AppIcon kind={tab.icon} />
                 </span>
-                <span className="mt-1 text-[11px] uppercase tracking-[0.18em]">{tab.label}</span>
+                <span className="mt-1 text-[10px] uppercase tracking-[0.18em]">{tab.label}</span>
               </button>
             ))}
           </div>

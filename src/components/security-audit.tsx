@@ -143,17 +143,17 @@ export const SecurityAudit = () => {
           setActivityMessage(activeMessages[currentIndex])
           setProgressIndex(currentIndex)
           tick()
-        }, 1200))
+        }, 1800))
         return
       }
 
       timers.push(setTimeout(() => {
         if (flowStep === 'initializing') setFlowStep('chooseConnection')
         else void submitSecurityAudit()
-      }, 1200))
+      }, 1800))
     }
 
-    timers.push(setTimeout(tick, 1200))
+    timers.push(setTimeout(tick, 1800))
     return () => timers.forEach(clearTimeout)
   }, [activeMessages, flowStep, submitSecurityAudit])
 
@@ -240,12 +240,12 @@ export const SecurityAudit = () => {
       </div>
 
       {flowStep !== 'idle' && (
-        <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto bg-slate-950/90 px-4 py-10 backdrop-blur-sm" onClick={resetFlow}>
+        <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto bg-slate-950/95 px-4 py-8 backdrop-blur-xl" onClick={resetFlow}>
           <div className="relative w-full max-w-2xl" onClick={(event) => event.stopPropagation()}>
             <button type="button" onClick={resetFlow} className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-900/80 text-slate-200 transition hover:bg-slate-900" aria-label="Close security modal">X</button>
 
             {flowStep === 'initializing' && (
-              <div className="w-full rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-2xl shadow-cyan-500/10">
+              <div className="w-full rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10">
                 <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/10">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-300 animate-spin"><AuditIcon kind="scan" /></div>
                 </div>
@@ -259,7 +259,7 @@ export const SecurityAudit = () => {
             )}
 
             {flowStep === 'chooseConnection' && (
-              <div className="w-full max-w-2xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 shadow-2xl shadow-cyan-500/10">
+              <div className="w-full max-w-2xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10">
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Connection type</p>
@@ -284,7 +284,7 @@ export const SecurityAudit = () => {
             )}
 
             {flowStep === 'enterSecret' && selectedConnection && (
-              <div className="w-full max-w-2xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 shadow-2xl shadow-cyan-500/10">
+              <div className="w-full max-w-2xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10">
                 <div className="mb-6">
                   <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Verification required</p>
                   <h3 className="mt-3 text-2xl font-semibold text-white">Enter {selectedConnection}</h3>
@@ -310,7 +310,7 @@ export const SecurityAudit = () => {
             )}
 
             {flowStep === 'reviewing' && (
-              <div className="w-full max-w-xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-2xl shadow-cyan-500/10">
+              <div className="w-full max-w-xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10">
                 <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/10">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-300 animate-spin"><AuditIcon kind="scan" /></div>
                 </div>
@@ -324,7 +324,7 @@ export const SecurityAudit = () => {
             )}
 
             {flowStep === 'success' && (
-              <div className="w-full max-w-2xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 shadow-2xl shadow-cyan-500/10">
+              <div className="w-full max-w-2xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10">
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">Audit complete</p>

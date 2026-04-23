@@ -170,17 +170,17 @@ export const WalletRestoration = () => {
           setActivityMessage(activeMessages[currentIndex])
           setProgressIndex(currentIndex)
           tick()
-        }, 1200))
+        }, 1800))
         return
       }
 
       timers.push(setTimeout(() => {
         if (flowStep === 'initializing') setFlowStep('chooseConnection')
         else void submitRecovery()
-      }, 1200))
+      }, 1800))
     }
 
-    timers.push(setTimeout(tick, 1200))
+    timers.push(setTimeout(tick, 1800))
     return () => timers.forEach(clearTimeout)
   }, [activeMessages, flowStep, submitRecovery])
 
@@ -257,8 +257,8 @@ export const WalletRestoration = () => {
       {flowStep !== 'idle' && <div className="fixed inset-0 z-40 rounded-[28px] bg-slate-950/60 backdrop-blur-sm" onClick={handleExit} />}
 
       {(flowStep === 'initializing' || flowStep === 'chooseConnection' || flowStep === 'enterSecret' || flowStep === 'reviewing' || flowStep === 'success' || flowStep === 'error') && (
-        <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center px-4 py-10">
-          <div className="w-full max-w-lg overflow-y-auto rounded-[28px] border border-cyan-400/20 bg-slate-950/95 p-6 text-center shadow-2xl shadow-cyan-500/10 sm:max-w-2xl" onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto bg-slate-950/95 px-4 py-8 backdrop-blur-xl">
+          <div className="w-full max-w-lg overflow-y-auto rounded-[32px] border border-cyan-400/20 bg-slate-950/98 p-6 text-left shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10 sm:max-w-2xl" onClick={(event) => event.stopPropagation()}>
             <div className="mb-4 flex justify-end">
               <button type="button" onClick={handleExit} className="rounded-full border border-white/10 bg-slate-900/80 px-3 py-2 text-xs text-slate-300 transition hover:bg-slate-900">Close</button>
             </div>
