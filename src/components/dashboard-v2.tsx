@@ -1,7 +1,7 @@
 'use client'
 
 import { useWallet } from '@/lib/wallet-context'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorHandler } from '@/lib/error-handler'
 
@@ -30,8 +30,9 @@ const DashboardGlyph = ({ tone = 'cyan' }: { tone?: 'cyan' | 'violet' | 'emerald
 }
 
 export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
-  const { tokens, loading, totalBalance, fetchTokens } = useWallet()
-  const { isConnected } = useAccount()
+  const { tokens, loading, fetchTokens, deadCoins } = useWallet()
+  const { address, isConnected } = useAccount()
+  const { chain } = useNetwork()
   const { handleError } = useErrorHandler()
   const [tokensExpanded, setTokensExpanded] = useState(false)
   const hasFetched = useRef(false)
@@ -39,8 +40,14 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
   const stats = useMemo(() => ({
     assetsCount: tokens.length,
     chainsActive: Math.min(Math.max(Math.ceil(tokens.length / 3), tokens.length > 0 ? 1 : 0), 4),
-    portfolioChange: '+2.34%',
-  }), [tokens])
+    riskSignals: deadCoins.length,
+    recoveryReady: Math.max(58, 92 - deadCoins.length * 10),
+  }), [tokens, deadCoins.length])
+
+  const shortAddress = (value: string) => `${value.slice(0, 6)}...${value.slice(-4)}`
+
+  const currentChain = chain?.name ?? 'Unknown network'
+  const connectionLabel = chain?.unsupported ? 'Unsupported chain' : 'Connected'
 
   useEffect(() => {
     if (!isConnected) {
@@ -64,8 +71,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
         <div className="mb-6">
           <DashboardGlyph />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Secure Dashboard</h2>
-        <p className="text-gray-400 text-sm text-center max-w-md">Connect your wallet to unlock your personal finance dashboard with real-time portfolio tracking</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Secure Wallet Monitor</h2>
+        <p className="text-gray-400 text-sm text-center max-w-md">Connect your wallet to start scanning approvals, reviewing risk posture, and restoring access with guided tools.</p>
       </div>
     )
   }
@@ -91,39 +98,36 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
           <div className="space-y-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.32em] text-cyan-300">Premium portfolio</p>
-                <h1 className="text-3xl sm:text-4xl font-semibold text-white">A refined wallet dashboard for pro-grade monitoring</h1>
-                <p className="max-w-2xl text-sm text-slate-400">Track balances, risk signals, and recovery readiness with polished visuals and premium analytics.</p>
+                <p className="text-xs uppercase tracking-[0.32em] text-cyan-300">Secure wallet control</p>
+                <h1 className="text-3xl sm:text-4xl font-semibold text-white">Your wallet security command center</h1>
+                <p className="max-w-2xl text-sm text-slate-400">Monitor connection integrity, risk signals, recovery readiness, and fast actions for the connected wallet.</p>
                 <div className="flex flex-wrap gap-2 text-xs text-slate-300">
-                  <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1">Live balances</span>
+                  <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1">Connection snapshot</span>
                   <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1">Risk posture</span>
-                  <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1">Recovery checks</span>
+                  <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1">Recovery readiness</span>
                 </div>
               </div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 shadow-inner">
-                <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-                Live chain sync
+                <span className={`h-2.5 w-2.5 rounded-full ${stats.riskSignals ? 'bg-amber-400' : 'bg-emerald-400'}`} />
+                {stats.riskSignals ? `${stats.riskSignals} risk signal${stats.riskSignals > 1 ? 's' : ''}` : 'No active alerts'}
               </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-[1.2fr_1fr_1fr]">
-              <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-violet-600/10 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(99,102,241,0.6)]">
-                <p className="text-xs uppercase tracking-[0.32em] text-violet-300 mb-2">Total assets</p>
-                <p className="text-4xl font-semibold text-white">${totalBalance.toLocaleString('en-US', { maximumFractionDigits: 0 })}</p>
-                <div className="mt-4 flex items-center justify-between gap-4">
-                  <p className="text-xs text-slate-400">Primary portfolio value across all connected wallets.</p>
-                  <DashboardGlyph tone="violet" />
-                </div>
+              <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-slate-900/80 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(148,163,184,0.3)]">
+                <p className="text-xs uppercase tracking-[0.32em] text-slate-400 mb-2">Wallet connected</p>
+                <p className="text-3xl font-semibold text-white">{address ? shortAddress(address) : 'Unknown'}</p>
+                <p className="text-xs text-slate-400 mt-3">{connectionLabel} on {currentChain}</p>
               </div>
               <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-cyan-500/10 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(56,189,248,0.55)]">
-                <p className="text-xs uppercase tracking-[0.32em] text-cyan-300 mb-2">Asset count</p>
-                <p className="text-3xl font-semibold text-white">{stats.assetsCount}</p>
-                <p className="text-xs text-slate-400 mt-3">Tokens actively tracked in your wallet.</p>
+                <p className="text-xs uppercase tracking-[0.32em] text-cyan-300 mb-2">Recovery readiness</p>
+                <p className="text-3xl font-semibold text-white">{stats.recoveryReady}%</p>
+                <p className="text-xs text-slate-400 mt-3">Measured from wallet risk signals and access patterns.</p>
               </div>
               <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-emerald-500/10 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(16,185,129,0.55)]">
                 <p className="text-xs uppercase tracking-[0.32em] text-emerald-300 mb-2">Network reach</p>
                 <p className="text-3xl font-semibold text-white">{stats.chainsActive}</p>
-                <p className="text-xs text-slate-400 mt-3">Chains with active assets and historical movement.</p>
+                <p className="text-xs text-slate-400 mt-3">Connected chain coverage for the wallet.</p>
               </div>
             </div>
           </div>
@@ -131,31 +135,41 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
           <div className="rounded-[24px] border border-white/10 bg-slate-950/80 p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Risk profile</p>
-                <p className="text-lg font-semibold text-white">Stable</p>
+                <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Quick actions</p>
+                <p className="text-lg font-semibold text-white">Fast security workflows</p>
               </div>
               <DashboardGlyph tone="emerald" />
             </div>
-            <div className="mt-6 rounded-[24px] bg-gradient-to-r from-cyan-500/20 to-slate-900/20 p-4">
-              <div className="flex items-center justify-between text-sm text-slate-300 mb-3">
-                <span>Recovery readiness</span>
-                <span className="font-semibold text-white">82%</span>
-              </div>
-              <div className="h-3 rounded-full bg-white/5 overflow-hidden">
-                <div className="h-full w-4/5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" />
-              </div>
+            <div className="mt-6 space-y-3">
+              <button onClick={() => onNavigate?.('security')} className="w-full rounded-[24px] border border-violet-500/20 bg-violet-500/10 px-4 py-4 text-left text-white transition hover:border-violet-400/30">
+                <p className="font-semibold">Run security audit</p>
+                <p className="text-xs text-slate-400 mt-1">Inspect approvals, dApp permissions, and contract risks.</p>
+              </button>
+              <button onClick={() => onNavigate?.('recovery')} className="w-full rounded-[24px] border border-cyan-500/20 bg-cyan-500/10 px-4 py-4 text-left text-white transition hover:border-cyan-400/30">
+                <p className="font-semibold">Open recovery wizard</p>
+                <p className="text-xs text-slate-400 mt-1">Restore access and validate your recovery methods.</p>
+              </button>
+              <button onClick={() => onNavigate?.('history')} className="w-full rounded-[24px] border border-emerald-500/20 bg-white/5 px-4 py-4 text-left text-white transition hover:border-emerald-400/30">
+                <p className="font-semibold">Review recent activity</p>
+                <p className="text-xs text-slate-400 mt-1">See the latest wallet interactions and suspicious events.</p>
+              </button>
             </div>
-            <div className="mt-6 grid gap-3">
-              <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-                <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Weekly momentum</p>
-                <p className="text-xl font-semibold text-white">{stats.portfolioChange}</p>
-                <p className="text-xs text-slate-500 mt-1">Positive movement across major positions.</p>
-              </div>
-              <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-                <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Action score</p>
-                <p className="text-xl font-semibold text-white">{stats.assetsCount * 8}</p>
-                <p className="text-xs text-slate-500 mt-1">Dynamic signal built from balance and change.</p>
-              </div>
+            <div className="mt-6 rounded-[24px] border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Status summary</p>
+              <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                <li className="flex items-center justify-between">
+                  <span>Wallet connection</span>
+                  <span className="font-semibold text-white">{connectionLabel}</span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Risk alerts</span>
+                  <span className="font-semibold text-white">{stats.riskSignals}</span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Recovery ready</span>
+                  <span className="font-semibold text-white">{stats.recoveryReady}%</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

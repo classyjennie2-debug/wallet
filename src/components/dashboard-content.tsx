@@ -103,16 +103,6 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
               </div>
 
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
-                {activeTab !== 'dashboard' && (
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('dashboard')}
-                    className="inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/80 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-cyan-400/50 hover:bg-slate-900"
-                  >
-                    <AppIcon kind="back" />
-                    <span className="hidden sm:inline">Back</span>
-                  </button>
-                )}
                 <div className="w-full sm:w-auto">
                   <WalletConnect />
                 </div>

@@ -15,78 +15,59 @@ export const MyWalletLogo = ({ size = 'md', variant = 'full' }: LogoProps) => {
   const dimensions = sizeMap[size]
 
   return (
-    <div className="flex items-center gap-2">
-      {/* Wallet Icon with Shield */}
+    <div className="flex items-center gap-3">
       <div className="relative">
         <svg
           width={dimensions.icon}
           height={dimensions.icon}
-          viewBox="0 0 48 48"
+          viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
-          {/* Wallet */}
-          <rect
-            x="6"
-            y="12"
-            width="36"
-            height="24"
-            rx="4"
-            fill="url(#gradient)"
-            stroke="currentColor"
-            strokeWidth="2"
-          />
-          {/* Wallet flap */}
-          <path
-            d="M6 12C6 9.79086 7.79086 8 10 8H36C38.2091 8 40 9.79086 40 12V16H6V12Z"
-            fill="url(#gradientLight)"
-            stroke="currentColor"
-            strokeWidth="2"
-          />
-          {/* Card slot */}
-          <rect x="28" y="20" width="8" height="12" rx="1" fill="currentColor" opacity="0.3" />
-          {/* Shield checkmark */}
-          <g transform="translate(8, 20)">
-            <path
-              d="M4 0C1.79086 0 0 1.79086 0 4V8C0 10 1 12 4 13C7 12 8 10 8 8V4C8 1.79086 6.20914 0 4 0Z"
-              fill="url(#gradientAccent)"
-            />
-            <path
-              d="M2 6L4 8L6 5"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </g>
-
           <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" />
+            <linearGradient id="walletGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#38bdf8" />
               <stop offset="100%" stopColor="#8b5cf6" />
             </linearGradient>
-            <linearGradient id="gradientLight" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id="walletTop" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#60a5fa" />
-              <stop offset="100%" stopColor="#a78bfa" />
+              <stop offset="100%" stopColor="#c084fc" />
             </linearGradient>
-            <linearGradient id="gradientAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#10b981" />
-              <stop offset="100%" stopColor="#14b8a6" />
+            <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#0ea5e9" />
+              <stop offset="100%" stopColor="#38bdf8" />
+            </linearGradient>
+            <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#14b8a6" />
+              <stop offset="100%" stopColor="#22c55e" />
             </linearGradient>
           </defs>
+
+          <rect x="6" y="20" width="52" height="28" rx="10" fill="url(#walletGrad)" stroke="rgba(255,255,255,0.18)" strokeWidth="2" />
+          <path d="M10 20C10 15.5817 13.5817 12 18 12H44C48.4183 12 52 15.5817 52 20V28H10V20Z" fill="url(#walletTop)" stroke="rgba(255,255,255,0.18)" strokeWidth="2" />
+          <rect x="18" y="28" width="16" height="8" rx="3" fill="rgba(255,255,255,0.2)" />
+          <rect x="40" y="28" width="12" height="12" rx="4" fill="url(#accentGrad)" opacity="0.95" />
+          <path d="M22 30H36" stroke="rgba(255,255,255,0.3)" strokeWidth="2" strokeLinecap="round" />
+          <path d="M24 36H38" stroke="rgba(255,255,255,0.18)" strokeWidth="2" strokeLinecap="round" />
+          <path d="M16 36L24 28L30 34L46 18" stroke="rgba(255,255,255,0.22)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+
+          <g transform="translate(42 34)">
+            <circle cx="0" cy="0" r="8" fill="url(#shieldGrad)" />
+            <path d="M-2 0L0 2L4-2" stroke="#f8fafc" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
         </svg>
       </div>
 
-      {/* Text Logo */}
       {variant === 'full' && (
         <div className="flex flex-col leading-none">
           <span
-            className="font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent"
+            className="font-semibold bg-gradient-to-r from-sky-400 via-indigo-500 to-violet-500 bg-clip-text text-transparent"
             style={{ fontSize: dimensions.text }}
           >
             MyWallet
           </span>
-          <span className="text-[0.6em] text-gray-500 font-medium">help</span>
+          <span className="text-[0.58em] uppercase tracking-[0.28em] text-slate-400">help</span>
         </div>
       )}
     </div>
