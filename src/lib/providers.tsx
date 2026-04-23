@@ -43,17 +43,7 @@ const transports: Record<number, ReturnType<typeof http>> = {
   [SUPPORTED_CHAINS[7].id]: http(),
 }
 
-function isMobileBrowser() {
-  if (typeof navigator === 'undefined') {
-    return false
-  }
-
-  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-}
-
 async function createWagmiConfig() {
-  const mobile = isMobileBrowser()
-
   if (projectId) {
     const { baseAccount, coinbaseWallet, metaMaskWallet, rainbowWallet, trustWallet, walletConnectWallet } = await import('@rainbow-me/rainbowkit/wallets')
 

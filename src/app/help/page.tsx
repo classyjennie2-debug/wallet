@@ -1,202 +1,121 @@
 import React from 'react'
 
+const faqs = [
+  ['What is MyWallet.Help?', 'MyWallet.Help is a cryptocurrency wallet workspace for portfolio tracking, security reviews, recovery guidance, and connected asset monitoring across multiple EVM networks.'],
+  ['Is my private key stored on your servers?', 'No. Private keys stay in your wallet. Connections are handled through wallet protocols that keep key material under your control.'],
+  ['Which wallets does MyWallet.Help support?', 'The app supports a broad set of wallets through RainbowKit, including MetaMask, Trust Wallet, Rainbow, Coinbase Wallet, Ledger, Trezor, and WalletConnect-compatible options.'],
+  ['What networks do you support?', 'Ethereum, Polygon, Arbitrum, and Base are supported now, with room to expand as the app grows.'],
+  ['How do I connect my wallet?', 'Use the Connect Wallet control in the header, select a wallet, and approve the session from your wallet app or extension.'],
+  ['Is MyWallet.Help safe to use?', 'The app uses HTTPS, client-side wallet connections, and security-focused workflows. Your assets remain under your control.'],
+  ['What is the Portfolio Risk Score?', 'It estimates concentration, volatility, contract exposure, and general balance distribution so you can spot portfolio risk faster.'],
+  ['How do I revoke token approvals?', 'Open the allowance manager from the Security tab to inspect token permissions and revoke approvals you no longer want active.'],
+  ['Can I recover my wallet with a seed phrase?', 'The recovery flow can validate seed phrase format and guide you through recovery-oriented checks. Never share your seed phrase with anyone.'],
+  ['What does Dead Coin Detector do?', 'It helps flag inactive or weak assets in your portfolio so you can evaluate liquidity and overall exposure more clearly.'],
+  ['How often are prices updated?', 'Prices are refreshed from connected data sources during wallet usage, and chart views pull from external APIs for historical context.'],
+  ['Can I trade directly from MyWallet.Help?', 'Yes. The token swap flow is built into the app so you can exchange supported assets from the same workspace.'],
+  ['Is there a mobile app?', 'There is no separate mobile app here, but the interface is designed to work well in mobile browsers with wallet apps.'],
+  ['How do I view my NFT collection?', 'Connect a wallet and navigate to the NFT portfolio area to inspect holdings, groupings, and collection details.'],
+  ['What if I forget my wallet password?', 'The app does not store passwords. Recovery remains under your control and depends on your own backup method.'],
+  ['Do you collect my personal data?', 'Data collection is minimal. Review the privacy page for details on what is and is not retained.'],
+  ['How do I report a security issue?', 'Use the public issue tracker with clear reproduction steps, affected flows, and any screenshots that help explain the problem.'],
+  ['Is MyWallet.Help available globally?', 'Yes, though some features may vary depending on the third-party services and jurisdictions involved.'],
+] as const
+
+const supportCards = [
+  { title: 'Documentation', subtitle: 'Reference guides and walkthroughs', href: 'https://docs.mywallet.help', tone: 'cyan' },
+  { title: 'Community', subtitle: 'Discord discussions and questions', href: 'https://discord.gg/mywallet-help', tone: 'violet' },
+  { title: 'Issue Tracker', subtitle: 'Report bugs and follow open work', href: 'https://github.com/mywallet-help/issues', tone: 'emerald' },
+]
+
+const safetyTips = [
+  { title: 'Never Share Your Seed Phrase', text: 'Anyone with your seed phrase can access your funds. Treat it like the highest-value secret in your wallet setup.', tone: 'rose' },
+  { title: 'Verify URLs', text: 'Use HTTPS, check the address bar carefully, and rely on saved bookmarks for trusted destinations.', tone: 'amber' },
+  { title: 'Use Hardware Wallets', text: 'For larger balances, a hardware wallet gives you a stronger separation between signing and browsing.', tone: 'cyan' },
+  { title: 'Enable 2FA', text: 'Turn on two-factor authentication anywhere your wallet workflow depends on exchange or account access.', tone: 'emerald' },
+] as const
+
+const toneStyles = {
+  cyan: 'border-cyan-400/20 bg-cyan-500/10 text-cyan-300',
+  violet: 'border-violet-400/20 bg-violet-500/10 text-violet-300',
+  emerald: 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300',
+  rose: 'border-rose-400/20 bg-rose-500/10 text-rose-300',
+  amber: 'border-amber-400/20 bg-amber-500/10 text-amber-300',
+}
+
 export default function Help() {
-  const faqs = [
-    {
-      question: 'What is MyWallet.Help?',
-      answer: 'MyWallet.Help is a comprehensive cryptocurrency wallet dashboard that helps you manage, track, and analyze your crypto assets across multiple blockchain networks. It provides portfolio tracking, price charts, security audits, NFT management, and more.'
-    },
-    {
-      question: 'Is my private key stored on your servers?',
-      answer: 'No. MyWallet.Help never stores or accesses your private keys. We use wallet connection protocols (RainbowKit) that keep your keys securely in your wallet. You maintain complete control of your assets.'
-    },
-    {
-      question: 'Which wallets does MyWallet.Help support?',
-      answer: 'We support 20+ wallet providers including MetaMask, Trust Wallet, Rainbow, Coinbase Wallet, Ledger, Trezor, WalletConnect, and many more through RainbowKit integration.'
-    },
-    {
-      question: 'What networks do you support?',
-      answer: 'We support Ethereum, Polygon, Arbitrum, and Base networks, with additional networks coming soon. All are EVM-compatible blockchain networks.'
-    },
-    {
-      question: 'How do I connect my wallet?',
-      answer: 'Click the "Connect Wallet" button in the header. Select your wallet from the list, approve the connection in your wallet app, and you\'ll be connected to MyWallet.Help.'
-    },
-    {
-      question: 'Is MyWallet.Help safe to use?',
-      answer: 'Yes. We implement industry-standard security practices including HTTPS encryption, no server-side storage of sensitive data, and regular security audits. Your assets remain under your control at all times.'
-    },
-    {
-      question: 'What is the Portfolio Risk Score?',
-      answer: 'The Portfolio Risk Score analyzes your holdings for concentration risk, volatility, contract risk, and market conditions. It provides a 0-100 score with recommendations to improve diversification.'
-    },
-    {
-      question: 'How do I revoke token approvals?',
-      answer: 'Use the Token Allowance Manager in the dashboard. It shows all contracts with permission to spend your tokens. Click "Revoke" to remove approval, reducing security risk.'
-    },
-    {
-      question: 'Can I recover my wallet with a seed phrase?',
-      answer: 'Yes, use the Wallet Recovery feature. Enter your 12 or 24-word seed phrase, and we\'ll validate it securely. Never share your seed phrase with anyone.'
-    },
-    {
-      question: 'What does Dead Coin Detector do?',
-      answer: 'The Dead Coin Detector identifies tokens in your portfolio that may be inactive, have low liquidity, or been abandoned. It helps you identify potential losses and diversify away from risky holdings.'
-    },
-    {
-      question: 'How often are prices updated?',
-      answer: 'Price data is updated in real-time when connected to the blockchain. Historical data is fetched from reliable API sources. Charts show data from the last 7 days to 1 year.'
-    },
-    {
-      question: 'Can I trade directly from MyWallet.Help?',
-      answer: 'Yes, use the Token Swap feature to exchange tokens directly from the dashboard. Swaps are routed through the best liquidity sources to get optimal prices.'
-    },
-    {
-      question: 'Is there a mobile app?',
-      answer: 'MyWallet.Help is fully responsive and works great on mobile browsers. We recommend using it with a mobile wallet app like MetaMask Mobile or Trust Wallet.'
-    },
-    {
-      question: 'How do I view my NFT collection?',
-      answer: 'Connect your wallet and navigate to the NFT Portfolio. Your NFTs will display with rarity information, floor prices, and collection grouping.'
-    },
-    {
-      question: 'What if I forget my wallet password?',
-      answer: 'MyWallet.Help doesn\'t store passwords. Use the Wallet Recovery feature with your seed phrase. Never give your seed phrase to anyone - recovery is always under your control.'
-    },
-    {
-      question: 'Do you collect my personal data?',
-      answer: 'We collect minimal data. See our Privacy Policy for details. We never store your wallet address permanently without consent, and we never sell or share your data.'
-    },
-    {
-      question: 'How do I report a security issue?',
-      answer: 'Please email support@mywallet.help with details. We take security seriously and respond promptly to all reports.'
-    },
-    {
-      question: 'Is MyWallet.Help available globally?',
-      answer: 'Yes, MyWallet.Help is available globally. However, some features may be restricted in certain jurisdictions due to local regulations.'
-    },
-  ]
-
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-        <div className="space-y-8">
-          {/* Header */}
-          <div className="text-center space-y-4">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white">Help & FAQ</h1>
-            <p className="text-gray-400">Find answers to common questions</p>
+    <main className="min-h-screen bg-slate-950">
+      <section className="border-b border-white/10 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.16),_transparent_42%)]">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+          <div className="max-w-3xl space-y-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-300">Help</p>
+            <h1 className="text-4xl font-semibold text-white sm:text-5xl">Answers, safety guidance, and support paths in one place.</h1>
+            <p className="max-w-2xl text-base text-slate-400">This page collects the most common product, wallet, and recovery questions so users can move quickly without digging through the app.</p>
           </div>
+        </div>
+      </section>
 
-          {/* FAQ List */}
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <details
-                key={index}
-                className="relative overflow-hidden rounded-lg border border-white/10 bg-gradient-to-br from-white/5 to-white/3 hover:border-white/20 transition-all group open:border-cyan-500/30 open:from-cyan-500/10 open:to-cyan-500/5"
-              >
-                <summary className="flex items-center justify-between cursor-pointer p-5 sm:p-6 font-semibold text-white hover:text-cyan-300 transition-colors select-none">
-                  <span className="text-left">{faq.question}</span>
-                  <span className="text-lg ml-2 group-open:rotate-180 transition-transform">▼</span>
+      <section className="border-b border-white/10">
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="grid gap-4">
+            {faqs.map(([question, answer]) => (
+              <details key={question} className="group rounded-[24px] border border-white/10 bg-white/5 transition hover:border-white/20 open:border-cyan-400/20 open:bg-cyan-500/5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left text-white">
+                  <span className="font-semibold">{question}</span>
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-950/80 text-slate-300 transition-transform group-open:rotate-180">+</span>
                 </summary>
-                
-                <div className="px-5 sm:px-6 pb-5 sm:pb-6 border-t border-white/10 text-gray-300 leading-relaxed">
-                  {faq.answer}
+                <div className="border-t border-white/10 px-5 py-5 text-sm leading-7 text-slate-300">
+                  {answer}
                 </div>
               </details>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Support Sections */}
-          <div className="space-y-6 pt-8">
-            <h2 className="text-2xl font-bold text-white">Need More Help?</h2>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Documentation */}
-              <a href="https://docs.mywallet.help" target="_blank" rel="noopener noreferrer"
-                className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/30 hover:border-blue-500/50 transition-all hover:-translate-y-1"
-              >
-                <div className="text-3xl mb-3">📚</div>
-                <h3 className="font-bold text-white mb-2">Documentation</h3>
-                <p className="text-sm text-gray-400">Read detailed guides and tutorials</p>
+      <section className="border-b border-white/10">
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="grid gap-5 md:grid-cols-3">
+            {supportCards.map((card) => (
+              <a key={card.title} href={card.href} target="_blank" rel="noopener noreferrer" className="rounded-[24px] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-white/20">
+                <div className={`inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] ${toneStyles[card.tone as keyof typeof toneStyles]}`}>
+                  {card.title}
+                </div>
+                <p className="mt-4 text-sm text-slate-300">{card.subtitle}</p>
               </a>
-
-              {/* Community Discord */}
-              <a href="https://discord.gg/mywallet-help" target="_blank" rel="noopener noreferrer"
-                className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/30 hover:border-purple-500/50 transition-all hover:-translate-y-1"
-              >
-                <div className="text-3xl mb-3">💬</div>
-                <h3 className="font-bold text-white mb-2">Community</h3>
-                <p className="text-sm text-gray-400">Join our Discord community</p>
-              </a>
-
-              {/* GitHub Issues */}
-              <a href="https://github.com/mywallet-help/issues" target="_blank" rel="noopener noreferrer"
-                className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-gray-500/10 to-gray-500/5 border border-gray-500/30 hover:border-gray-500/50 transition-all hover:-translate-y-1"
-              >
-                <div className="text-3xl mb-3">🐛</div>
-                <h3 className="font-bold text-white mb-2">Report Issues</h3>
-                <p className="text-sm text-gray-400">Report bugs on GitHub</p>
-              </a>
-
-              {/* Email Support */}
-              <a href="mailto:support@mywallet.help"
-                className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:-translate-y-1"
-              >
-                <div className="text-3xl mb-3">📧</div>
-                <h3 className="font-bold text-white mb-2">Email Support</h3>
-                <p className="text-sm text-gray-400">support@mywallet.help</p>
-              </a>
-            </div>
-          </div>
-
-          {/* Safety Tips */}
-          <div className="space-y-4 pt-8 border-t border-white/10">
-            <h2 className="text-2xl font-bold text-white">🔐 Safety Tips</h2>
-            
-            <div className="space-y-3">
-              <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30">
-                <p className="text-red-300 font-semibold text-sm mb-1">🔴 Never Share Your Seed Phrase</p>
-                <p className="text-gray-300 text-sm">Anyone with your seed phrase can access your funds. MyWallet.Help will never ask for it.</p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
-                <p className="text-yellow-300 font-semibold text-sm mb-1">⚠️ Verify URLs</p>
-                <p className="text-gray-300 text-sm">Always use HTTPS and verify the URL is correct. Bookmark the official site.</p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/30">
-                <p className="text-blue-300 font-semibold text-sm mb-1">ℹ️ Use Hardware Wallets</p>
-                <p className="text-gray-300 text-sm">Consider using a hardware wallet like Ledger or Trezor for maximum security.</p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
-                <p className="text-emerald-300 font-semibold text-sm mb-1">✅ Enable 2FA</p>
-                <p className="text-gray-300 text-sm">Always enable two-factor authentication on wallets and exchange accounts.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4 pt-8">
-            <h2 className="text-lg font-bold text-white">Quick Links</h2>
-            
-            <div className="flex flex-wrap gap-3">
-              {[
-                { href: '/privacy', label: 'Privacy Policy' },
-                { href: '/terms', label: 'Terms of Service' },
-                { href: '/about', label: 'About Us' },
-              ].map((link, i) => (
-                <a
-                  key={i}
-                  href={link.href}
-                  className="px-4 py-2 rounded-lg text-sm font-semibold text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 transition-all"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      <section className="border-b border-white/10">
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="grid gap-5 md:grid-cols-2">
+            {safetyTips.map((tip) => (
+              <article key={tip.title} className={`rounded-[24px] border p-6 ${toneStyles[tip.tone as keyof typeof toneStyles]}`}>
+                <h2 className="text-lg font-semibold text-white">{tip.title}</h2>
+                <p className="mt-3 text-sm leading-6 text-slate-200">{tip.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap gap-3">
+            {[
+              { href: '/privacy', label: 'Privacy Policy' },
+              { href: '/terms', label: 'Terms of Service' },
+              { href: '/about', label: 'About Us' },
+            ].map((link) => (
+              <a key={link.href} href={link.href} className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-300 transition hover:bg-cyan-500/20">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   )
 }
