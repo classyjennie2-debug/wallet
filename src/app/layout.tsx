@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "@/lib/providers";
@@ -33,42 +32,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="MyWallet.Help" />
-      </head>
       <body className="bg-slate-950 text-white">
         <Providers>
           {children}
           <MobileWalletHelper />
         </Providers>
-        
-        {/* Suppress only known noisy analytics errors without hiding wallet connection failures */}
-        <Script 
-          id="suppress-analytics-errors"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const origError = console.error;
-                console.error = function(...args) {
-                  const message = args[0]?.toString?.() || '';
-                  if (message.includes('Analytics SDK')) {
-                    return;
-                  }
-                  origError.apply(console, args);
-                };
-                
-                window.addEventListener('unhandledrejection', (event) => {
-                  if (event.reason?.message?.includes('Analytics SDK')) {
-                    event.preventDefault();
-                  }
-                });
-              })();
-            `
-          }}
-        />
       </body>
     </html>
   );

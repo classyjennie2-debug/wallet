@@ -7,16 +7,16 @@ export function Web3WalletConnector() {
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
         const connected = mounted && account && chain
-        const addressLabel = account?.address ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}` : 'Wallet'
+        const addressLabel = account?.address ? `${account.address.slice(0, 6)}...${account.address.slice(-4)}` : 'Wallet'
 
         const mobileButton =
-          'w-full rounded-2xl px-3 py-2 text-sm font-semibold text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition sm:w-auto'
+          'w-full rounded-2xl bg-cyan-400 px-3 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 sm:w-auto'
         const desktopButton =
-          'w-full sm:w-auto rounded-2xl px-3 py-2 text-sm font-semibold text-white bg-slate-900/90 hover:bg-slate-800 transition'
+          'w-full rounded-2xl bg-slate-900/90 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:w-auto'
 
         if (!mounted) {
           return (
-            <button type="button" disabled className={desktopButton + ' opacity-60 cursor-not-allowed'}>
+            <button type="button" disabled className={desktopButton + ' cursor-not-allowed opacity-60'}>
               Connect Wallet
             </button>
           )
@@ -31,22 +31,22 @@ export function Web3WalletConnector() {
         }
 
         return (
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <div className="flex flex-row items-center gap-3">
             <button
               type="button"
               onClick={openAccountModal}
-              className="w-full sm:w-auto rounded-2xl px-3 py-2 bg-slate-900/95 text-left text-xs sm:text-sm text-white shadow-xl shadow-cyan-500/10 transition hover:bg-slate-800"
+              className="bg-slate-900/95 rounded-2xl px-3 py-2 text-left text-xs text-white shadow-xl shadow-cyan-500/10 transition hover:bg-slate-800 sm:text-sm"
             >
-              <div className="font-semibold truncate">{account.displayName ?? addressLabel}</div>
-              <div className="text-[11px] text-slate-400 hidden sm:block">Connected</div>
+              <div className="truncate font-semibold">{account.displayName ?? addressLabel}</div>
+              <div className="hidden text-[11px] text-slate-400 sm:block">Connected</div>
             </button>
             <button
               type="button"
               onClick={openChainModal}
-              className="w-full sm:w-auto rounded-2xl px-3 py-2 bg-white/10 text-xs sm:text-sm text-white transition hover:bg-white/15"
+              className="rounded-2xl bg-white/10 px-3 py-2 text-xs text-white transition hover:bg-white/15 sm:text-sm"
             >
               <span className="block font-semibold">{chain?.name ?? 'Network'}</span>
-              <span className="text-[11px] text-slate-400 hidden sm:block">Switch</span>
+              <span className="hidden text-[11px] text-slate-400 sm:block">Switch</span>
             </button>
           </div>
         )

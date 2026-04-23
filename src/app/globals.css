@@ -31,9 +31,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-manrope);
-  --font-heading: var(--font-space-grotesk);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Manrope", "Segoe UI", sans-serif;
+  --font-heading: "Space Grotesk", "Aptos", "Segoe UI", sans-serif;
+  --font-mono: "SFMono-Regular", "Cascadia Code", "Consolas", monospace;
 }
 
 html, body {
@@ -46,13 +46,11 @@ html, body {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-manrope), "Segoe UI", sans-serif;
+  font-family: "Manrope", "Segoe UI", sans-serif;
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 .app-shell {

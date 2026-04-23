@@ -291,7 +291,7 @@ export const SecurityAudit = () => {
               <div className="mt-5 rounded-full bg-slate-800/90 p-1">
                 <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${Math.min(100, Math.max(0, progressWidth))}%` }} />
               </div>
-              <div className="mt-3 text-xs text-slate-500">{flowStep === 'idle' ? 'Select an audit option to begin.' : flowStep === 'success' || flowStep === 'error' ? 'Review the final result below.' : `${Math.min(currentStepIndex + 1, wizardSteps.length)} of ${wizardSteps.length} steps`}</div>
+              <div className="mt-3 text-xs text-slate-500">{flowStep === 'success' || flowStep === 'error' ? 'Review the final result below.' : `${Math.min(currentStepIndex + 1, wizardSteps.length)} of ${wizardSteps.length} steps`}</div>
             </div>
 
             {flowStep === 'initializing' && (

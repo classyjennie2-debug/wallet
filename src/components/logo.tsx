@@ -16,58 +16,56 @@ export const MyWalletLogo = ({ size = 'md', variant = 'full' }: LogoProps) => {
 
   return (
     <div className="flex items-center gap-3">
-      <div className="relative">
+      <div className="relative" aria-hidden>
         <svg
           width={dimensions.icon}
           height={dimensions.icon}
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
+          role="img"
         >
           <defs>
-            <linearGradient id="walletGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#38bdf8" />
-              <stop offset="100%" stopColor="#8b5cf6" />
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#06b6d4" />
+              <stop offset="60%" stopColor="#7c3aed" />
+              <stop offset="100%" stopColor="#ef4444" />
             </linearGradient>
-            <linearGradient id="walletTop" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#60a5fa" />
-              <stop offset="100%" stopColor="#c084fc" />
-            </linearGradient>
-            <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0ea5e9" />
-              <stop offset="100%" stopColor="#38bdf8" />
-            </linearGradient>
-            <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#14b8a6" />
+            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#0ea5a4" />
               <stop offset="100%" stopColor="#22c55e" />
             </linearGradient>
+            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#0ea5a4" floodOpacity="0.12" />
+            </filter>
           </defs>
 
-          <rect x="6" y="20" width="52" height="28" rx="10" fill="url(#walletGrad)" stroke="rgba(255,255,255,0.18)" strokeWidth="2" />
-          <path d="M10 20C10 15.5817 13.5817 12 18 12H44C48.4183 12 52 15.5817 52 20V28H10V20Z" fill="url(#walletTop)" stroke="rgba(255,255,255,0.18)" strokeWidth="2" />
-          <rect x="18" y="28" width="16" height="8" rx="3" fill="rgba(255,255,255,0.2)" />
-          <rect x="40" y="28" width="12" height="12" rx="4" fill="url(#accentGrad)" opacity="0.95" />
-          <path d="M22 30H36" stroke="rgba(255,255,255,0.3)" strokeWidth="2" strokeLinecap="round" />
-          <path d="M24 36H38" stroke="rgba(255,255,255,0.18)" strokeWidth="2" strokeLinecap="round" />
-          <path d="M16 36L24 28L30 34L46 18" stroke="rgba(255,255,255,0.22)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Shield base */}
+          <path d="M32 6c7.2 4.6 18 7 18 15 0 13-8.8 22-18 26-9.2-4-18-13-18-26 0-8 10.8-10.4 18-15z" fill="url(#g1)" filter="url(#softShadow)" />
 
-          <g transform="translate(42 34)">
-            <circle cx="0" cy="0" r="8" fill="url(#shieldGrad)" />
-            <path d="M-2 0L0 2L4-2" stroke="#f8fafc" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Stylized wallet inside shield */}
+          <g transform="translate(10,18)">
+            <rect x="4" y="6" width="40" height="22" rx="6" fill="#0f172a" opacity="0.12" />
+            <rect x="2" y="0" width="36" height="18" rx="5" fill="white" opacity="0.06" />
+            <rect x="6" y="8" width="26" height="12" rx="4" fill="url(#g2)" />
+            <circle cx="34" cy="14" r="5.2" fill="#0f172a" opacity="0.14" />
+            <path d="M10 14h14" stroke="rgba(255,255,255,0.9)" strokeWidth="1.8" strokeLinecap="round" opacity="0.95" />
           </g>
+
+          {/* Check mark accent */}
+          <path d="M22 34l6 6 14-18" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
         </svg>
       </div>
 
       {variant === 'full' && (
         <div className="flex flex-col leading-none">
           <span
-            className="font-semibold bg-gradient-to-r from-sky-400 via-indigo-500 to-violet-500 bg-clip-text text-transparent"
+            className="font-semibold bg-gradient-to-r from-cyan-400 via-violet-500 to-red-500 bg-clip-text text-transparent"
             style={{ fontSize: dimensions.text }}
           >
             MyWallet
           </span>
-          <span className="text-[0.58em] uppercase tracking-[0.28em] text-slate-400">help</span>
+          <span className="text-[0.58em] uppercase tracking-[0.28em] text-slate-400">Security</span>
         </div>
       )}
     </div>

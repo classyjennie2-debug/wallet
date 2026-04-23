@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
@@ -13,15 +14,23 @@ const features = [
 ]
 
 const stats = [
-  { number: '100K+', label: 'Active Users' },
-  { number: '$2B+', label: 'Assets Tracked' },
-  { number: '8', label: 'Networks Supported' },
+  { number: 'Client-side', label: 'Runs in your browser' },
+  { number: '0', label: 'Private keys stored' },
+  { number: '8', label: 'Networks supported' },
+]
+
+const principles = [
+  { name: 'No key custody', detail: 'Designed so users keep control of sensitive credentials.', accent: 'from-cyan-500 to-sky-500' },
+  { name: 'Wallet-focused UX', detail: 'Recovery, approvals, and diagnostics stay front and center.', accent: 'from-fuchsia-500 to-indigo-500' },
+  { name: 'Explainable flows', detail: 'Each step communicates what is happening and why it matters.', accent: 'from-emerald-500 to-teal-500' },
+  { name: 'Documentation path', detail: 'Visitors can inspect the docs before connecting anything.', accent: 'from-sky-500 to-cyan-500' },
 ]
 
 export const LandingPageV2 = () => {
   const router = useRouter()
   const { isConnected } = useAccount()
   const { openConnectModal } = useConnectModal()
+  const currentYear = new Date().getFullYear()
 
   const handleLaunch = () => {
     if (isConnected) {
@@ -29,27 +38,21 @@ export const LandingPageV2 = () => {
       return
     }
 
-    if (openConnectModal) {
-      openConnectModal()
-    }
-  }
-
-  const handleReadDocs = () => {
-    router.push('/docs')
+    openConnectModal?.()
   }
 
   return (
     <div className="min-h-screen overflow-hidden bg-slate-950 text-white">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-24 -right-16 h-72 w-72 rounded-full bg-gradient-to-br from-cyan-400/20 via-indigo-500/10 to-transparent blur-3xl animate-[pulse_8s_ease-in-out_infinite]" />
         <div className="absolute -bottom-28 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-gradient-to-tr from-fuchsia-500/15 via-sky-500/10 to-transparent blur-3xl animate-[spin_26s_linear_infinite]" />
         <div className="absolute inset-x-0 top-1/3 h-1/2 bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.08),_transparent_60%)]" />
       </div>
 
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),transparent_20%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.08),transparent_20%)] pointer-events-none" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),transparent_20%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.08),transparent_20%)]" />
 
       <div className="relative z-10">
-        <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-xl shadow-slate-950/40">
+        <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 shadow-xl shadow-slate-950/40 backdrop-blur-xl">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div className="flex items-center gap-3">
               <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500 to-slate-900 text-sm font-bold text-white shadow-lg shadow-cyan-500/10">
@@ -64,9 +67,9 @@ export const LandingPageV2 = () => {
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <nav className="flex flex-wrap items-center justify-center gap-3 text-sm text-slate-300 sm:justify-end">
-                <a href="/about" className="transition hover:text-cyan-300">About</a>
-                <a href="/help" className="transition hover:text-cyan-300">Guide</a>
-                <a href="/privacy" className="transition hover:text-cyan-300">Privacy</a>
+                <Link href="/about" className="transition hover:text-cyan-300">About</Link>
+                <Link href="/help" className="transition hover:text-cyan-300">Guide</Link>
+                <Link href="/privacy" className="transition hover:text-cyan-300">Privacy</Link>
               </nav>
               <div className="w-full sm:w-auto">
                 <Web3WalletConnector />
@@ -93,6 +96,18 @@ export const LandingPageV2 = () => {
                   </p>
                 </div>
 
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {[
+                    'Non-custodial by design',
+                    'Private keys stay with the user',
+                    'Focused on recovery and wallet hygiene',
+                  ].map((item) => (
+                    <div key={item} className="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <button
                     type="button"
@@ -101,13 +116,12 @@ export const LandingPageV2 = () => {
                   >
                     Launch Dashboard
                   </button>
-                  <button
-                    type="button"
-                    onClick={handleReadDocs}
+                  <Link
+                    href="/docs"
                     className="inline-flex items-center justify-center rounded-3xl border border-white/10 bg-white/5 px-8 py-3 text-base font-semibold text-white transition hover:border-cyan-300 hover:bg-white/10"
                   >
                     Read Docs
-                  </button>
+                  </Link>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -128,14 +142,14 @@ export const LandingPageV2 = () => {
                 <div className="absolute left-0 top-12 h-24 w-24 rounded-full bg-violet-500/10 blur-3xl" />
                 <div className="relative z-10 space-y-6">
                   <div className="rounded-[28px] border border-white/10 bg-slate-900/90 p-5 shadow-[0_20px_80px_-60px_rgba(56,189,248,0.45)] transition hover:-translate-y-1">
-                    <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Active signal</p>
-                    <h3 className="mt-3 text-2xl font-semibold text-white">+58% recovery confidence</h3>
-                    <p className="mt-2 text-sm text-slate-400">Your wallet is analyzed automatically, with risk insights delivered live.</p>
+                    <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Product principle</p>
+                    <h3 className="mt-3 text-2xl font-semibold text-white">Security cues that earn trust</h3>
+                    <p className="mt-2 text-sm text-slate-400">Designed to explain what the app does, what it checks, and what it never takes custody of.</p>
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
                     {[
-                      { label: 'Tokens scanned', value: '74' },
-                      { label: 'Approvals reviewed', value: '18' },
+                      { label: 'Wallet data', value: 'Read-only review' },
+                      { label: 'Recovery flow', value: 'Guided and explicit' },
                     ].map((item) => (
                       <div key={item.label} className="rounded-3xl border border-white/10 bg-white/5 p-4 text-center transition hover:border-cyan-400/30 hover:bg-white/10">
                         <p className="text-sm text-slate-400">{item.label}</p>
@@ -151,21 +165,19 @@ export const LandingPageV2 = () => {
           <section className="rounded-[32px] border border-white/10 bg-slate-950/90 p-8 shadow-2xl shadow-slate-950/30 sm:p-10">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Trusted by</p>
-                <h2 className="mt-3 text-3xl font-semibold text-white">Forward-thinking teams and security-first wallets</h2>
+                <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Built on clear principles</p>
+                <h2 className="mt-3 text-3xl font-semibold text-white">Trust signals that are easier to verify than marketing claims</h2>
               </div>
-              <div className="hidden rounded-full bg-slate-900/80 px-4 py-2 text-sm text-slate-400 sm:block">Secure partnerships with a premium feel</div>
+              <div className="hidden rounded-full bg-slate-900/80 px-4 py-2 text-sm text-slate-400 sm:block">Clear language beats inflated proof points</div>
             </div>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-4">
-              {[
-                { name: 'SafeGrid', accent: 'from-cyan-500 to-sky-500' },
-                { name: 'ChainLens', accent: 'from-fuchsia-500 to-purple-500' },
-                { name: 'VaultCore', accent: 'from-emerald-500 to-teal-500' },
-                { name: 'NexusAudit', accent: 'from-sky-500 to-indigo-500' },
-              ].map((brand) => (
-                <div key={brand.name} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-5 shadow-sm shadow-slate-950/20 transition hover:-translate-y-1 hover:shadow-lg">
-                  <div className={`inline-flex rounded-2xl bg-gradient-to-r ${brand.accent} px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-950`}>{brand.name}</div>
+              {principles.map((principle) => (
+                <div key={principle.name} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-5 shadow-sm shadow-slate-950/20 transition hover:-translate-y-1 hover:shadow-lg">
+                  <div className={`inline-flex rounded-2xl bg-gradient-to-r ${principle.accent} px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-950`}>
+                    {principle.name}
+                  </div>
+                  <p className="mt-4 text-sm text-slate-300">{principle.detail}</p>
                 </div>
               ))}
             </div>
@@ -204,11 +216,11 @@ export const LandingPageV2 = () => {
 
         <footer className="border-t border-white/10 bg-slate-950/90 backdrop-blur-xl">
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-4 py-10 text-sm text-slate-400 md:flex-row sm:px-6">
-            <div>MyWallet.Help © 2024 | Self-Sovereign Finance</div>
+            <div>{`MyWallet.Help © ${currentYear} | Self-Sovereign Finance`}</div>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <a href="/privacy" className="transition hover:text-cyan-300">Privacy</a>
-              <a href="/terms" className="transition hover:text-cyan-300">Terms</a>
-              <a href="/help" className="transition hover:text-cyan-300">Support</a>
+              <Link href="/privacy" className="transition hover:text-cyan-300">Privacy</Link>
+              <Link href="/terms" className="transition hover:text-cyan-300">Terms</Link>
+              <Link href="/help" className="transition hover:text-cyan-300">Support</Link>
             </div>
           </div>
         </footer>

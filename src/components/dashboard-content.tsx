@@ -1,8 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
 import { DashboardV2 } from '@/components/dashboard-v2'
@@ -72,37 +70,27 @@ const tabs: { id: Tab; label: string; icon: 'dashboard' | 'alert' | 'security' |
 
 export default function DashboardContent({ activeTab, setActiveTab }: DashboardContentProps) {
   const { isConnected } = useAccount()
-  const { openConnectModal } = useConnectModal()
-
-  useEffect(() => {
-    if (!isConnected && openConnectModal) {
-      const timer = setTimeout(() => openConnectModal(), 300)
-      return () => clearTimeout(timer)
-    }
-  }, [isConnected, openConnectModal])
 
   return (
     <main className="min-h-screen bg-slate-950">
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
           <div className="mx-auto w-full max-w-full px-4 py-2 sm:px-4 sm:py-2">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="block md:hidden">
-                    <MyWalletLogo size="sm" variant="icon" />
-                  </div>
-                  <div className="hidden md:block">
-                    <MyWalletLogo size="md" variant="full" />
-                  </div>
+            <div className="flex flex-row items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="block md:hidden">
+                  <MyWalletLogo size="sm" variant="icon" />
+                </div>
+                <div className="hidden md:block">
+                  <MyWalletLogo size="md" variant="full" />
                 </div>
                 <div className="hidden md:block">
                   <p className="text-[11px] text-slate-400">Premium wallet intelligence for recovery and security posture.</p>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
-                <div className="w-full sm:w-auto">
+              <div className="flex items-center gap-3">
+                <div className="w-auto">
                   <WalletConnect />
                 </div>
               </div>
