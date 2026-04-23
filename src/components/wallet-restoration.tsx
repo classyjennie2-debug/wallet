@@ -31,6 +31,15 @@ const connectionTypes: ConnectionType[] = ['Secret Phrase', 'Keystore', 'Private
 const initializingSteps = ['Establishing secure recovery channel', 'Validating issue context and selected repair path', 'Preparing recovery diagnostics']
 const reviewingSteps = ['Encrypting recovery details', 'Processing recovery details', 'Finalizing recovery review']
 const recoverySteps = ['Select issue', 'Initialize', 'Choose connection', 'Enter secret', 'Review', 'Success']
+const stepLabels = {
+  initializing: 'Initializing recovery flow',
+  chooseConnection: 'Choose verification mode',
+  enterSecret: 'Enter recovery details',
+  reviewing: 'Reviewing recovery progress',
+  success: 'Recovery complete',
+  error: 'Recovery error',
+} as const
+const wizardSteps = ['initializing', 'chooseConnection', 'enterSecret', 'reviewing'] as const
 
 const RecoveryIcon = ({ kind }: { kind: 'shield' | 'key' | 'file' | 'vault' | 'check' | 'alert' }) => {
   const iconMap = {
@@ -106,6 +115,17 @@ export const WalletRestoration = () => {
     setActivityMessage('Preparing wallet recovery diagnostics...')
     setProgressIndex(0)
   }
+
+  useEffect(() => {
+    if (flowStep === 'idle') return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') handleExit()
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [flowStep])
 
   const submitRecovery = useCallback(async () => {
     if (!activeIssue || !selectedConnection) {
@@ -216,7 +236,9 @@ export const WalletRestoration = () => {
     setFlowStep('reviewing')
   }
 
-  const canContinue = Boolean(selectedConnection && connectionInput.trim())
+  const currentStepIndex = wizardSteps.indexOf(flowStep as typeof wizardSteps[number])
+  const progressWidth = activeMessages.length > 0 ? ((progressIndex + 1) / activeMessages.length) * 100 : 0
+  const canContinue = Boolean(selectedConnection && validateConnectionInput(selectedConnection, connectionInput))
 
   return (
     <div className="relative space-y-6">
@@ -259,9 +281,22 @@ export const WalletRestoration = () => {
       {(flowStep === 'initializing' || flowStep === 'chooseConnection' || flowStep === 'enterSecret' || flowStep === 'reviewing' || flowStep === 'success' || flowStep === 'error') && (
         <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto bg-slate-950/95 px-4 py-8 backdrop-blur-xl">
           <div className="w-full max-w-lg overflow-y-auto rounded-[32px] border border-cyan-400/20 bg-slate-950/98 p-6 text-left shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10 sm:max-w-2xl" onClick={(event) => event.stopPropagation()}>
-            <div className="mb-4 flex justify-end">
-              <button type="button" onClick={handleExit} className="rounded-full border border-white/10 bg-slate-900/80 px-3 py-2 text-xs text-slate-300 transition hover:bg-slate-900">Close</button>
+            <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm uppercase tracking-[0.28em] text-cyan-300">Wallet recovery wizard</p>
+                <h2 className="mt-2 text-2xl font-semibold text-white">{activeIssue?.title ?? 'Wallet recovery in progress'}</h2>
+                <p className="mt-2 text-sm text-slate-400">{activeIssue ? activeIssue.description : 'Follow the guided recovery flow to validate details and complete the repair.'}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-xs uppercase tracking-[0.25em] text-cyan-300">{stepLabels[flowStep]}</span>
+                <button type="button" onClick={handleExit} className="rounded-full border border-white/10 bg-slate-900/80 px-3 py-2 text-xs text-slate-300 transition hover:bg-slate-900">Close</button>
+              </div>
             </div>
+
+            <div className="mb-5 rounded-full bg-slate-800/90 p-1">
+              <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${Math.min(100, Math.max(0, progressWidth))}%` }} />
+            </div>
+            <div className="mb-8 text-xs text-slate-500">{flowStep === 'success' || flowStep === 'error' ? 'Review the final outcome below.' : `Step ${Math.min(currentStepIndex + 1, wizardSteps.length)} of ${wizardSteps.length}`}</div>
 
             {flowStep === 'initializing' && (
               <>
@@ -324,7 +359,15 @@ export const WalletRestoration = () => {
                 />
                 {inputError && <p className="mt-3 text-sm text-rose-400">{inputError}</p>}
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-slate-400">Once validated, the recovery flow will continue securely.</p>
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-400">Once validated, the recovery flow will continue securely.</p>
+                    <button type="button" onClick={() => {
+                      setFlowStep('chooseConnection')
+                      setInputError('')
+                      setMessage('')
+                      setConnectionInput('')
+                    }} className="text-sm font-semibold text-slate-300 hover:text-white">Change verification mode</button>
+                  </div>
                   <button type="button" onClick={handleContinue} disabled={!canContinue} className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50">Continue</button>
                 </div>
               </>

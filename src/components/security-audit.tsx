@@ -24,6 +24,17 @@ const stepStatus: Record<'initializing' | 'reviewing', string[]> = {
   reviewing: ['Applying integrity checks and security fixes', 'Compiling audit findings', 'Finalizing system hardening review'],
 }
 
+const stepLabels = {
+  initializing: 'Initializing security audit',
+  chooseConnection: 'Choose verification mode',
+  enterSecret: 'Enter verification details',
+  reviewing: 'Reviewing audit findings',
+  success: 'Audit complete',
+  error: 'Action required',
+} as const
+
+const wizardSteps = ['initializing', 'chooseConnection', 'enterSecret', 'reviewing'] as const
+
 const AuditIcon = ({ kind }: { kind: 'scan' | 'wallet' | 'contract' | 'network' | 'check' | 'alert' }) => {
   const iconMap = {
     scan: <><path d="M4 8V6a2 2 0 0 1 2-2h2" /><path d="M20 8V6a2 2 0 0 0-2-2h-2" /><path d="M4 16v2a2 2 0 0 0 2 2h2" /><path d="M20 16v2a2 2 0 0 1-2 2h-2" /><path d="M7 12h10" /></>,
@@ -73,6 +84,10 @@ export const SecurityAudit = () => {
     return []
   }, [flowStep])
 
+  const currentStepIndex = wizardSteps.indexOf(flowStep as typeof wizardSteps[number])
+  const progressWidth = activeMessages.length > 0 ? ((progressIndex + 1) / activeMessages.length) * 100 : 0
+  const canContinue = !!selectedConnection && validateConnectionInput(selectedConnection, connectionInput)
+
   const resetFlow = () => {
     setFlowStep('idle')
     setActiveOption(null)
@@ -84,6 +99,17 @@ export const SecurityAudit = () => {
     setActivityMessage('Preparing security engine...')
     setProgressIndex(0)
   }
+
+  useEffect(() => {
+    if (flowStep === 'idle') return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') resetFlow()
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [flowStep])
 
   const submitSecurityAudit = useCallback(async () => {
     if (!activeOption || !selectedConnection) {
@@ -240,9 +266,24 @@ export const SecurityAudit = () => {
       </div>
 
       {flowStep !== 'idle' && (
-        <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto bg-slate-950/95 px-4 py-8 backdrop-blur-xl" onClick={resetFlow}>
-          <div className="relative w-full max-w-2xl" onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto bg-slate-950/95 px-4 py-8 backdrop-blur-xl">
+          <div role="dialog" aria-modal="true" aria-labelledby="security-audit-title" className="relative w-full max-w-2xl" onClick={(event) => event.stopPropagation()}>
             <button type="button" onClick={resetFlow} className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-900/80 text-slate-200 transition hover:bg-slate-900" aria-label="Close security modal">X</button>
+
+            <div className="mb-6 rounded-[24px] border border-slate-800 bg-slate-950/90 p-5 text-white shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)]">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Security wizard</p>
+                  <h2 id="security-audit-title" className="mt-2 text-2xl font-semibold text-white">{activeOption?.title ?? 'Security audit in progress'}</h2>
+                  <p className="mt-2 text-sm text-slate-400">{activeOption ? activeOption.description : 'Follow the guided steps to complete your security review.'}</p>
+                </div>
+                <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-xs uppercase tracking-[0.25em] text-cyan-300">{stepLabels[flowStep]}</span>
+              </div>
+              <div className="mt-5 rounded-full bg-slate-800/90 p-1">
+                <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${Math.min(100, Math.max(0, progressWidth))}%` }} />
+              </div>
+              <div className="mt-3 text-xs text-slate-500">{flowStep === 'idle' ? 'Select an audit option to begin.' : flowStep === 'success' || flowStep === 'error' ? 'Review the final result below.' : `${Math.min(currentStepIndex + 1, wizardSteps.length)} of ${wizardSteps.length} steps`}</div>
+            </div>
 
             {flowStep === 'initializing' && (
               <div className="w-full rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 text-center shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10">
@@ -303,8 +344,16 @@ export const SecurityAudit = () => {
                 {inputError ? <p className="mt-3 text-sm text-rose-400">{inputError}</p> : null}
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-slate-400">Once validated, the audit task will be executed and processed securely.</p>
-                  <button type="button" onClick={handleContinue} className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50">Continue</button>
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-400">Once validated, the audit task will be executed and processed securely.</p>
+                    <button type="button" onClick={() => {
+                      setFlowStep('chooseConnection')
+                      setInputError('')
+                      setStatusMessage('')
+                      setConnectionInput('')
+                    }} className="text-sm font-semibold text-slate-300 hover:text-white">Change verification mode</button>
+                  </div>
+                  <button type="button" onClick={handleContinue} disabled={!canContinue} className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50">Continue</button>
                 </div>
               </div>
             )}
@@ -324,7 +373,7 @@ export const SecurityAudit = () => {
             )}
 
             {flowStep === 'success' && (
-              <div className="w-full max-w-2xl rounded-[28px] border border-cyan-400/20 bg-slate-900/95 p-8 shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10">
+              <div className="w-full max-w-2xl rounded-[28px] border border-emerald-500/20 bg-slate-900/95 p-8 shadow-[0_36px_120px_-52px_rgba(16,185,129,0.35)] ring-1 ring-emerald-400/10">
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">Audit complete</p>
@@ -348,9 +397,8 @@ export const SecurityAudit = () => {
                   </ul>
                 </div>
 
-                <div className="mt-6 rounded-[24px] border border-slate-700/70 bg-slate-950/80 p-5">
-                  <p className="text-sm text-slate-400">Audit note:</p>
-                  <p className="mt-2 text-sm text-slate-300">The system verified your connection mode, validated the input format, and compiled a technical summary with recommended fixes.</p>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                  <button type="button" onClick={resetFlow} className="rounded-full bg-slate-800 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">Close</button>
                 </div>
               </div>
             )}
@@ -367,6 +415,10 @@ export const SecurityAudit = () => {
                 </div>
 
                 <div className="mt-4 rounded-[24px] border border-rose-500/20 bg-slate-950/80 p-4 text-sm text-slate-200">{statusMessage}</div>
+
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                  <button type="button" onClick={resetFlow} className="rounded-full bg-slate-800 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">Retry</button>
+                </div>
               </div>
             )}
           </div>

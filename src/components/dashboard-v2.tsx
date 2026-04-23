@@ -1,11 +1,11 @@
 'use client'
 
 import { useWallet } from '@/lib/wallet-context'
-import { useAccount, useNetwork } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorHandler } from '@/lib/error-handler'
 
-type Tab = 'dashboard' | 'charts' | 'history' | 'risk' | 'nft' | 'allowances' | 'security' | 'recovery' | 'swap' | 'send' | 'analysis'
+type Tab = 'dashboard' | 'alerts' | 'security' | 'recovery'
 
 interface DashboardV2Props {
   onNavigate?: (tab: Tab) => void
@@ -32,7 +32,6 @@ const DashboardGlyph = ({ tone = 'cyan' }: { tone?: 'cyan' | 'violet' | 'emerald
 export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
   const { tokens, loading, fetchTokens, deadCoins } = useWallet()
   const { address, isConnected } = useAccount()
-  const { chain } = useNetwork()
   const { handleError } = useErrorHandler()
   const [tokensExpanded, setTokensExpanded] = useState(false)
   const hasFetched = useRef(false)
@@ -41,13 +40,14 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
     assetsCount: tokens.length,
     chainsActive: Math.min(Math.max(Math.ceil(tokens.length / 3), tokens.length > 0 ? 1 : 0), 4),
     riskSignals: deadCoins.length,
+    signalMomentum: '+2.34%',
     recoveryReady: Math.max(58, 92 - deadCoins.length * 10),
+    openAlerts: deadCoins.length,
   }), [tokens, deadCoins.length])
 
   const shortAddress = (value: string) => `${value.slice(0, 6)}...${value.slice(-4)}`
 
-  const currentChain = chain?.name ?? 'Unknown network'
-  const connectionLabel = chain?.unsupported ? 'Unsupported chain' : 'Connected'
+  const connectionLabel = 'Connected'
 
   useEffect(() => {
     if (!isConnected) {
@@ -113,11 +113,11 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
               </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-[1.2fr_1fr_1fr]">
+            <div className="grid gap-4 md:grid-cols-[1.05fr_0.9fr_0.9fr_0.9fr]">
               <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-slate-900/80 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(148,163,184,0.3)]">
                 <p className="text-xs uppercase tracking-[0.32em] text-slate-400 mb-2">Wallet connected</p>
                 <p className="text-3xl font-semibold text-white">{address ? shortAddress(address) : 'Unknown'}</p>
-                <p className="text-xs text-slate-400 mt-3">{connectionLabel} on {currentChain}</p>
+                <p className="text-xs text-slate-400 mt-3">{connectionLabel} wallet session</p>
               </div>
               <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-cyan-500/10 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(56,189,248,0.55)]">
                 <p className="text-xs uppercase tracking-[0.32em] text-cyan-300 mb-2">Recovery readiness</p>
@@ -128,6 +128,11 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                 <p className="text-xs uppercase tracking-[0.32em] text-emerald-300 mb-2">Network reach</p>
                 <p className="text-3xl font-semibold text-white">{stats.chainsActive}</p>
                 <p className="text-xs text-slate-400 mt-3">Connected chain coverage for the wallet.</p>
+              </div>
+              <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-amber-500/10 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(245,158,11,0.35)]">
+                <p className="text-xs uppercase tracking-[0.32em] text-amber-300 mb-2">Open alerts</p>
+                <p className="text-3xl font-semibold text-white">{stats.openAlerts}</p>
+                <p className="text-xs text-slate-400 mt-3">Active risk findings in your current session.</p>
               </div>
             </div>
           </div>
@@ -149,9 +154,9 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                 <p className="font-semibold">Open recovery wizard</p>
                 <p className="text-xs text-slate-400 mt-1">Restore access and validate your recovery methods.</p>
               </button>
-              <button onClick={() => onNavigate?.('history')} className="w-full rounded-[24px] border border-emerald-500/20 bg-white/5 px-4 py-4 text-left text-white transition hover:border-emerald-400/30">
-                <p className="font-semibold">Review recent activity</p>
-                <p className="text-xs text-slate-400 mt-1">See the latest wallet interactions and suspicious events.</p>
+              <button onClick={() => onNavigate?.('alerts')} className="w-full rounded-[24px] border border-emerald-500/20 bg-white/5 px-4 py-4 text-left text-white transition hover:border-emerald-400/30">
+                <p className="font-semibold">View security alerts</p>
+                <p className="text-xs text-slate-400 mt-1">See the latest suspicious events and incident history.</p>
               </button>
             </div>
             <div className="mt-6 rounded-[24px] border border-white/10 bg-white/5 p-4">
@@ -180,8 +185,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
           <div className="rounded-[28px] border border-white/10 bg-slate-950/90 p-6 shadow-[0_30px_80px_-50px_rgba(56,189,248,0.35)]">
             <div className="flex items-center justify-between mb-5 gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Portfolio details</p>
-                <h2 className="text-2xl font-semibold text-white">Top positions</h2>
+                <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Risk exposure</p>
+                <h2 className="text-2xl font-semibold text-white">Active risk exposures</h2>
               </div>
               <button
                 onClick={() => setTokensExpanded((s) => !s)}
@@ -197,18 +202,18 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 text-white font-semibold">{token.symbol[0]}</div>
                     <div className="min-w-0">
                       <p className="font-semibold text-white truncate">{token.name}</p>
-                      <p className="text-xs text-slate-400 truncate">{token.symbol} · {token.balance}</p>
+                      <p className="text-xs text-slate-400 truncate">{token.symbol} · {token.isDead ? 'Risk flagged' : 'Monitored'}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-white">${token.usdValue.toFixed(2)}</p>
-                      <p className="text-xs text-slate-400">Current value</p>
+                      <p className="font-semibold text-white">{token.isDead ? 'Risk' : 'Normal'}</p>
+                      <p className="text-xs text-slate-400">{token.isDead ? 'Risk token' : 'Watched token'}</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="rounded-[24px] border border-dashed border-white/10 bg-white/5 p-8 text-center text-slate-400">
-                No assets are currently tracked. Connect a wallet to begin.
+                No connected token exposures are currently visible. Connect a wallet to begin.
               </div>
             )}
           </div>
@@ -227,7 +232,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                 <p className="text-xs text-slate-500 mt-1">Strong seed phrase habits reduce restore risk.</p>
               </div>
               <div className="rounded-[24px] bg-white/5 p-4 border border-white/10">
-                <p className="text-sm text-white">Enable hardware or multisig wallets for high-value holdings.</p>
+                <p className="text-sm text-white">Enable hardware or multisig wallets for high-risk exposures.</p>
                 <p className="text-xs text-slate-500 mt-1">A layered defense is the premium standard.</p>
               </div>
             </div>
@@ -259,11 +264,11 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                   <DashboardGlyph tone="violet" />
                 </div>
               </button>
-              <button onClick={() => onNavigate?.('history')} className="rounded-[24px] border border-emerald-500/10 bg-white/5 px-4 py-4 text-left text-white transition hover:border-emerald-400/30">
+              <button onClick={() => onNavigate?.('alerts')} className="rounded-[24px] border border-emerald-500/10 bg-white/5 px-4 py-4 text-left text-white transition hover:border-emerald-400/30">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-semibold">Transaction Review</p>
-                    <p className="text-xs text-slate-400 mt-1">Inspect your last wallet activity in a sleek timeline.</p>
+                    <p className="font-semibold">Incident Review</p>
+                    <p className="text-xs text-slate-400 mt-1">Inspect your latest security alerts and suspicious events.</p>
                   </div>
                   <DashboardGlyph tone="emerald" />
                 </div>

@@ -7,20 +7,19 @@ import { MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
 import { DashboardV2 } from '@/components/dashboard-v2'
 import { DeadCoinDetector } from '@/components/dead-coin-detector'
-import { TransactionHistory } from '@/components/transaction-history'
+import { SecurityAlerts } from '@/components/security-alerts'
 import { TokenAllowanceManager } from '@/components/token-allowance-manager'
 import { SecurityAudit } from '@/components/security-audit'
 import { WalletRestoration } from '@/components/wallet-restoration'
-import { PortfolioOverview } from '@/components/portfolio-overview'
 
-type Tab = 'dashboard' | 'history' | 'security' | 'recovery'
+type Tab = 'dashboard' | 'alerts' | 'security' | 'recovery'
 
 interface DashboardContentProps {
   activeTab: Tab
   setActiveTab: (tab: Tab) => void
 }
 
-const AppIcon = ({ kind }: { kind: 'dashboard' | 'history' | 'security' | 'recovery' | 'back' }) => {
+const AppIcon = ({ kind }: { kind: 'dashboard' | 'alert' | 'security' | 'recovery' | 'back' }) => {
   const iconMap = {
     dashboard: (
       <>
@@ -30,11 +29,11 @@ const AppIcon = ({ kind }: { kind: 'dashboard' | 'history' | 'security' | 'recov
         <rect x="4" y="13" width="7" height="7" rx="1.5" />
       </>
     ),
-    history: (
+    alert: (
       <>
-        <path d="M4 12a8 8 0 1 0 2.3-5.6" />
-        <path d="M4 4v5h5" />
-        <path d="M12 8v4l3 2" />
+        <path d="M12 4l9 16H3L12 4z" />
+        <path d="M12 9v4" />
+        <path d="M12 16h.01" />
       </>
     ),
     security: (
@@ -64,9 +63,9 @@ const AppIcon = ({ kind }: { kind: 'dashboard' | 'history' | 'security' | 'recov
   )
 }
 
-const tabs: { id: Tab; label: string; icon: 'dashboard' | 'history' | 'security' | 'recovery'; description: string }[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', description: 'Portfolio and live balances' },
-  { id: 'history', label: 'History', icon: 'history', description: 'Timeline and transactions' },
+const tabs: { id: Tab; label: string; icon: 'dashboard' | 'alert' | 'security' | 'recovery'; description: string }[] = [
+  { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', description: 'Wallet posture and connection health' },
+  { id: 'alerts', label: 'Alerts', icon: 'alert', description: 'Security incidents and suspicious activity' },
   { id: 'security', label: 'Security', icon: 'security', description: 'Checks and approvals' },
   { id: 'recovery', label: 'Recovery', icon: 'recovery', description: 'Guided restoration tools' },
 ]
@@ -98,7 +97,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                   </div>
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-[11px] text-slate-400">Premium wallet intelligence for recovery, security, and portfolio management.</p>
+                  <p className="text-[11px] text-slate-400">Premium wallet intelligence for recovery and security posture.</p>
                 </div>
               </div>
 
@@ -146,22 +145,21 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
           {activeTab === 'dashboard' && (
             <div className="space-y-6 animate-in fade-in-50">
               <DashboardV2 onNavigate={(tab) => setActiveTab(tab as Tab)} />
-              <PortfolioOverview />
             </div>
           )}
 
-          {activeTab === 'history' && (
+          {activeTab === 'alerts' && (
             <div className="animate-in fade-in-50">
               <div className="mb-4 sm:mb-6 flex items-start gap-4">
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10 text-violet-300">
-                  <AppIcon kind="history" />
+                  <AppIcon kind="alert" />
                 </span>
                 <div>
-                  <h1 className="text-2xl font-bold text-white sm:text-3xl">Transaction History</h1>
-                  <p className="mt-1 text-xs text-gray-400 sm:text-sm">View and analyze your transactions.</p>
+                  <h1 className="text-2xl font-bold text-white sm:text-3xl">Security Alerts</h1>
+                  <p className="mt-1 text-xs text-gray-400 sm:text-sm">Review suspicious wallet events, approval alerts, and incident history.</p>
                 </div>
               </div>
-              <TransactionHistory />
+              <SecurityAlerts />
             </div>
           )}
 

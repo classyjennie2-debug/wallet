@@ -21,7 +21,7 @@ const DashboardContent = dynamicImport(() => import('../components/dashboard-con
   loading: () => <div className="min-h-screen bg-slate-950" />,
 })
 
-type Tab = 'dashboard' | 'history' | 'security' | 'recovery'
+type Tab = 'dashboard' | 'alerts' | 'security' | 'recovery'
 
 export default function Home() {
   const { isConnected } = useAccount()
