@@ -25,7 +25,7 @@ export const LandingPageV2 = () => {
 
   const handleLaunch = () => {
     if (isConnected) {
-      router.push('/')
+      router.replace('/')
       return
     }
 

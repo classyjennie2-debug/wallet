@@ -85,7 +85,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/90 p-6 shadow-[0_32px_90px_-50px_rgba(59,130,246,0.45)]">
+      <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/90 p-5 sm:p-6 shadow-[0_24px_70px_-40px_rgba(59,130,246,0.35)]">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.16),_transparent_58%)]" />
         <div className="relative z-10 grid gap-6 lg:grid-cols-[1.9fr_1fr]">
           <div className="space-y-5">
@@ -106,7 +106,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-[1.2fr_1fr_1fr]">
+            <div className="grid gap-4 md:grid-cols-[1.2fr_1fr_1fr]">
               <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-violet-600/10 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(99,102,241,0.6)]">
                 <p className="text-xs uppercase tracking-[0.32em] text-violet-300 mb-2">Total assets</p>
                 <p className="text-4xl font-semibold text-white">${totalBalance.toLocaleString('en-US', { maximumFractionDigits: 0 })}</p>
@@ -179,7 +179,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
             {tokens.length > 0 ? (
               <div className="space-y-3">
                 {(tokensExpanded ? tokens : tokens.slice(0, 4)).map((token) => (
-                  <div key={`${token.address}:${token.name}`} className="grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-[24px] border border-white/10 bg-white/5 p-4 transition hover:border-cyan-500/20 hover:bg-white/10">
+                  <div key={`${token.address}:${token.name}`} className="grid gap-4 sm:grid-cols-[auto_1fr_auto] items-center rounded-[24px] border border-white/10 bg-white/5 p-4 transition hover:border-cyan-500/20 hover:bg-white/10">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 text-white font-semibold">{token.symbol[0]}</div>
                     <div className="min-w-0">
                       <p className="font-semibold text-white truncate">{token.name}</p>

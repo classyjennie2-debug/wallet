@@ -87,20 +87,22 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-2xl">
           <div className="mx-auto w-full max-w-full px-4 py-3 sm:px-4 sm:py-3">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-                <div className="block md:hidden">
-                  <MyWalletLogo size="sm" variant="icon" />
-                </div>
-                <div className="hidden md:block">
-                  <MyWalletLogo size="md" variant="full" />
+                <div className="flex items-center gap-3">
+                  <div className="block md:hidden">
+                    <MyWalletLogo size="sm" variant="icon" />
+                  </div>
+                  <div className="hidden md:block">
+                    <MyWalletLogo size="md" variant="full" />
+                  </div>
                 </div>
                 <div className="hidden sm:block">
-                  <p className="text-sm text-slate-400">Premium wallet intelligence for recovery, security, and portfolio management.</p>
+                  <p className="text-xs text-slate-400">Premium wallet intelligence for recovery, security, and portfolio management.</p>
                 </div>
               </div>
 
-              <div className="flex flex-1 items-center justify-end gap-3 sm:flex-none">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
                 {activeTab !== 'dashboard' && (
                   <button
                     type="button"
@@ -118,7 +120,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
             </div>
           </div>
 
-          <nav className="hidden sm:block mx-auto w-full max-w-7xl px-2 py-3 sm:px-4 sm:py-4">
+          <nav className="hidden sm:block mx-auto w-full max-w-7xl px-2 py-3 sm:px-4 sm:py-4" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
             <div className="overflow-hidden rounded-full border border-white/10 bg-slate-950/90 px-2 py-2 shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)] backdrop-blur-xl">
               <div className="flex gap-2 overflow-x-auto px-1" role="tablist">
                 {tabs.map((tab) => (

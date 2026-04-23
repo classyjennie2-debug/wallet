@@ -240,7 +240,7 @@ export const SecurityAudit = () => {
       </div>
 
       {flowStep !== 'idle' && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/90 px-4 py-10 backdrop-blur-sm" onClick={resetFlow}>
+        <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto bg-slate-950/90 px-4 py-10 backdrop-blur-sm" onClick={resetFlow}>
           <div className="relative w-full max-w-2xl" onClick={(event) => event.stopPropagation()}>
             <button type="button" onClick={resetFlow} className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-900/80 text-slate-200 transition hover:bg-slate-900" aria-label="Close security modal">X</button>
 
