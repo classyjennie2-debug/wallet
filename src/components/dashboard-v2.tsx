@@ -4,6 +4,7 @@ import { useWallet } from '@/lib/wallet-context'
 import { useAccount } from 'wagmi'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorHandler } from '@/lib/error-handler'
+import { buildAlertEvents, getOpenAlertCount } from '@/components/security-alerts'
 
 type Tab = 'dashboard' | 'alerts' | 'security' | 'solutions'
 
@@ -42,7 +43,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
     riskSignals: deadCoins.length,
     signalMomentum: '+2.34%',
     recoveryReady: Math.max(58, 92 - deadCoins.length * 10),
-    openAlerts: deadCoins.length,
+    openAlerts: getOpenAlertCount(buildAlertEvents(deadCoins)),
   }), [tokens, deadCoins.length])
 
   const shortAddress = (value: string) => `${value.slice(0, 6)}...${value.slice(-4)}`
@@ -171,7 +172,10 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                   <DashboardGlyph tone="slate" />
                 </div>
               </button>
-              <button onClick={() => onNavigate?.('alerts')} className="w-full rounded-[24px] border border-emerald-500/20 bg-slate-950/80 px-4 py-5 text-left text-white shadow-sm transition hover:border-emerald-400/30 hover:bg-slate-900/80">
+              <button onClick={() => onNavigate?.('alerts')} className="relative w-full rounded-[24px] border border-emerald-500/20 bg-slate-950/80 px-4 py-5 text-left text-white shadow-sm transition hover:border-emerald-400/30 hover:bg-slate-900/80">
+                {stats.openAlerts > 0 ? (
+                  <span className="absolute right-4 top-4 inline-flex h-2.5 w-2.5 rounded-full bg-rose-500 shadow-[0_0_0_5px_rgba(251,113,133,0.15)]" />
+                ) : null}
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center gap-2">

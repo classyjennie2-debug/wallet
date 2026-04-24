@@ -1,14 +1,15 @@
  'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAccount } from 'wagmi'
+import { useWallet } from '@/lib/wallet-context'
 import { issueOptions } from '@/components/wallet-restoration'
 import { MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
 import { DashboardV2 } from '@/components/dashboard-v2'
 import { DeadCoinDetector } from '@/components/dead-coin-detector'
-import { SecurityAlerts } from '@/components/security-alerts'
+import { SecurityAlerts, buildAlertEvents, getOpenAlertCount } from '@/components/security-alerts'
 import { TokenAllowanceManager } from '@/components/token-allowance-manager'
 import { SecurityAudit } from '@/components/security-audit'
 import { WalletRestoration } from '@/components/wallet-restoration'
@@ -92,10 +93,12 @@ const tabHeadings: Record<Tab, { title: string; description: string; tone: strin
 export default function DashboardContent({ activeTab, setActiveTab }: DashboardContentProps) {
   const router = useRouter()
   const { isConnected } = useAccount()
+  const { deadCoins } = useWallet()
   const activeMeta = tabHeadings[activeTab]
   const [showScanModal, setShowScanModal] = useState(false)
   const [scanResult, setScanResult] = useState<any>(null)
   const [scanProgress, setScanProgress] = useState(0)
+  const openAlertCount = useMemo(() => getOpenAlertCount(buildAlertEvents(deadCoins)), [deadCoins])
 
   useEffect(() => {
     if (!showScanModal) return
@@ -163,7 +166,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                       key={tab.id}
                       type="button"
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex min-h-[44px] items-center gap-2 rounded-full px-3 py-2 text-[13px] font-semibold whitespace-nowrap transition-all ${
+                      className={`relative flex min-h-[44px] items-center gap-2 rounded-full px-3 py-2 text-[13px] font-semibold whitespace-nowrap transition-all ${
                         activeTab === tab.id
                           ? 'bg-gradient-to-r from-cyan-500/20 via-slate-950/80 to-cyan-500/20 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
                           : 'text-slate-400 hover:bg-white/5 hover:text-white'
@@ -182,6 +185,9 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                           {tab.description}
                         </span>
                       </span>
+                      {tab.id === 'alerts' && openAlertCount > 0 ? (
+                        <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-rose-500 shadow-[0_0_0_4px_rgba(251,113,133,0.15)]" />
+                      ) : null}
                     </button>
                   ))}
                 </div>
@@ -269,7 +275,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
 
           {activeTab === 'alerts' && (
             <div className="animate-in fade-in-50">
-              <SecurityAlerts />
+              <SecurityAlerts onNavigate={(tab) => setActiveTab(tab as Tab)} />
             </div>
           )}
 
