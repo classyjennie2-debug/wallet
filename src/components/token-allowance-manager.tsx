@@ -107,7 +107,7 @@ export const TokenAllowanceManager = () => {
             </div>
           ))
         ) : (
-          <div className="rounded-[24px] border border-white/10 bg-white/5 py-12 text-center">
+          <div className="rounded-[24px] border border-slate-700/60 bg-slate-900/75 py-12 text-center">
             <p className="text-gray-400 text-sm">No active allowances</p>
           </div>
         )}

@@ -27,9 +27,9 @@ export const MyWalletLogo = ({ size = 'md', variant = 'full' }: LogoProps) => {
         >
           <defs>
             <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#06b6d4" />
-              <stop offset="60%" stopColor="#7c3aed" />
-              <stop offset="100%" stopColor="#ef4444" />
+              <stop offset="0%" stopColor="#22d3ee" />
+              <stop offset="60%" stopColor="#38bdf8" />
+              <stop offset="100%" stopColor="#38bdf8" />
             </linearGradient>
             <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#0ea5a4" />
@@ -60,7 +60,7 @@ export const MyWalletLogo = ({ size = 'md', variant = 'full' }: LogoProps) => {
       {variant !== 'icon' && (
         <div className="flex flex-col leading-none">
           <span
-            className="font-semibold bg-gradient-to-r from-cyan-400 via-violet-500 to-red-500 bg-clip-text text-transparent"
+            className="font-semibold bg-gradient-to-r from-cyan-400 to-sky-500 bg-clip-text text-transparent"
             style={{ fontSize: dimensions.text }}
           >
             MyWallet

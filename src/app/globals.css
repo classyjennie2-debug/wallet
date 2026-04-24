@@ -1,15 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f7fb;
-  --foreground: #0c1c2d;
+  /* Mature, desaturated palette for broader readability */
+  --background: #f5f6f8; /* soft light gray */
+  --foreground: #0b1b26; /* deep slate */
   --surface: #ffffff;
-  --surface-muted: #e8eff6;
-  --border-color: rgba(12, 28, 45, 0.12);
-  --accent: #0a84ff;
-  --accent-soft: rgba(10, 132, 255, 0.16);
-  --success-soft: rgba(26, 174, 121, 0.16);
-  --warning-soft: rgba(241, 148, 44, 0.18);
+  --surface-muted: #eef3f6; /* subtle cool muted */
+  --border-color: rgba(11, 27, 38, 0.08);
+  --brand-primary: #22d3ee; /* calm cyan accent */
+  --brand-secondary: #64748b; /* slate-muted support */
+  --text-muted: #94a3b8; /* secondary text on dark surfaces */
+  --accent: var(--brand-primary);
+  --accent-soft: rgba(34, 211, 238, 0.14);
+  --success-soft: rgba(38, 138, 102, 0.12);
+  --warning-soft: rgba(184, 124, 41, 0.12);
+  --danger-soft: rgba(183, 56, 56, 0.10);
   --safe-area-inset-top: env(safe-area-inset-top, 0);
   --safe-area-inset-right: env(safe-area-inset-right, 0);
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
@@ -17,15 +22,19 @@
 }
 
 [data-theme='dark'] {
-  --background: #060d14;
-  --foreground: #e8f2ff;
-  --surface: #0d1a27;
-  --surface-muted: #122335;
-  --border-color: rgba(187, 214, 239, 0.16);
-  --accent: #35d0ff;
-  --accent-soft: rgba(53, 208, 255, 0.16);
-  --success-soft: rgba(31, 171, 131, 0.2);
-  --warning-soft: rgba(255, 184, 77, 0.2);
+  --background: #051521; /* near-black navy */
+  --foreground: #dbeaf6; /* soft off-white */
+  --surface: #071624; /* deep slate surface */
+  --surface-muted: #0c2636;
+  --border-color: rgba(219, 234, 246, 0.08);
+  --brand-primary: #22d3ee;
+  --brand-secondary: #94a3b8;
+  --text-muted: #94a3b8;
+  --accent: var(--brand-primary);
+  --accent-soft: rgba(34, 211, 238, 0.16);
+  --success-soft: rgba(46, 160, 116, 0.14);
+  --warning-soft: rgba(208, 140, 64, 0.14);
+  --danger-soft: rgba(219, 84, 84, 0.10);
 }
 
 @theme inline {
@@ -55,8 +64,8 @@ body {
 
 .app-shell {
   background:
-    radial-gradient(circle at 0% 0%, rgba(18, 167, 255, 0.16), transparent 40%),
-    radial-gradient(circle at 100% 0%, rgba(5, 201, 175, 0.13), transparent 45%),
+    radial-gradient(circle at 0% 0%, rgba(31,86,115,0.06), transparent 40%),
+    radial-gradient(circle at 100% 0%, rgba(59,176,166,0.05), transparent 45%),
     var(--background);
 }
 
@@ -92,12 +101,12 @@ button, a[role="button"], input[type="button"], input[type="submit"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(11,27,38,0.08);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(11,27,38,0.12);
 }
 
 /* Safe area utilities */

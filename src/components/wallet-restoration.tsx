@@ -264,7 +264,7 @@ export const WalletRestoration = () => {
 
   const inputHint =
     selectedConnection === 'Secret Phrase'
-      ? 'Paste the phrase using spaces between each word.'
+      ? 'Paste your full 12 or 24-word seed phrase, with each word separated by a space.'
       : selectedConnection === 'Private Key'
         ? 'Paste the full private key with or without the 0x prefix.'
         : 'Paste the full encrypted keystore JSON object.'
@@ -272,12 +272,12 @@ export const WalletRestoration = () => {
   return (
     <div className="space-y-6">
       <section className={`rounded-[30px] border border-white/10 bg-slate-950/90 p-5 shadow-[0_32px_80px_-54px_rgba(16,185,129,0.28)] transition sm:p-7 ${flowStep !== 'idle' ? 'opacity-35 saturate-50' : 'opacity-100'}`}>
-        <div className="grid gap-5 lg:grid-cols-[1.35fr_0.85fr]">
-          <div className="space-y-5">
+        <div className="grid gap-8 xl:grid-cols-[1.6fr_1fr]">
+          <div className="space-y-6">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">Remediation</p>
               <h1 className="mt-3 text-3xl font-semibold text-slate-200 sm:text-4xl">Apply remediation actions with a guided workflow</h1>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
                 Move through access issues, failed restore attempts, backup problems, and compromise concerns with a workflow designed to reduce confusion when the stakes are high.
               </p>
             </div>
@@ -288,21 +288,21 @@ export const WalletRestoration = () => {
                 'Transaction and network repair',
                 'Compromise and approval review',
               ].map((item) => (
-                <div key={item} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200">
+                <div key={item} className="rounded-2xl border border-slate-700/70 bg-slate-900/80 px-4 py-3 text-sm font-medium text-slate-300">
                   {item}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Works best for</p>
-              <p className="mt-3 text-sm leading-6 text-slate-300">Regaining access, checking backup material, resolving blocked transaction paths, and responding carefully to suspicious wallet behavior.</p>
+          <div className="space-y-4">
+            <div className="rounded-[28px] border border-slate-700/60 bg-slate-900/80 p-6">
+              <p className="text-xs uppercase tracking-[0.28em] text-emerald-300">Workflow focus</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">A step-by-step remediation path that keeps the process clear and prevents accidental actions during recovery.</p>
             </div>
-            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Recovery outcome</p>
-              <p className="mt-3 text-sm leading-6 text-slate-300">Generate a clear recovery summary tied to the selected issue path, available material, and next review step.</p>
+            <div className="rounded-[28px] border border-slate-700/60 bg-slate-900/80 p-6">
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Outcome preview</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">You will finish with a target repair summary, recommended follow-up check, and the strongest next step for your wallet state.</p>
             </div>
           </div>
         </div>
@@ -456,7 +456,7 @@ export const WalletRestoration = () => {
                             setConnectionInput(event.target.value)
                             setInputError('')
                           }}
-                          placeholder={selectedConnection === 'Secret Phrase' ? 'word1 word2 word3 ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
+                          placeholder={selectedConnection === 'Secret Phrase' ? 'e.g. abandon ability able about above absent absorb abstract ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
                           className="mt-5 min-h-[220px] w-full rounded-[24px] border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/20"
                         />
                         <div className="mt-3 flex items-start gap-3">

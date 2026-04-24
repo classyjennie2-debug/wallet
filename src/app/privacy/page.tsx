@@ -12,14 +12,14 @@ export default function Privacy() {
               <MyWalletLogo size="md" variant="full" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Privacy Policy</h1>
-            <p className="text-gray-400">Last updated: January 2024</p>
+            <p className="text-gray-400">Last updated: April 2026</p>
           </div>
 
           {/* Introduction */}
           <div className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-white/5 to-white/3 border border-white/10">
             <h2 className="text-xl font-bold text-white mb-3">Introduction</h2>
             <p className="text-gray-300 leading-relaxed">
-              We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our crypto wallet dashboard.
+              We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our crypto wallet dashboard. Your wallet secrets remain on your device and are never stored by us.
             </p>
           </div>
 
@@ -30,7 +30,7 @@ export default function Privacy() {
             <div className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/30">
               <h3 className="text-lg font-bold text-blue-300 mb-3">Wallet Information</h3>
               <p className="text-gray-300">
-                We do not collect or store your private keys, seed phrases, or secret recovery phrases. These remain entirely under your control.
+                We do not collect or store your private keys, seed phrases, or secret recovery phrases. These remain entirely under your control, and all wallet operations happen locally in your browser.
               </p>
             </div>
 
@@ -73,13 +73,13 @@ export default function Privacy() {
           <div className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 border border-yellow-500/30">
             <h2 className="text-xl font-bold text-yellow-300 mb-3">🔐 Security</h2>
             <p className="text-gray-300 mb-4">
-              We implement industry-standard security measures to protect your information. However, no method of transmission over the internet is 100% secure.
+              We implement industry-standard security measures to protect your information. Sensitive wallet material is never transmitted to or stored by our servers.
             </p>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>• HTTPS encryption for all communications</li>
               <li>• No server-side storage of sensitive data</li>
+              <li>• All wallet-sensitive operations run locally in your browser</li>
               <li>• Regular security audits and updates</li>
-              <li>• Compliance with modern cryptographic standards</li>
             </ul>
           </div>
 

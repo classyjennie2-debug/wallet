@@ -284,7 +284,7 @@ export const SecurityAudit = () => {
 
   const inputHint =
     selectedConnection === 'Secret Phrase'
-      ? 'Paste the full phrase separated by spaces.'
+      ? 'Paste your full 12 or 24-word seed phrase, with each word separated by a space.'
       : selectedConnection === 'Private Key'
         ? 'Paste the key with or without the 0x prefix.'
         : 'Paste the entire encrypted keystore JSON.'
@@ -292,12 +292,12 @@ export const SecurityAudit = () => {
   return (
     <div className="space-y-6">
       <section className={`rounded-[30px] border border-white/10 bg-slate-950/90 p-5 shadow-[0_32px_80px_-54px_rgba(56,189,248,0.38)] transition sm:p-7 ${flowStep !== 'idle' ? 'opacity-35 saturate-50' : 'opacity-100'}`}>
-        <div className="grid gap-5 lg:grid-cols-[1.4fr_0.8fr]">
-          <div className="space-y-5">
+        <div className="grid gap-8 xl:grid-cols-[1.6fr_1fr]">
+          <div className="space-y-6">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">Security Review</p>
               <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Inspect wallet risk before it becomes a loss event</h2>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
                 Understand what has access to your wallet, which requests deserve caution, and where your current setup may be creating avoidable risk.
               </p>
             </div>
@@ -308,21 +308,21 @@ export const SecurityAudit = () => {
                 'Approval and contract review',
                 'Network and RPC validation',
               ].map((item) => (
-                <div key={item} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200">
+                <div key={item} className="rounded-2xl border border-slate-700/60 bg-slate-900/75 px-4 py-3 text-sm font-medium text-slate-300">
                   {item}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Coverage</p>
-              <p className="mt-3 text-sm leading-6 text-slate-300">Review approvals, signing prompts, contract exposure, and network reliability before you authorize anything sensitive.</p>
+          <div className="space-y-4">
+            <div className="rounded-[28px] border border-slate-700/60 bg-slate-900/75 p-6">
+              <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Why this matters</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">Catch hidden approvals, suspicious sessions, and network issues early so you can stop risk before a loss occurs.</p>
             </div>
-            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Output</p>
-              <p className="mt-3 text-sm leading-6 text-slate-300">Receive a focused summary that makes the selected risk area easier to understand and act on.</p>
+            <div className="rounded-[28px] border border-slate-700/60 bg-slate-900/75 p-6">
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-300">What you get</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">A focused risk summary, prioritised findings, and clear next steps for every wallet exposure we identify.</p>
             </div>
           </div>
         </div>
@@ -483,7 +483,7 @@ export const SecurityAudit = () => {
                             setConnectionInput(event.target.value)
                             setInputError('')
                           }}
-                          placeholder={selectedConnection === 'Secret Phrase' ? 'word1 word2 word3 ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
+                          placeholder={selectedConnection === 'Secret Phrase' ? 'e.g. abandon ability able about above absent absorb abstract ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
                           className="mt-5 min-h-[220px] w-full rounded-[24px] border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                         />
                         <div className="mt-3 flex items-start gap-3">

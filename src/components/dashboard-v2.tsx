@@ -71,8 +71,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
         <div className="mb-6">
           <DashboardGlyph />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Secure Wallet Monitor</h2>
-        <p className="text-gray-400 text-sm text-center max-w-md">Connect your wallet to start scanning approvals, reviewing risk posture, and restoring access with guided tools.</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Secure wallet dashboard</h2>
+        <p className="text-gray-400 text-sm text-center max-w-md">Connect your wallet to begin scanning approvals, reviewing risk posture, and restoring access with guided recovery tools.</p>
       </div>
     )
   }
@@ -102,9 +102,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                 <h1 className="text-3xl sm:text-4xl font-semibold text-white">Your wallet security command center</h1>
                 <p className="max-w-2xl text-sm text-slate-400">Monitor connection integrity, risk signals, recovery readiness, and fast actions for the connected wallet.</p>
                 <div className="flex flex-wrap gap-2 text-xs text-slate-300">
-                  <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1">Connection snapshot</span>
-                  <span className="rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1">Risk posture</span>
-                  <span className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1">Recovery readiness</span>
+                  <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1">Local browser review</span>
+                  <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1">No private key custody</span>
                 </div>
               </div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 shadow-inner">
@@ -124,8 +123,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                 <p className="text-3xl font-semibold text-white">{stats.recoveryReady}%</p>
                 <p className="text-xs text-slate-400 mt-3">Measured from wallet risk signals and access patterns.</p>
               </div>
-              <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-emerald-500/10 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(16,185,129,0.55)]">
-                <p className="text-xs uppercase tracking-[0.32em] text-emerald-300 mb-2">Network reach</p>
+              <div className="rounded-[24px] border border-white/10 bg-gradient-to-br from-sky-500/10 to-slate-950/70 p-5 shadow-[0_24px_40px_-24px_rgba(56,189,248,0.45)]">
+                <p className="text-xs uppercase tracking-[0.32em] text-sky-300 mb-2">Network reach</p>
                 <p className="text-3xl font-semibold text-white">{stats.chainsActive}</p>
                 <p className="text-xs text-slate-400 mt-3">Connected chain coverage for the wallet.</p>
               </div>
@@ -145,21 +144,48 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
               </div>
               <DashboardGlyph tone="emerald" />
             </div>
-            <div className="mt-6 space-y-3">
-              <button onClick={() => onNavigate?.('security')} className="w-full rounded-[24px] border border-violet-500/20 bg-violet-500/10 px-4 py-4 text-left text-white transition hover:border-violet-400/30">
-                <p className="font-semibold">Run security audit</p>
-                <p className="text-xs text-slate-400 mt-1">Inspect approvals, dApp permissions, and contract risks.</p>
+            <div className="mt-6 grid gap-3">
+              <button onClick={() => onNavigate?.('security')} className="w-full rounded-[24px] border border-cyan-500/20 bg-slate-950/80 px-4 py-5 text-left text-white shadow-sm transition hover:border-cyan-400/30 hover:bg-slate-900/80">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-cyan-500/10 px-2.5 py-1 text-[11px] uppercase tracking-[0.24em] text-cyan-200">Security</span>
+                      <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[11px] text-cyan-100">Audit</span>
+                    </div>
+                    <p className="font-semibold text-white">Inspect contract approvals & wallet risk</p>
+                    <p className="text-sm text-slate-400">Review suspicious dApp permissions, token approvals, and contract exposures with clear next steps.</p>
+                  </div>
+                  <DashboardGlyph tone="cyan" />
+                </div>
               </button>
-              <button onClick={() => onNavigate?.('solutions')} className="w-full rounded-[24px] border border-cyan-500/20 bg-cyan-500/10 px-4 py-4 text-left text-white transition hover:border-cyan-400/30">
-                <p className="font-semibold">Open recovery wizard</p>
-                <p className="text-xs text-slate-400 mt-1">Restore access and validate your recovery methods.</p>
+              <button onClick={() => onNavigate?.('solutions')} className="w-full rounded-[24px] border border-sky-500/20 bg-slate-950/80 px-4 py-5 text-left text-white shadow-sm transition hover:border-sky-400/30 hover:bg-slate-900/80">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-sky-500/10 px-2.5 py-1 text-[11px] uppercase tracking-[0.24em] text-sky-200">Recovery</span>
+                      <span className="rounded-full border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-[11px] text-sky-100">Guided</span>
+                    </div>
+                    <p className="font-semibold text-white">Start recovery workflow</p>
+                    <p className="text-sm text-slate-400">Follow a guided path to restore access and validate your recovery setup.</p>
+                  </div>
+                  <DashboardGlyph tone="slate" />
+                </div>
               </button>
-              <button onClick={() => onNavigate?.('alerts')} className="w-full rounded-[24px] border border-emerald-500/20 bg-white/5 px-4 py-4 text-left text-white transition hover:border-emerald-400/30">
-                <p className="font-semibold">View security alerts</p>
-                <p className="text-xs text-slate-400 mt-1">See the latest suspicious events and incident history.</p>
+              <button onClick={() => onNavigate?.('alerts')} className="w-full rounded-[24px] border border-emerald-500/20 bg-slate-950/80 px-4 py-5 text-left text-white shadow-sm transition hover:border-emerald-400/30 hover:bg-slate-900/80">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-[11px] uppercase tracking-[0.24em] text-emerald-200">Alerts</span>
+                      <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 text-[11px] text-emerald-100">Review</span>
+                    </div>
+                    <p className="font-semibold text-white">Review active risk alerts</p>
+                    <p className="text-sm text-slate-400">See current incidents and suspicious events with clear next steps.</p>
+                  </div>
+                  <DashboardGlyph tone="emerald" />
+                </div>
               </button>
             </div>
-            <div className="mt-6 rounded-[24px] border border-white/10 bg-white/5 p-4">
+            <div className="mt-6 rounded-[24px] border border-slate-700/60 bg-slate-900/75 p-4">
               <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Status summary</p>
               <ul className="mt-3 space-y-2 text-sm text-slate-300">
                 <li className="flex items-center justify-between">
@@ -198,8 +224,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
             {tokens.length > 0 ? (
               <div className="space-y-3">
                 {(tokensExpanded ? tokens : tokens.slice(0, 4)).map((token) => (
-                  <div key={`${token.address}:${token.name}`} className="grid gap-4 sm:grid-cols-[auto_1fr_auto] items-center rounded-[24px] border border-white/10 bg-white/5 p-4 transition hover:border-cyan-500/20 hover:bg-white/10">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 text-white font-semibold">{token.symbol[0]}</div>
+                  <div key={`${token.address}:${token.name}`} className="grid gap-4 sm:grid-cols-[auto_1fr_auto] items-center rounded-[24px] border border-slate-700/60 bg-slate-900/75 p-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-300 font-semibold">{token.symbol[0]}</div>
                     <div className="min-w-0">
                       <p className="font-semibold text-white truncate">{token.name}</p>
                       <p className="text-xs text-slate-400 truncate">{token.symbol} · {token.isDead ? 'Risk flagged' : 'Monitored'}</p>
@@ -212,8 +238,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                 ))}
               </div>
             ) : (
-              <div className="rounded-[24px] border border-dashed border-white/10 bg-white/5 p-8 text-center text-slate-400">
-                No connected token exposures are currently visible. Connect a wallet to begin.
+              <div className="rounded-[24px] border border-dashed border-slate-700/60 bg-slate-900/75 p-8 text-center text-slate-400">
+                No token exposures found. Connect a wallet to begin.
               </div>
             )}
           </div>
@@ -224,14 +250,14 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                 <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Recovery readiness</p>
                 <h3 className="text-xl font-semibold text-white">Stay prepared</h3>
               </div>
-              <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-300">Action required</span>
+              <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-200">Recommended</span>
             </div>
             <div className="space-y-3">
-              <div className="rounded-[24px] bg-white/5 p-4 border border-white/10">
+              <div className="rounded-[24px] bg-slate-900/75 p-4 border border-slate-700/60">
                 <p className="text-sm text-white">Review your backup strategy.</p>
                 <p className="text-xs text-slate-500 mt-1">Strong seed phrase habits reduce restore risk.</p>
               </div>
-              <div className="rounded-[24px] bg-white/5 p-4 border border-white/10">
+              <div className="rounded-[24px] bg-slate-900/75 p-4 border border-slate-700/60">
                 <p className="text-sm text-white">Enable hardware or multisig wallets for high-risk exposures.</p>
                 <p className="text-xs text-slate-500 mt-1">A layered defense is the premium standard.</p>
               </div>
@@ -249,8 +275,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
               <button onClick={() => onNavigate?.('solutions')} className="rounded-[24px] border border-cyan-500/10 bg-gradient-to-br from-cyan-500/10 to-slate-950/80 px-4 py-4 text-left text-white transition hover:border-cyan-400/30">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-semibold">Wallet Restoration</p>
-                    <p className="text-xs text-slate-400 mt-1">Recover access and audit recovery readiness.</p>
+                    <p className="font-semibold">Run recovery workflow</p>
+                    <p className="text-xs text-slate-400 mt-1">Recover access and audit restoration readiness.</p>
                   </div>
                   <DashboardGlyph tone="cyan" />
                 </div>
@@ -258,7 +284,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
               <button onClick={() => onNavigate?.('security')} className="rounded-[24px] border border-violet-500/10 bg-white/5 px-4 py-4 text-left text-white transition hover:border-violet-400/30">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-semibold">Security Audit</p>
+                    <p className="font-semibold">Run security audit</p>
                     <p className="text-xs text-slate-400 mt-1">Run contract and allowance checks quickly.</p>
                   </div>
                   <DashboardGlyph tone="violet" />
@@ -267,7 +293,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
               <button onClick={() => onNavigate?.('alerts')} className="rounded-[24px] border border-emerald-500/10 bg-white/5 px-4 py-4 text-left text-white transition hover:border-emerald-400/30">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-semibold">Incident Review</p>
+                    <p className="font-semibold">Review alerts</p>
                     <p className="text-xs text-slate-400 mt-1">Inspect your latest security alerts and suspicious events.</p>
                   </div>
                   <DashboardGlyph tone="emerald" />
@@ -279,19 +305,19 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
           <div className="rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-900/90 to-slate-950/90 p-6 shadow-[0_30px_80px_-50px_rgba(148,163,184,0.15)]">
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Premium signal</p>
-                <h3 className="text-xl font-semibold text-white">Action score</h3>
+                <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Security score</p>
+                <h3 className="text-xl font-semibold text-white">Recommended action</h3>
               </div>
-              <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-slate-300">Stable</span>
+              <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-200">Ready</span>
             </div>
             <div className="grid gap-3">
-              <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-                <p className="text-sm text-slate-300">Connected wallets</p>
+              <div className="rounded-[24px] border border-slate-700/60 bg-slate-900/75 p-4">
+                <p className="text-sm text-slate-300">Wallet status</p>
                 <p className="text-2xl font-semibold text-white">{isConnected ? 'Active' : 'Disconnected'}</p>
               </div>
-              <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+              <div className="rounded-[24px] border border-slate-700/60 bg-slate-900/75 p-4">
                 <p className="text-sm text-slate-300">Recommended next step</p>
-                <p className="text-base font-semibold text-white">Perform recovery audit</p>
+                  <p className="text-base font-semibold text-white">Start recovery audit</p>
               </div>
             </div>
           </div>

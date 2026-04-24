@@ -23,35 +23,36 @@ const AppIcon = ({ kind }: { kind: 'dashboard' | 'alert' | 'security' | 'recover
   const iconMap = {
     dashboard: (
       <>
-        <rect x="4" y="4" width="7" height="7" rx="1.5" />
-        <rect x="13" y="4" width="7" height="4.5" rx="1.5" />
-        <rect x="13" y="10.5" width="7" height="9.5" rx="1.5" />
-        <rect x="4" y="13" width="7" height="7" rx="1.5" />
+        <rect x="3" y="3" width="8" height="8" rx="2" />
+        <rect x="13" y="3" width="8" height="8" rx="2" />
+        <rect x="3" y="13" width="8" height="8" rx="2" />
+        <rect x="13" y="13" width="8" height="8" rx="2" />
       </>
     ),
     alert: (
       <>
-        <path d="M12 4l9 16H3L12 4z" />
-        <path d="M12 9v4" />
-        <path d="M12 16h.01" />
+        <path d="M12 4l8 14H4L12 4Z" />
+        <path d="M12 9v5" />
+        <circle cx="12" cy="17" r="1" />
       </>
     ),
     security: (
       <>
-        <path d="M12 3l7 4v5c0 4.4-2.8 7.8-7 9-4.2-1.2-7-4.6-7-9V7l7-4z" />
-        <path d="M9.5 12.5l1.7 1.7 3.3-4" />
+        <path d="M12 3l8 4v6.5c0 3.6-2.3 6.3-8 7-5.7-.7-8-3.4-8-7V7l8-4Z" />
+        <path d="M8.5 12.5l2.5 2.5 4.5-5" fill="none" />
       </>
     ),
     recovery: (
       <>
-        <circle cx="8.5" cy="12" r="2.5" />
-        <path d="M11 12h9M17 12v2M20 12v2" />
+        <circle cx="12" cy="12" r="6" />
+        <path d="M12 6v3l2-2" fill="none" />
+        <path d="M16 12a4 4 0 1 1-8 0" fill="none" />
       </>
     ),
   }
 
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {iconMap[kind]}
     </svg>
   )
@@ -72,18 +73,18 @@ const tabHeadings: Record<Tab, { title: string; description: string; tone: strin
   },
   alerts: {
     title: 'Security alerts',
-    description: 'Review suspicious events, risky approvals, and recent incident signals tied to the connected wallet.',
-    tone: 'border-violet-400/20 bg-violet-500/10 text-violet-300',
+    description: 'Review suspicious events, risky approvals, and incident signals tied to the connected wallet.',
+    tone: 'border-cyan-400/20 bg-cyan-500/10 text-cyan-300',
   },
   security: {
     title: 'Security tools',
-    description: 'Audit contracts, inspect permissions, and review wallet safety across the most common risk surfaces.',
+    description: 'Audit contracts, inspect permissions, and review wallet safety across key risk surfaces.',
     tone: 'border-cyan-400/20 bg-cyan-500/10 text-cyan-300',
   },
   solutions: {
     title: 'Remediation & Guidance',
-    description: 'Automated wallet scans and remediation actions to recover or mitigate issues.',
-    tone: 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300',
+    description: 'Guided remediation workflows to recover access and reduce wallet exposure.',
+    tone: 'border-cyan-400/20 bg-cyan-500/10 text-cyan-300',
   },
 }
 
@@ -124,7 +125,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                 <div className="flex items-center gap-3">
                   <MyWalletLogo size="md" variant="full" />
                   <div className="min-w-0">
-                      <p className="hidden text-[11px] text-slate-400 md:block">Premium wallet intelligence for remediation and wallet diagnostics.</p>
+                      <p className="hidden text-[11px] text-slate-400 md:block">Local wallet diagnostics and guided remediation tools.</p>
                   </div>
                 </div>
               </div>
@@ -162,20 +163,20 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex min-h-[44px] items-center gap-2 rounded-full px-3 py-2 text-[13px] font-semibold whitespace-nowrap transition-all ${
                         activeTab === tab.id
-                          ? 'bg-gradient-to-r from-purple-500/20 via-slate-900/80 to-cyan-500/20 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
+                          ? 'bg-gradient-to-r from-cyan-500/20 via-slate-950/80 to-cyan-500/20 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
                           : 'text-slate-400 hover:bg-white/5 hover:text-white'
                       }`}
                       role="tab"
                       aria-selected={activeTab === tab.id}
                     >
                       <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full border ${
-                        activeTab === tab.id ? 'border-white/15 bg-white/10 text-white' : 'border-white/10 bg-white/5 text-slate-300'
+                        activeTab === tab.id ? 'border-cyan-400/20 bg-cyan-500/10 text-cyan-300' : 'border-white/10 bg-white/5 text-slate-300'
                       }`}>
                         <AppIcon kind={tab.icon} />
                       </span>
                       <span className="text-left leading-tight">
                         <span>{tab.label}</span>
-                        <span className={`mt-0.5 block text-[10px] font-medium ${activeTab === tab.id ? 'text-slate-300' : 'text-slate-500'}`}>
+                        <span className={`mt-0.5 block text-[10px] font-medium ${activeTab === tab.id ? 'text-slate-200' : 'text-slate-500'}`}>
                           {tab.description}
                         </span>
                       </span>
@@ -191,8 +192,8 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
           <div className="fixed inset-0 z-50 flex items-end justify-center px-4 py-6 sm:items-center sm:py-12">
             <div className="absolute inset-0 bg-black/60" onClick={() => setShowScanModal(false)} />
             <div className="relative w-full max-w-lg rounded-lg bg-slate-900/95 p-5 shadow-lg">
-              <h3 className="text-lg font-semibold text-white">Wallet scan</h3>
-              <p className="mt-2 text-sm text-slate-300">Scanning your wallet for common issues. This will take a short moment.</p>
+              <h3 className="text-lg font-semibold text-white">Scan wallet</h3>
+              <p className="mt-2 text-sm text-slate-300">Review your connected wallet for approvals, network issues, and potential risks.</p>
               <div className="mt-4">
                 {!scanResult ? (
                   <div className="space-y-4">
@@ -232,7 +233,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                         }}
                         className="rounded-lg bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-900"
                       >
-                        Apply remediation
+                        Open remediation
                       </button>
                       <button onClick={() => setShowScanModal(false)} className="rounded-lg px-3 py-2 text-sm text-slate-300 bg-white/5">Close</button>
                     </div>

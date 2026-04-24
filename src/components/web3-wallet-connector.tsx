@@ -12,7 +12,7 @@ export function Web3WalletConnector() {
         const addressLabel = account?.address ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}` : 'Wallet'
 
         const mobileButton =
-          'w-full rounded-2xl px-3 py-2 text-sm font-semibold text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition sm:w-auto'
+          'w-full rounded-2xl px-3 py-2 text-sm font-semibold text-slate-950 bg-cyan-500 hover:bg-cyan-400 transition sm:w-auto'
         const desktopButton =
           'w-full sm:w-auto rounded-2xl px-3 py-2 text-sm font-semibold text-white bg-slate-900/90 hover:bg-slate-800 transition'
 

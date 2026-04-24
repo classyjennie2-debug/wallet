@@ -7,13 +7,6 @@ import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { MyWalletLogo } from './logo'
 import { Web3WalletConnector } from './web3-wallet-connector'
 
-const features = [
-  { label: 'Restore', title: 'Wallet Restoration Hub', desc: 'Recover access safely and validate seed phrase data without exposing private keys.' },
-  { label: 'Scan', title: 'Risk & Contract Scanner', desc: 'Analyze tokens, contracts, and approvals for dead coin risk and hidden vulnerabilities.' },
-  { label: 'Guard', title: 'Allowance Defense', desc: 'Review approvals and revoke unsafe token allowances to protect your funds.' },
-  { label: 'Fix', title: 'Connection Diagnostics', desc: 'Detect and resolve wallet network and connection issues quickly.' },
-]
-
 const stats = [
   { number: 'Client-side', label: 'Runs in your browser' },
   { number: '0', label: 'Private keys stored' },
@@ -21,10 +14,10 @@ const stats = [
 ]
 
 const principles = [
-  { name: 'No key custody', detail: 'Designed so users keep control of sensitive credentials.', accent: 'from-cyan-500 to-sky-500' },
-  { name: 'Wallet-focused UX', detail: 'Recovery, approvals, and diagnostics stay front and center.', accent: 'from-fuchsia-500 to-indigo-500' },
-  { name: 'Explainable flows', detail: 'Each step communicates what is happening and why it matters.', accent: 'from-emerald-500 to-teal-500' },
-  { name: 'Documentation path', detail: 'Visitors can inspect the docs before connecting anything.', accent: 'from-sky-500 to-cyan-500' },
+  { name: 'No key custody', detail: 'Designed so users keep control of sensitive credentials.' },
+  { name: 'Wallet-focused UX', detail: 'Recovery, approvals, and diagnostics stay front and center.' },
+  { name: 'Explainable flows', detail: 'Each step communicates what is happening and why it matters.' },
+  { name: 'Documentation path', detail: 'Visitors can inspect the docs before connecting anything.' },
 ]
 
 export const LandingPageV2 = () => {
@@ -45,12 +38,11 @@ export const LandingPageV2 = () => {
   return (
     <div className="min-h-screen overflow-hidden bg-slate-950 text-white">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-24 -right-16 h-72 w-72 rounded-full bg-gradient-to-br from-cyan-400/20 via-indigo-500/10 to-transparent blur-3xl animate-[pulse_8s_ease-in-out_infinite]" />
-        <div className="absolute -bottom-28 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-gradient-to-tr from-fuchsia-500/15 via-sky-500/10 to-transparent blur-3xl animate-[spin_26s_linear_infinite]" />
-        <div className="absolute inset-x-0 top-1/3 h-1/2 bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.08),_transparent_60%)]" />
+        <div className="absolute -top-24 -right-16 h-72 w-72 rounded-full bg-gradient-to-br from-cyan-400/20 via-sky-500/10 to-transparent blur-3xl animate-[pulse_8s_ease-in-out_infinite]" />
+        <div className="absolute -bottom-28 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-gradient-to-tr from-cyan-400/10 via-sky-500/10 to-transparent blur-3xl animate-[spin_26s_linear_infinite]" />
       </div>
 
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),transparent_20%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.08),transparent_20%)]" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.08),transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.06),transparent_24%)]" />
 
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 shadow-xl shadow-slate-950/40 backdrop-blur-xl">
@@ -85,10 +77,10 @@ export const LandingPageV2 = () => {
 
                 <div className="space-y-4">
                   <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl md:text-6xl">
-                    Clarity and control for the moments your wallet matters most.
+                    Clear wallet safety, without custody.
                   </h1>
                   <p className="max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                    MyWallet Security helps you review approvals, investigate wallet risk, and work through recovery steps in one calm, security-first workspace built for real self-custody decisions.
+                    Inspect approvals, recover access, and protect your self-custody wallet with browser-only security tools.
                   </p>
                 </div>
 
@@ -104,19 +96,32 @@ export const LandingPageV2 = () => {
                   ))}
                 </div>
 
+                <div className="grid gap-3 rounded-[28px] border border-white/10 bg-slate-900/90 p-5 text-sm text-slate-300 sm:grid-cols-2">
+                  {[
+                    'Local browser-only review',
+                    'No wallet custody',
+                    'Read-only risk checks',
+                    'Private data stays on device',
+                  ].map((item) => (
+                    <div key={item} className="rounded-3xl bg-slate-950/80 px-4 py-3 text-slate-200">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <button
                     type="button"
                     onClick={handleLaunch}
-                    className="inline-flex items-center justify-center rounded-3xl bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 px-8 py-3 text-base font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:shadow-xl"
+                    className="inline-flex items-center justify-center rounded-3xl bg-gradient-to-r from-cyan-500 to-sky-500 px-8 py-3 text-base font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:shadow-xl"
                   >
-                    Launch Dashboard
+                    Start wallet review
                   </button>
                   <Link
-                    href="/docs"
+                    href="/privacy"
                     className="inline-flex items-center justify-center rounded-3xl border border-white/10 bg-white/5 px-8 py-3 text-base font-semibold text-white transition hover:border-cyan-300 hover:bg-white/10"
                   >
-                    Read Docs
+                    Read privacy guide
                   </Link>
                 </div>
 
@@ -135,7 +140,7 @@ export const LandingPageV2 = () => {
 
               <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-slate-950/80 to-slate-900/80 p-6 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
                 <div className="absolute -right-16 top-6 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
-                <div className="absolute left-0 top-12 h-24 w-24 rounded-full bg-violet-500/10 blur-3xl" />
+                <div className="absolute left-0 top-12 h-24 w-24 rounded-full bg-sky-400/10 blur-3xl" />
                 <div className="relative z-10 space-y-6">
                   <div className="rounded-[28px] border border-white/10 bg-slate-900/90 p-5 shadow-[0_20px_80px_-60px_rgba(56,189,248,0.45)] transition hover:-translate-y-1">
                     <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Product principle</p>
@@ -170,27 +175,10 @@ export const LandingPageV2 = () => {
             <div className="mt-8 grid gap-4 sm:grid-cols-4">
               {principles.map((principle) => (
                 <div key={principle.name} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-5 shadow-sm shadow-slate-950/20 transition hover:-translate-y-1 hover:shadow-lg">
-                  <div className={`inline-flex rounded-2xl bg-gradient-to-r ${principle.accent} px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-950`}>
+                  <div className="inline-flex rounded-2xl bg-gradient-to-r from-cyan-500 to-sky-500 px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-950">
                     {principle.name}
                   </div>
                   <p className="mt-4 text-sm text-slate-300">{principle.detail}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="space-y-6 px-4 sm:px-0">
-            <div className="space-y-2 text-center">
-              <h2 className="text-3xl font-bold text-white sm:text-4xl">Focused on Recovery & Safety</h2>
-              <p className="mx-auto max-w-2xl text-slate-400">Every section is designed to help you understand wallet state quickly, act with confidence, and avoid unnecessary exposure.</p>
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {features.map((feature) => (
-                <div key={feature.title} className="rounded-[28px] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/10">
-                  <div className="mb-3 text-sm font-semibold uppercase tracking-wide text-cyan-200">{feature.label}</div>
-                  <h3 className="text-lg font-bold text-white">{feature.title}</h3>
-                  <p className="mt-2 text-sm text-slate-300">{feature.desc}</p>
                 </div>
               ))}
             </div>
@@ -200,7 +188,7 @@ export const LandingPageV2 = () => {
             <div className="grid gap-6 text-center md:grid-cols-3">
               {stats.map((stat) => (
                 <div key={stat.label} className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_20px_60px_-45px_rgba(56,189,248,0.35)] transition hover:-translate-y-1 hover:border-cyan-400/20">
-                  <div className="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-3xl font-black text-transparent sm:text-4xl">
+                  <div className="bg-gradient-to-r from-cyan-400 to-sky-400 bg-clip-text text-3xl font-black text-transparent sm:text-4xl">
                     {stat.number}
                   </div>
                   <p className="mt-2 text-slate-300">{stat.label}</p>
