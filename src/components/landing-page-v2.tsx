@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAccount, useConnect } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { MyWalletLogo } from './logo'
 import { Web3WalletConnector } from './web3-wallet-connector'
@@ -24,34 +24,28 @@ const principles = [
 export const LandingPageV2 = () => {
   const router = useRouter()
   const { isConnected } = useAccount()
-  const { connect, connectors } = useConnect()
   const { openConnectModal } = useConnectModal()
   const currentYear = new Date().getFullYear()
+  const [showWalletConnectNote, setShowWalletConnectNote] = useState(false)
 
-  const isMobileBrowser = useMemo(() => {
-    if (typeof navigator === 'undefined') return false
-    return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)
+  useEffect(() => {
+    const isMobileBrowser = () => {
+      try {
+        return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)
+      } catch {
+        return false
+      }
+    }
+
+    const mobileBrowser = isMobileBrowser()
+    const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
+    setShowWalletConnectNote(mobileBrowser && !hasInjectedWallet)
   }, [])
 
-  const handleLaunch = async () => {
+  const handleLaunch = () => {
     if (isConnected) {
       router.replace('/')
       return
-    }
-
-    const mobileBrowser = isMobileBrowser && typeof window !== 'undefined'
-    const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
-
-    if (mobileBrowser && !hasInjectedWallet) {
-      const walletConnectConnector = connectors.find((connector) => connector.name?.toLowerCase().includes('walletconnect'))
-      if (walletConnectConnector?.ready) {
-        try {
-          await connect({ connector: walletConnectConnector })
-          return
-        } catch {
-          // fall back to the standard modal if WalletConnect fails
-        }
-      }
     }
 
     openConnectModal?.()
@@ -146,6 +140,11 @@ export const LandingPageV2 = () => {
                     Read privacy guide
                   </Link>
                 </div>
+                {showWalletConnectNote ? (
+                  <p className="mt-3 text-sm text-slate-400">
+                    In browser mode, choose WalletConnect from the connector modal so the app can connect without an injected wallet.
+                  </p>
+                ) : null}
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   {[
