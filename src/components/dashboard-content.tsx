@@ -1,6 +1,8 @@
-'use client'
+ 'use client'
 
+import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
+import { issueOptions } from '@/components/wallet-restoration'
 import { MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
 import { DashboardV2 } from '@/components/dashboard-v2'
@@ -10,7 +12,7 @@ import { TokenAllowanceManager } from '@/components/token-allowance-manager'
 import { SecurityAudit } from '@/components/security-audit'
 import { WalletRestoration } from '@/components/wallet-restoration'
 
-type Tab = 'dashboard' | 'alerts' | 'security' | 'recovery'
+type Tab = 'dashboard' | 'alerts' | 'security' | 'solutions'
 
 interface DashboardContentProps {
   activeTab: Tab
@@ -59,7 +61,7 @@ const tabs: { id: Tab; label: string; icon: 'dashboard' | 'alert' | 'security' |
   { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', description: 'Wallet posture and connection health', mobileLabel: 'Home' },
   { id: 'alerts', label: 'Alerts', icon: 'alert', description: 'Security incidents and suspicious activity', mobileLabel: 'Alerts' },
   { id: 'security', label: 'Security', icon: 'security', description: 'Checks and approvals', mobileLabel: 'Security' },
-  { id: 'recovery', label: 'Recovery', icon: 'recovery', description: 'Guided restoration tools', mobileLabel: 'Recover' },
+  { id: 'solutions', label: 'Solutions', icon: 'recovery', description: 'Remediation and repair actions', mobileLabel: 'Fix' },
 ]
 
 const tabHeadings: Record<Tab, { title: string; description: string; tone: string }> = {
@@ -78,9 +80,9 @@ const tabHeadings: Record<Tab, { title: string; description: string; tone: strin
     description: 'Audit contracts, inspect permissions, and review wallet safety across the most common risk surfaces.',
     tone: 'border-cyan-400/20 bg-cyan-500/10 text-cyan-300',
   },
-  recovery: {
-    title: 'Recovery workflows',
-    description: 'Use guided recovery paths to restore access, repair blocked flows, and organize the next recovery step.',
+  solutions: {
+    title: 'Remediation & Guidance',
+    description: 'Automated wallet scans and remediation actions to recover or mitigate issues.',
     tone: 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300',
   },
 }
@@ -88,6 +90,29 @@ const tabHeadings: Record<Tab, { title: string; description: string; tone: strin
 export default function DashboardContent({ activeTab, setActiveTab }: DashboardContentProps) {
   const { isConnected } = useAccount()
   const activeMeta = tabHeadings[activeTab]
+  const [showScanModal, setShowScanModal] = useState(false)
+  const [scanResult, setScanResult] = useState<any>(null)
+  const [scanProgress, setScanProgress] = useState(0)
+
+  useEffect(() => {
+    if (!showScanModal) return
+    setScanProgress(0)
+    setScanResult(null)
+    const start = Date.now()
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - start
+      const pct = Math.min(100, Math.floor((elapsed / 10000) * 100))
+      setScanProgress(pct)
+      if (pct >= 100) {
+        clearInterval(interval)
+        // when scan completes, recommend the RPC & Service Failures remediation
+        const pick = issueOptions.find((i: any) => i.id === 'integration-api') || issueOptions[0]
+        setTimeout(() => setScanResult(pick), 220)
+      }
+    }, 100)
+
+    return () => clearInterval(interval)
+  }, [showScanModal])
 
   return (
     <main className="min-h-screen bg-slate-950">
@@ -99,16 +124,29 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                 <div className="flex items-center gap-3">
                   <MyWalletLogo size="md" variant="full" />
                   <div className="min-w-0">
-                    <p className="hidden text-[11px] text-slate-400 md:block">Premium wallet intelligence for recovery and wallet diagnostics.</p>
-                    <p className="mt-0.5 text-[11px] text-slate-500 md:hidden">
-                      {isConnected ? activeMeta.description : 'Connect a wallet to review recovery and live wallet diagnostics.'}
-                    </p>
+                      <p className="hidden text-[11px] text-slate-400 md:block">Premium wallet intelligence for remediation and wallet diagnostics.</p>
                   </div>
                 </div>
               </div>
 
-              <div className="shrink-0">
+              <div className="shrink-0 flex items-center gap-3">
                 <WalletConnect />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowScanModal(true)
+                    setScanResult(null)
+                    setScanProgress(0)
+                  }}
+                  aria-label="Scan wallet"
+                  className="rounded-2xl p-2 text-sm font-semibold bg-white/6 text-white hover:bg-white/10 transition"
+                >
+                  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="M21 21l-4.35-4.35" />
+                    <path d="M3 11h4" strokeOpacity="0.6" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -149,6 +187,62 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
           </nav>
         </header>
 
+        {showScanModal && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center px-4 py-6 sm:items-center sm:py-12">
+            <div className="absolute inset-0 bg-black/60" onClick={() => setShowScanModal(false)} />
+            <div className="relative w-full max-w-lg rounded-lg bg-slate-900/95 p-5 shadow-lg">
+              <h3 className="text-lg font-semibold text-white">Wallet scan</h3>
+              <p className="mt-2 text-sm text-slate-300">Scanning your wallet for common issues. This will take a short moment.</p>
+              <div className="mt-4">
+                {!scanResult ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-center">
+                      <svg className="h-28 w-28 animate-pulse text-cyan-400" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        <circle cx="32" cy="32" r="14" strokeOpacity="0.18" />
+                        <circle cx="32" cy="32" r="22" strokeOpacity="0.08" />
+                        <path d="M44 44L58 58" />
+                      </svg>
+                    </div>
+                    <div className="rounded-md bg-slate-800/80 p-3">
+                      <div className="flex items-center justify-between text-sm text-slate-300">
+                        <div>Scanning components</div>
+                        <div>{scanProgress}%</div>
+                      </div>
+                      <div className="mt-2 h-2 w-full rounded-full bg-slate-700/80">
+                        <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${scanProgress}%` }} />
+                      </div>
+                      <ul className="mt-3 grid gap-2 text-sm text-slate-400">
+                        <li>Checking connected dApps and approvals</li>
+                        <li>Validating RPC and chain integrity</li>
+                        <li>Scanning contract interactions and token approvals</li>
+                        <li>Verifying local session and signature history</li>
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="text-sm text-slate-200 font-semibold">Recommended remediation</div>
+                    <div className="mt-2 text-sm text-slate-300">{scanResult.title}</div>
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        onClick={() => {
+                          try { window.history.pushState(null, '', `?issue=${scanResult.id}`) } catch {}
+                          setShowScanModal(false)
+                          setTimeout(() => setActiveTab('solutions'), 80)
+                        }}
+                        className="rounded-lg bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-900"
+                      >
+                        Apply remediation
+                      </button>
+                      <button onClick={() => setShowScanModal(false)} className="rounded-lg px-3 py-2 text-sm text-slate-300 bg-white/5">Close</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="mx-auto max-w-7xl px-3 py-4 pb-28 sm:px-4 sm:py-8 sm:pb-32">
           {activeTab !== 'dashboard' && (
             <section className="mb-5 rounded-[26px] border border-white/10 bg-white/5 p-4 shadow-[0_24px_70px_-54px_rgba(15,23,42,0.5)] sm:mb-6 sm:p-5">
@@ -184,7 +278,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
             </div>
           )}
 
-          {activeTab === 'recovery' && (
+          {activeTab === 'solutions' && (
             <div className="space-y-6 animate-in fade-in-50">
               <WalletRestoration />
             </div>

@@ -13,31 +13,31 @@ interface SecurityOption {
 const securityOptions: SecurityOption[] = [
   {
     id: 'wallet',
-    title: 'Wallet Session Review',
-    description: 'Check recent prompts, session behavior, account access changes, and local wallet state for signs that something is off.',
+    title: 'Restore Wallet Session',
+    description: 'Resolve session inconsistencies, unexpected access, and local wallet state issues to restore normal behavior.',
     badge: 'Wallet',
-    outcome: 'Ideal when the wallet suddenly feels unfamiliar, unstable, or more permissive than expected.',
+    outcome: 'Use this to re-establish a secure session and rollback suspicious local changes.',
   },
   {
     id: 'dapp',
-    title: 'Connected dApp Review',
-    description: 'Inspect connected sites, active permissions, and approval history to understand which dApps still have influence over the wallet.',
+    title: 'Remediate Connected dApps',
+    description: 'Identify and remove risky dApp permissions, revoke approvals, and restore minimal access scopes.',
     badge: 'dApp',
-    outcome: 'Ideal for surprise signature requests, unfamiliar popups, or lingering dApp access you no longer trust.',
+    outcome: 'Use this to revoke unwanted approvals and reduce attack surface from third-party sites.',
   },
   {
     id: 'contract',
-    title: 'Token & Contract Review',
-    description: 'Review token behavior, contract trust signals, and approval scope before signing a transaction or interacting again.',
+    title: 'Token & Contract Remediation',
+    description: 'Detect unsafe approvals, abnormal token behavior, and repair or revoke risky contract permissions.',
     badge: 'Contract',
-    outcome: 'Ideal when a token looks suspicious, a contract request feels unclear, or an allowance seems too broad.',
+    outcome: 'Use this to revoke dangerous allowances and secure token interactions.',
   },
   {
     id: 'network',
-    title: 'RPC & Network Review',
-    description: 'Validate chain selection, RPC reliability, and network routing so transaction failures are easier to isolate and fix.',
+    title: 'RPC & Network Repair',
+    description: 'Verify chain configuration, RPC endpoints, and routing; repair wrong-network settings and unreliable providers.',
     badge: 'Network',
-    outcome: 'Ideal for wrong-network prompts, failed broadcasts, or chain behavior that does not match what the wallet shows.',
+    outcome: 'Use this to realign network settings and restore reliable transaction routing.',
   },
 ]
 
@@ -223,8 +223,8 @@ export const SecurityAudit = () => {
       }
 
       const elapsed = Date.now() - startTime
-      if (elapsed < 2200) {
-        await new Promise((resolve) => setTimeout(resolve, 2200 - elapsed))
+      if (elapsed < 7000) {
+        await new Promise((resolve) => setTimeout(resolve, 7000 - elapsed))
       }
 
       setAuditSummary([
@@ -344,7 +344,7 @@ export const SecurityAudit = () => {
                     <span className="text-xs font-semibold uppercase tracking-[0.26em] text-cyan-300">{option.badge}</span>
                     <span className="rounded-full border border-white/10 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-300">Focused review</span>
                   </div>
-                  <h3 className="mt-3 text-lg font-semibold text-white">{option.title}</h3>
+                  <h3 className="mt-3 text-lg font-semibold text-slate-200">{option.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-400">{option.description}</p>
                   <p className="mt-4 text-sm text-slate-300">{option.outcome}</p>
                 </div>
@@ -367,7 +367,7 @@ export const SecurityAudit = () => {
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Security wizard</p>
-                    <h2 id="security-audit-title" className="mt-2 text-2xl font-semibold text-white">
+                    <h2 id="security-audit-title" className="mt-2 text-2xl font-semibold text-slate-200">
                       {activeOption?.title ?? 'Security review'}
                     </h2>
                     <p className="mt-2 text-sm leading-6 text-slate-400">
@@ -415,7 +415,7 @@ export const SecurityAudit = () => {
                           <FlowGlyph kind="scan" />
                         </span>
                         <div>
-                          <p className="text-sm font-semibold text-white">Preparing the security review</p>
+                          <p className="text-sm font-semibold text-slate-200">Preparing the security solution</p>
                           <p className="mt-1 text-sm text-slate-400">{activityMessage}</p>
                         </div>
                       </div>
@@ -455,7 +455,7 @@ export const SecurityAudit = () => {
                           <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-500/10 text-cyan-300">
                             <FlowGlyph kind={type === 'Secret Phrase' ? 'wallet' : type === 'Keystore' ? 'contract' : 'network'} />
                           </span>
-                          <p className="mt-4 text-base font-semibold text-white">{type}</p>
+                          <p className="mt-4 text-base font-semibold text-slate-200">{type}</p>
                           <p className="mt-2 text-sm leading-6 text-slate-400">
                             {type === 'Secret Phrase'
                               ? 'Best when you are working from the wallet recovery phrase.'
@@ -474,7 +474,7 @@ export const SecurityAudit = () => {
                     <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
                       <div className="rounded-[26px] border border-white/10 bg-white/5 p-5">
                         <p className="text-xs uppercase tracking-[0.26em] text-cyan-300">Verification input</p>
-                        <h3 className="mt-3 text-xl font-semibold text-white">{selectedConnection}</h3>
+                        <h3 className="mt-3 text-xl font-semibold text-slate-200">{selectedConnection}</h3>
                         <p className="mt-2 text-sm leading-6 text-slate-400">{inputHint}</p>
 
                         <textarea
@@ -486,6 +486,16 @@ export const SecurityAudit = () => {
                           placeholder={selectedConnection === 'Secret Phrase' ? 'word1 word2 word3 ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
                           className="mt-5 min-h-[220px] w-full rounded-[24px] border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                         />
+                        <div className="mt-3 flex items-start gap-3">
+                          <svg className="h-5 w-5 text-cyan-400 mt-1 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                            <rect x="3" y="11" width="18" height="10" rx="2" />
+                            <path d="M7 11V8a5 5 0 0 1 10 0v3" />
+                          </svg>
+                          <div className="text-sm text-slate-400">
+                            <div className="font-medium text-slate-200">Secure input</div>
+                            <div className="text-[13px]">Your details are processed securely and are not stored on this device or server.</div>
+                          </div>
+                        </div>
                         {inputError ? <p className="mt-3 text-sm text-rose-400">{inputError}</p> : null}
                       </div>
 
@@ -521,7 +531,7 @@ export const SecurityAudit = () => {
                       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-400/20 bg-slate-900/80 text-cyan-300">
                         <FlowGlyph kind="scan" />
                       </div>
-                      <h3 className="mt-4 text-2xl font-semibold text-white">Security review in progress</h3>
+                      <h3 className="mt-4 text-2xl font-semibold text-slate-200">Security solution in progress</h3>
                       <p className="mt-2 text-sm text-slate-400">{activityMessage}</p>
                       <div className="mt-5 rounded-full bg-slate-800/90 p-1">
                         <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${Math.max(progressWidth, 22)}%` }} />
@@ -546,14 +556,14 @@ export const SecurityAudit = () => {
                           <FlowGlyph kind="check" />
                         </span>
                         <div>
-                          <h3 className="text-xl font-semibold text-white">Security summary ready</h3>
+                          <h3 className="text-xl font-semibold text-slate-200">Security summary ready</h3>
                           <p className="mt-2 text-sm text-slate-300">{statusMessage}</p>
                         </div>
                       </div>
                     </div>
 
                     <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                      <p className="text-sm font-semibold text-white">Summary</p>
+                      <p className="text-sm font-semibold text-slate-200">Summary</p>
                       <ul className="mt-4 space-y-3 text-sm text-slate-300">
                         {auditSummary.map((line) => (
                           <li key={line} className="flex items-start gap-3">
@@ -574,7 +584,7 @@ export const SecurityAudit = () => {
                           <FlowGlyph kind="alert" />
                         </span>
                         <div>
-                          <h3 className="text-xl font-semibold text-white">The review could not be completed</h3>
+                          <h3 className="text-xl font-semibold text-slate-200">The solution could not be completed</h3>
                           <p className="mt-2 text-sm text-slate-300">{statusMessage}</p>
                         </div>
                       </div>
@@ -600,7 +610,7 @@ export const SecurityAudit = () => {
                       disabled={!canContinue}
                       className="rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      Review audit input
+                      Apply solution
                     </button>
                   )}
 

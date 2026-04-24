@@ -150,7 +150,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
                 <p className="font-semibold">Run security audit</p>
                 <p className="text-xs text-slate-400 mt-1">Inspect approvals, dApp permissions, and contract risks.</p>
               </button>
-              <button onClick={() => onNavigate?.('recovery')} className="w-full rounded-[24px] border border-cyan-500/20 bg-cyan-500/10 px-4 py-4 text-left text-white transition hover:border-cyan-400/30">
+              <button onClick={() => onNavigate?.('solutions')} className="w-full rounded-[24px] border border-cyan-500/20 bg-cyan-500/10 px-4 py-4 text-left text-white transition hover:border-cyan-400/30">
                 <p className="font-semibold">Open recovery wizard</p>
                 <p className="text-xs text-slate-400 mt-1">Restore access and validate your recovery methods.</p>
               </button>
@@ -246,7 +246,7 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
               <h3 className="text-xl font-semibold text-white">Recovery & security hub</h3>
             </div>
             <div className="grid gap-3">
-              <button onClick={() => onNavigate?.('recovery')} className="rounded-[24px] border border-cyan-500/10 bg-gradient-to-br from-cyan-500/10 to-slate-950/80 px-4 py-4 text-left text-white transition hover:border-cyan-400/30">
+              <button onClick={() => onNavigate?.('solutions')} className="rounded-[24px] border border-cyan-500/10 bg-gradient-to-br from-cyan-500/10 to-slate-950/80 px-4 py-4 text-left text-white transition hover:border-cyan-400/30">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="font-semibold">Wallet Restoration</p>
