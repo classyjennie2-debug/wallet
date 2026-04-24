@@ -315,16 +315,6 @@ export const SecurityAudit = () => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="rounded-[28px] border border-slate-700/60 bg-slate-900/75 p-6">
-              <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Why this matters</p>
-              <p className="mt-3 text-sm leading-6 text-slate-300">Catch hidden approvals, suspicious sessions, and network issues early so you can stop risk before a loss occurs.</p>
-            </div>
-            <div className="rounded-[28px] border border-slate-700/60 bg-slate-900/75 p-6">
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-300">What you get</p>
-              <p className="mt-3 text-sm leading-6 text-slate-300">A focused risk summary, prioritised findings, and clear next steps for every wallet exposure we identify.</p>
-            </div>
-          </div>
         </div>
 
         <div className="mt-6 grid gap-4 xl:grid-cols-2">

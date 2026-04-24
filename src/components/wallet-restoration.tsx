@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 type RecoveryStage = 'idle' | 'initializing' | 'chooseConnection' | 'enterSecret' | 'reviewing' | 'success' | 'error'
 type ConnectionType = 'Secret Phrase' | 'Keystore' | 'Private Key'
@@ -92,7 +92,7 @@ export const WalletRestoration = () => {
   const [resultSummary, setResultSummary] = useState<string[]>([])
   const [message, setMessage] = useState('')
   const router = useRouter()
-  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+  const searchParams = useSearchParams()
 
   // If an ?issue=... param exists, preselect that issue and jump to the chooseConnection step
   useEffect(() => {
@@ -295,16 +295,6 @@ export const WalletRestoration = () => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="rounded-[28px] border border-slate-700/60 bg-slate-900/80 p-6">
-              <p className="text-xs uppercase tracking-[0.28em] text-emerald-300">Workflow focus</p>
-              <p className="mt-3 text-sm leading-6 text-slate-300">A step-by-step remediation path that keeps the process clear and prevents accidental actions during recovery.</p>
-            </div>
-            <div className="rounded-[28px] border border-slate-700/60 bg-slate-900/80 p-6">
-              <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Outcome preview</p>
-              <p className="mt-3 text-sm leading-6 text-slate-300">You will finish with a target repair summary, recommended follow-up check, and the strongest next step for your wallet state.</p>
-            </div>
-          </div>
         </div>
 
         <div className="mt-6 grid gap-4 xl:grid-cols-2">

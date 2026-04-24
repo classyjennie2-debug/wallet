@@ -1,6 +1,7 @@
  'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAccount } from 'wagmi'
 import { issueOptions } from '@/components/wallet-restoration'
 import { MyWalletLogo } from '@/components/logo'
@@ -89,6 +90,7 @@ const tabHeadings: Record<Tab, { title: string; description: string; tone: strin
 }
 
 export default function DashboardContent({ activeTab, setActiveTab }: DashboardContentProps) {
+  const router = useRouter()
   const { isConnected } = useAccount()
   const activeMeta = tabHeadings[activeTab]
   const [showScanModal, setShowScanModal] = useState(false)
@@ -227,7 +229,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                     <div className="mt-3 flex gap-2">
                       <button
                         onClick={() => {
-                          try { window.history.pushState(null, '', `?issue=${scanResult.id}`) } catch {}
+                          router.replace(`?issue=${scanResult.id}`)
                           setShowScanModal(false)
                           setTimeout(() => setActiveTab('solutions'), 80)
                         }}

@@ -66,7 +66,7 @@ export const LandingPageV2 = () => {
           </div>
         </header>
 
-        <section className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-16 sm:px-6 sm:py-24">
+        <section className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-20 sm:px-6 sm:py-24">
           <div className="rounded-[32px] border border-white/10 bg-slate-950/90 p-8 shadow-[0_40px_120px_-70px_rgba(14,165,233,0.8)] sm:p-12">
             <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
               <div className="space-y-8">

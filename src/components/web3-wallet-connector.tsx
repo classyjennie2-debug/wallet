@@ -1,7 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+
+function AutoOpenMobileConnect({ openConnectModal, mounted, connected }: { openConnectModal?: () => void; mounted: boolean; connected: boolean }) {
+  useEffect(() => {
+    if (!mounted || connected || typeof window === 'undefined') return
+
+    const isMobileBrowser = /Mobi|Android|iPhone|iPad|iPod|Windows Phone/.test(navigator.userAgent)
+    const hasInjectedWallet = Boolean((window as any).ethereum)
+
+    if (!isMobileBrowser || hasInjectedWallet) return
+
+    const timer = window.setTimeout(() => {
+      openConnectModal?.()
+    }, 700)
+
+    return () => window.clearTimeout(timer)
+  }, [connected, mounted, openConnectModal])
+
+  return null
+}
 
 export function Web3WalletConnector() {
   return (
@@ -45,6 +64,7 @@ export function Web3WalletConnector() {
         if (!connected) {
           return (
             <div className="relative">
+              <AutoOpenMobileConnect mounted={mounted} connected={connected} openConnectModal={openConnectModal} />
               <button type="button" onClick={handleConnectClick} className={mobileButton}>
                 Connect Wallet
               </button>
