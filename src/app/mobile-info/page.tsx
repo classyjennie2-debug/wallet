@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { MyWalletLogo } from '@/components/logo'
 
 export default function MobileOptimized() {
   const [isMobile, setIsMobile] = useState(false)
@@ -20,7 +21,10 @@ export default function MobileOptimized() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="space-y-8">
           {/* Header */}
-          <div>
+          <div className="space-y-4">
+            <div className="inline-flex rounded-[22px] border border-white/10 bg-slate-950/60 px-3 py-2">
+              <MyWalletLogo size="md" variant="full" />
+            </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Mobile Optimization</h1>
             <p className="text-gray-400">This app is now optimized for mobile-first experience with WalletConnect</p>
           </div>

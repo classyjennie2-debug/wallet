@@ -55,7 +55,7 @@ const alertEvents: AlertEvent[] = [
     category: 'recovery',
     title: 'Recovery session initiated',
     summary: 'A recovery flow was started for this wallet address.',
-    source: 'MyWallet.Help recovery wizard',
+    source: 'MyWallet Security recovery wizard',
     target: 'Your wallet',
     date: '2026-04-20T09:30:00Z',
     status: 'resolved',

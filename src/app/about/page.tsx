@@ -1,4 +1,5 @@
 import React from 'react'
+import { MyWalletLogo } from '@/components/logo'
 
 const featureCards = [
   { title: 'Portfolio Overview', desc: 'Real-time tracking of your crypto assets across multiple chains.', tone: 'cyan' },
@@ -31,10 +32,13 @@ export default function About() {
       <section className="border-b border-white/10 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.14),_transparent_45%)]">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="max-w-3xl space-y-5">
+            <div className="inline-flex rounded-[22px] border border-white/10 bg-slate-950/60 px-3 py-2">
+              <MyWalletLogo size="md" variant="full" />
+            </div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">About</p>
             <h1 className="text-4xl font-semibold text-white sm:text-5xl">A wallet workspace built for clarity, control, and recovery readiness.</h1>
             <p className="max-w-2xl text-base text-slate-400">
-              MyWallet.Help combines portfolio monitoring, security workflows, and recovery guidance into one consistent interface designed for serious day-to-day wallet management.
+              MyWallet Security brings recovery guidance, approval reviews, and wallet monitoring into one interface designed to make high-stakes decisions feel more manageable.
             </p>
           </div>
         </div>
@@ -97,7 +101,12 @@ export default function About() {
               <p className="mt-3 font-mono text-lg text-white">docs.mywallet.help</p>
             </div>
           </div>
-          <p className="mt-10 border-t border-white/10 pt-6 text-sm text-slate-500">MyWallet.Help © 2024. Built for the crypto community.</p>
+          <div className="mt-10 border-t border-white/10 pt-6 text-sm text-slate-500">
+            <div className="flex items-center gap-3">
+              <MyWalletLogo size="sm" variant="full" />
+              <span>Built for people who want more confidence in wallet recovery and day-to-day security.</span>
+            </div>
+          </div>
         </div>
       </section>
     </main>

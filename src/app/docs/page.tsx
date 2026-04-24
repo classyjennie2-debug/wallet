@@ -1,4 +1,5 @@
 import React from 'react'
+import { MyWalletLogo } from '@/components/logo'
 
 export default function DocsPage() {
   return (
@@ -7,10 +8,13 @@ export default function DocsPage() {
         <div className="space-y-10">
           <section className="rounded-3xl border border-white/10 bg-slate-900/90 p-10 shadow-2xl shadow-black/20">
             <div className="space-y-4">
+              <div className="inline-flex rounded-[22px] border border-white/10 bg-slate-950/60 px-3 py-2">
+                <MyWalletLogo size="md" variant="full" />
+              </div>
               <p className="text-sm uppercase tracking-[0.32em] text-purple-300">Documentation</p>
-              <h1 className="text-4xl font-black text-white sm:text-5xl">MyWallet.Help — Audit & Product Overview</h1>
+              <h1 className="text-4xl font-black text-white sm:text-5xl">MyWallet Security - Product Overview</h1>
               <p className="max-w-3xl text-lg leading-8 text-slate-300">
-                A strategic audit of the website, its product positioning, and its user experience. This document explains what the site is for, how it works, and why the platform exists for wallet recovery, risk remediation, and secure portfolio management.
+                An overview of the platform, its core workflows, and the decisions behind a security-first wallet experience centered on recovery, approvals, and self-custody clarity.
               </p>
             </div>
           </section>
@@ -19,7 +23,7 @@ export default function DocsPage() {
             <article className="space-y-6 rounded-3xl border border-white/10 bg-slate-900/80 p-8">
               <h2 className="text-3xl font-bold text-white">About the Website</h2>
               <p className="text-slate-300 leading-7">
-                MyWallet.Help is a non-custodial Web3 wallet management platform designed to make recovery, security, and wallet hygiene accessible to active crypto users. It combines portfolio visibility with diagnostic tools that help users identify risky token positions, review wallet approvals, and recover access when wallet state becomes compromised.
+                MyWallet Security is a non-custodial Web3 workspace designed to make recovery, risk review, and wallet hygiene easier to navigate for active crypto users. It combines portfolio visibility with tools that help users inspect approvals, investigate risky token behavior, and work through access issues without giving up custody.
               </p>
               <p className="text-slate-300 leading-7">
                 The site emphasizes safety-first wallet workflows, multi-chain asset tracking, and transparent guidance for users who want to regain confidence in their crypto holdings without introducing central custody or unnecessary complexity.
@@ -64,10 +68,10 @@ export default function DocsPage() {
             <h2 className="text-3xl font-bold text-white">Audit Summary</h2>
             <div className="space-y-4 text-slate-300 leading-7">
               <p>
-                The current website successfully establishes a strong visual identity with a dark, polished interface. To strengthen its positioning, the product messaging should highlight wallet recovery and safety as the core differentiators, instead of generic portfolio management language.
+                The platform is intentionally centered on calm, high-trust guidance. The design language supports that by pairing strong visual hierarchy with copy that explains risk clearly and keeps the most important actions within reach.
               </p>
               <p>
-                The homepage should communicate the immediate user benefit: recover access, remove wallet risk, and manage token approvals without introducing more centralized custody. This makes the product unique compared to generic Web3 dashboards.
+                The homepage leads with the practical user value: understand wallet state, reduce approval risk, and move through recovery steps without adding central custody or unnecessary complexity.
               </p>
             </div>
 
@@ -83,7 +87,7 @@ export default function DocsPage() {
                 },
                 {
                   title: 'Recommendations',
-                  items: ['Make “recovery” central in copy', 'Add audit docs and user guides', 'Use real problem statements'],
+                  items: ['Keep recovery central in copy', 'Add deeper user guides', 'Speak to real wallet problems'],
                 },
               ].map((group) => (
                 <div key={group.title} className="rounded-2xl border border-white/10 bg-white/5 p-6">

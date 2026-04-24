@@ -1,4 +1,5 @@
 import React from 'react'
+import { MyWalletLogo } from '@/components/logo'
 
 export default function Privacy() {
   return (
@@ -6,7 +7,10 @@ export default function Privacy() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="space-y-8">
           {/* Header */}
-          <div>
+          <div className="space-y-4">
+            <div className="inline-flex rounded-[22px] border border-white/10 bg-slate-950/60 px-3 py-2">
+              <MyWalletLogo size="md" variant="full" />
+            </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Privacy Policy</h1>
             <p className="text-gray-400">Last updated: January 2024</p>
           </div>

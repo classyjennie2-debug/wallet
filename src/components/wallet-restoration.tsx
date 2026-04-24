@@ -15,61 +15,20 @@ type RecoveryIssue = {
 }
 
 const issueOptions: RecoveryIssue[] = [
-  { id: 'key-management', title: 'Key Management & Cryptography Issues', description: 'Review key generation, storage, and cryptographic protections for private data.', badge: 'Key Management', summary: 'Address private key leaks, weak encryption, and recovery phrase vulnerabilities.' },
-  { id: 'network-transaction', title: 'Network & Transaction Layer Problems', description: 'Inspect RPC, mempool handling, gas fee behavior, and transaction propagation.', badge: 'Network', summary: 'Detect network stalls, failed transaction broadcasts, and incorrect fee estimation.' },
-  { id: 'smart-contract', title: 'Smart Contract & Token Interaction Bugs', description: 'Analyze contract integrations, token approvals, reentrancy risks, and call failures.', badge: 'Smart Contract', summary: 'Fix token approval issues, contract call failures, and unsafe interaction flows.' },
-  { id: 'ui-ux', title: 'UI/UX-Induced Technical Failures', description: 'Detect interface issues that lead to user mistakes, incorrect approvals, or stale data.', badge: 'UI/UX', summary: 'Resolve misleading prompts, stale state, and approval flow failures caused by the UI.' },
-  { id: 'integration-api', title: 'Integration & API Issues', description: 'Validate API endpoints, third-party integrations, and external service stability.', badge: 'Integration', summary: 'Repair broken API calls, third-party mismatches, and service timeout failures.' },
-  { id: 'storage-persistence', title: 'Storage & Persistence Problems', description: 'Check local storage, session persistence, backup recovery, and cache coherency.', badge: 'Storage', summary: 'Fix cached state loss, corrupted backups, and inconsistent local persistence.' },
-  { id: 'cross-chain', title: 'Cross-Chain & Multi-Chain Issues', description: 'Review bridging logic, chain selection, and multi-chain transaction consistency.', badge: 'Cross-Chain', summary: 'Address chain mismatch, bridge failure, and cross-network transaction problems.' },
-  { id: 'vulnerabilities', title: 'Security Vulnerabilities', description: 'Scan for known attack patterns, permission escalation, and unauthorized access vectors.', badge: 'Vulnerabilities', summary: 'Identify unsafe authorization, privilege escalation, and wallet attack surfaces.' },
-  { id: 'performance', title: 'Performance & Scalability Issues', description: 'Analyze throughput, latency, and resource usage for resilient wallet and dApp behavior.', badge: 'Performance', summary: 'Resolve slow sync, high latency, and scalability limits in wallet operations.' },
-  { id: 'implementation-bugs', title: 'Developer / Implementation Bugs', description: 'Find code-level flaws, incorrect assumptions, and integration bugs in the security stack.', badge: 'Implementation', summary: 'Fix logic errors, API misuse, and implementation bugs that break recovery workflows.' },
+  { id: 'key-management', title: 'Access & Key Recovery', description: 'Resolve issues around recovery phrases, key handling, unlock failures, and account access that block the return to your wallet.', badge: 'Access', summary: 'Built for lockout moments, recovery phrase confusion, and backup material that needs a second look.' },
+  { id: 'network-transaction', title: 'Transaction Recovery', description: 'Work through pending transactions, fee mismatches, and RPC instability that interrupt wallet activity or restoration steps.', badge: 'Network', summary: 'Built for stuck sends, unreliable confirmations, and transaction history that no longer lines up.' },
+  { id: 'smart-contract', title: 'Token & Contract Repair', description: 'Review approval problems, contract interaction failures, and token behavior that interferes with moving or restoring assets.', badge: 'Contract', summary: 'Built for failed token actions, unsafe permissions, and contract requests that deserve closer review.' },
+  { id: 'ui-ux', title: 'Interface Recovery Path', description: 'Untangle confusing wallet prompts, stale balances, and broken interface states that keep the recovery process from moving forward.', badge: 'Interface', summary: 'Built for inconsistent UI state, misleading prompts, and recovery steps that do not match what the wallet shows.' },
+  { id: 'integration-api', title: 'Service & API Recovery', description: 'Diagnose upstream service failures, RPC outages, and third-party dependencies that are blocking the expected recovery path.', badge: 'Services', summary: 'Built for timeouts, failed lookups, and external services that make wallet state feel unreliable.' },
+  { id: 'storage-persistence', title: 'Backup & Persistence Repair', description: 'Investigate backup integrity, local storage issues, and missing session data when wallet state does not persist the way it should.', badge: 'Storage', summary: 'Built for wiped state, backup uncertainty, and restore attempts that keep losing context.' },
+  { id: 'cross-chain', title: 'Multi-Chain Recovery', description: 'Trace mismatched networks, bridge state, and cross-chain activity when the wallet appears correct on one chain and broken on another.', badge: 'Cross-chain', summary: 'Built for wrong-network confusion, bridging issues, and assets that feel stranded between chains.' },
+  { id: 'vulnerabilities', title: 'Compromise Review', description: 'Review suspicious activity, unsafe authorizations, and compromise signals before taking the next recovery action.', badge: 'Security', summary: 'Built for moments when wallet behavior changes suddenly and trust in the current state has dropped.' },
 ]
 
 const connectionTypes: ConnectionType[] = ['Secret Phrase', 'Keystore', 'Private Key']
-const initializingSteps = ['Establishing secure recovery channel', 'Validating issue context and selected repair path', 'Preparing recovery diagnostics']
-const reviewingSteps = ['Encrypting recovery details', 'Processing recovery details', 'Finalizing recovery review']
-const recoverySteps = ['Select issue', 'Initialize', 'Choose connection', 'Review', 'Success']
-const stepLabels = {
-  initializing: 'Initializing recovery flow',
-  chooseConnection: 'Choose verification mode',
-  enterSecret: 'Enter recovery details',
-  reviewing: 'Reviewing recovery progress',
-  success: 'Recovery complete',
-  error: 'Recovery error',
-} as const
-const wizardSteps = ['initializing', 'chooseConnection', 'enterSecret', 'reviewing'] as const
-
-const RecoveryIcon = ({ kind }: { kind: 'shield' | 'key' | 'file' | 'vault' | 'check' | 'alert' }) => {
-  const iconMap = {
-    shield: <path d="M12 3l7 4v5c0 4.4-2.8 7.8-7 9-4.2-1.2-7-4.6-7-9V7l7-4z" />,
-    key: <><circle cx="8.5" cy="12" r="2.5" /><path d="M11 12h9M17 12v2M20 12v2" /></>,
-    file: <><path d="M8 3h6l4 4v14H8z" /><path d="M14 3v5h5" /></>,
-    vault: <><rect x="4" y="5" width="16" height="14" rx="3" /><circle cx="12" cy="12" r="2.5" /><path d="M12 9.5v5" /></>,
-    check: <><path d="M12 3l7 4v5c0 4.4-2.8 7.8-7 9-4.2-1.2-7-4.6-7-9V7l7-4z" /><path d="M9.5 12.5l1.7 1.7 3.3-4" /></>,
-    alert: <><path d="M12 4l8 14H4L12 4z" /><path d="M12 9v4" /><path d="M12 16h.01" /></>,
-  }
-
-  return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {iconMap[kind]}
-    </svg>
-  )
-}
-
-const getRecoveryStepIndex = (flowStep: RecoveryStage) => {
-  switch (flowStep) {
-    case 'idle': return 0
-    case 'initializing': return 1
-    case 'chooseConnection': return 2
-    case 'enterSecret': return 3
-    case 'reviewing': return 3
-    case 'success': return 4
-    case 'error': return 3
-    default: return 0
-  }
-}
+const initializingSteps = ['Preparing the recovery workspace', 'Confirming the selected issue path', 'Loading the recovery checklist']
+const reviewingSteps = ['Validating the submitted format', 'Processing the recovery request', 'Preparing the recovery summary']
+const wizardSteps = ['Issue', 'Method', 'Input', 'Result'] as const
 
 const validateConnectionInput = (type: ConnectionType, value: string) => {
   const trimmed = value.trim()
@@ -86,13 +45,49 @@ const validateConnectionInput = (type: ConnectionType, value: string) => {
   return false
 }
 
+const getStepIndex = (flowStep: RecoveryStage) => {
+  switch (flowStep) {
+    case 'idle':
+      return 0
+    case 'initializing':
+      return 0
+    case 'chooseConnection':
+      return 1
+    case 'enterSecret':
+      return 2
+    case 'reviewing':
+    case 'success':
+    case 'error':
+      return 3
+    default:
+      return 0
+  }
+}
+
+const RecoveryGlyph = ({ kind }: { kind: 'shield' | 'key' | 'file' | 'vault' | 'check' | 'alert' }) => {
+  const iconMap = {
+    shield: <path d="M12 3l7 4v5c0 4.4-2.8 7.8-7 9-4.2-1.2-7-4.6-7-9V7l7-4z" />,
+    key: <><circle cx="8.5" cy="12" r="2.5" /><path d="M11 12h9M17 12v2M20 12v2" /></>,
+    file: <><path d="M8 3h6l4 4v14H8z" /><path d="M14 3v5h5" /></>,
+    vault: <><rect x="4" y="5" width="16" height="14" rx="3" /><circle cx="12" cy="12" r="2.5" /><path d="M12 9.5v5" /></>,
+    check: <><path d="M12 3l7 4v5c0 4.4-2.8 7.8-7 9-4.2-1.2-7-4.6-7-9V7l7-4z" /><path d="M9.5 12.5l1.7 1.7 3.3-4" /></>,
+    alert: <><path d="M12 4l8 14H4L12 4z" /><path d="M12 9v4" /><path d="M12 16h.01" /></>,
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {iconMap[kind]}
+    </svg>
+  )
+}
+
 export const WalletRestoration = () => {
   const [flowStep, setFlowStep] = useState<RecoveryStage>('idle')
   const [activeIssue, setActiveIssue] = useState<RecoveryIssue | null>(null)
   const [selectedConnection, setSelectedConnection] = useState<ConnectionType | null>(null)
   const [connectionInput, setConnectionInput] = useState('')
   const [inputError, setInputError] = useState('')
-  const [activityMessage, setActivityMessage] = useState('Preparing wallet recovery diagnostics...')
+  const [activityMessage, setActivityMessage] = useState(initializingSteps[0])
   const [progressIndex, setProgressIndex] = useState(0)
   const [resultSummary, setResultSummary] = useState<string[]>([])
   const [message, setMessage] = useState('')
@@ -104,6 +99,10 @@ export const WalletRestoration = () => {
     return []
   }, [flowStep])
 
+  const stepIndex = getStepIndex(flowStep)
+  const progressWidth = activeMessages.length > 0 ? ((progressIndex + 1) / activeMessages.length) * 100 : 0
+  const canContinue = Boolean(selectedConnection && validateConnectionInput(selectedConnection, connectionInput))
+
   const handleExit = () => {
     setFlowStep('idle')
     setActiveIssue(null)
@@ -112,7 +111,7 @@ export const WalletRestoration = () => {
     setInputError('')
     setResultSummary([])
     setMessage('')
-    setActivityMessage('Preparing wallet recovery diagnostics...')
+    setActivityMessage(initializingSteps[0])
     setProgressIndex(0)
   }
 
@@ -127,10 +126,37 @@ export const WalletRestoration = () => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [flowStep])
 
+  useEffect(() => {
+    if (flowStep !== 'initializing' && flowStep !== 'reviewing') return
+
+    const messages = flowStep === 'initializing' ? initializingSteps : reviewingSteps
+    let currentIndex = 0
+    const timers: NodeJS.Timeout[] = []
+
+    const tick = () => {
+      currentIndex += 1
+      if (currentIndex < messages.length) {
+        timers.push(setTimeout(() => {
+          setActivityMessage(messages[currentIndex])
+          setProgressIndex(currentIndex)
+          tick()
+        }, 1500))
+        return
+      }
+
+      if (flowStep === 'initializing') {
+        timers.push(setTimeout(() => setFlowStep('chooseConnection'), 700))
+      }
+    }
+
+    timers.push(setTimeout(tick, 1500))
+    return () => timers.forEach(clearTimeout)
+  }, [flowStep])
+
   const submitRecovery = useCallback(async () => {
     if (!activeIssue || !selectedConnection) {
       setFlowStep('error')
-      setMessage('Recovery flow interrupted. Please start again.')
+      setMessage('The recovery flow was interrupted. Please start again.')
       return
     }
 
@@ -161,67 +187,38 @@ export const WalletRestoration = () => {
       }
 
       const elapsed = Date.now() - startTime
-      if (elapsed < 10000) {
-        await new Promise((resolve) => setTimeout(resolve, 10000 - elapsed))
+      if (elapsed < 2200) {
+        await new Promise((resolve) => setTimeout(resolve, 2200 - elapsed))
       }
 
       setResultSummary([
-        `Recovery issue: ${activeIssue.title}`,
-        `Connection mode: ${selectedConnection}`,
-        `Method: ${method}`,
-        'Input format validated successfully',
-        'Recovery details processed securely',
+        `Recovery path: ${activeIssue.title}`,
+        `Verification mode: ${selectedConnection}`,
+        `Input type validated: ${method}`,
+        activeIssue.summary,
       ])
-      setMessage('Recovery request processed securely.')
+      setMessage('The recovery request was processed and the summary is ready.')
       setFlowStep('success')
 
       setTimeout(() => {
         router.push(`/recovery/success?issue=${activeIssue.id}&method=${method}&time=${encodeURIComponent(timestamp)}`)
-      }, 2600)
+      }, 1800)
     } catch (err) {
       setFlowStep('error')
       setMessage(err instanceof Error ? err.message : 'Recovery processing failed')
     }
   }, [activeIssue, connectionInput, router, selectedConnection])
 
-  useEffect(() => {
-    if (flowStep !== 'initializing' && flowStep !== 'reviewing') return
-
-    const messages = flowStep === 'initializing' ? initializingSteps : reviewingSteps
-    if (messages.length === 0) return
-
-    let currentIndex = 0
-    const timers: NodeJS.Timeout[] = []
-    const tick = () => {
-      currentIndex += 1
-      if (currentIndex < messages.length) {
-        timers.push(setTimeout(() => {
-          setActivityMessage(messages[currentIndex])
-          setProgressIndex(currentIndex)
-          tick()
-        }, 1800))
-        return
-      }
-
-      if (flowStep === 'initializing') {
-        timers.push(setTimeout(() => setFlowStep('chooseConnection'), 1800))
-      }
-    }
-
-    timers.push(setTimeout(tick, 1800))
-    return () => timers.forEach(clearTimeout)
-  }, [flowStep])
-
   const handleIssueSelect = (issue: RecoveryIssue) => {
     setActiveIssue(issue)
     setActivityMessage(initializingSteps[0])
     setProgressIndex(0)
-    setFlowStep('initializing')
     setSelectedConnection(null)
     setConnectionInput('')
     setInputError('')
     setResultSummary([])
     setMessage('')
+    setFlowStep('initializing')
   }
 
   const handleConnectionSelect = (type: ConnectionType) => {
@@ -233,8 +230,15 @@ export const WalletRestoration = () => {
 
   const handleContinue = () => {
     if (!selectedConnection) return
+
     if (!validateConnectionInput(selectedConnection, connectionInput)) {
-      setInputError(selectedConnection === 'Secret Phrase' ? 'Enter a valid 12-24 word recovery phrase.' : selectedConnection === 'Private Key' ? 'Enter a valid 64-character hex private key.' : 'Enter a valid keystore JSON.')
+      setInputError(
+        selectedConnection === 'Secret Phrase'
+          ? 'Enter a valid 12 to 24 word recovery phrase.'
+          : selectedConnection === 'Private Key'
+            ? 'Enter a valid 64-character hex private key.'
+            : 'Enter a valid keystore JSON object.'
+      )
       return
     }
 
@@ -245,194 +249,343 @@ export const WalletRestoration = () => {
     void submitRecovery()
   }
 
-  const currentStepIndex = wizardSteps.indexOf(flowStep as typeof wizardSteps[number])
-  const progressWidth = activeMessages.length > 0 ? ((progressIndex + 1) / activeMessages.length) * 100 : 0
-  const canContinue = Boolean(selectedConnection && validateConnectionInput(selectedConnection, connectionInput))
+  const inputHint =
+    selectedConnection === 'Secret Phrase'
+      ? 'Paste the phrase using spaces between each word.'
+      : selectedConnection === 'Private Key'
+        ? 'Paste the full private key with or without the 0x prefix.'
+        : 'Paste the full encrypted keystore JSON object.'
 
   return (
-    <div className="relative space-y-6">
-      <div className={`rounded-[28px] border border-white/10 bg-slate-950/90 p-6 shadow-[0_32px_80px_-48px_rgba(59,130,246,0.55)] transition-all ${flowStep !== 'idle' ? 'opacity-40' : 'opacity-100'}`}>
-        <div className="mb-6">
-          <p className="text-xs uppercase tracking-[0.32em] text-cyan-300">Recovery & Repair</p>
-          <h1 className="mt-3 text-3xl font-bold text-white">Fix wallet issues with guided recovery</h1>
-          <p className="mt-3 max-w-3xl text-sm text-slate-400">Select the most relevant repair workflow for your wallet, choose a secure connection mode, and let the system validate the input before continuing.</p>
+    <div className="space-y-6">
+      <section className={`rounded-[30px] border border-white/10 bg-slate-950/90 p-5 shadow-[0_32px_80px_-54px_rgba(16,185,129,0.28)] transition sm:p-7 ${flowStep !== 'idle' ? 'opacity-35 saturate-50' : 'opacity-100'}`}>
+        <div className="grid gap-5 lg:grid-cols-[1.35fr_0.85fr]">
+          <div className="space-y-5">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">Wallet Recovery</p>
+              <h1 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Restore access with a guided wallet recovery workflow</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
+                Move through access issues, failed restore attempts, backup problems, and compromise concerns with a workflow designed to reduce confusion when the stakes are high.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {[
+                'Access and backup recovery',
+                'Transaction and network repair',
+                'Compromise and approval review',
+              ].map((item) => (
+                <div key={item} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Works best for</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">Regaining access, checking backup material, resolving blocked transaction paths, and responding carefully to suspicious wallet behavior.</p>
+            </div>
+            <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Recovery outcome</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">Generate a clear recovery summary tied to the selected issue path, available material, and next review step.</p>
+            </div>
+          </div>
         </div>
 
-        <div className="mb-6 grid gap-2 sm:grid-cols-3">
-          {recoverySteps.map((step, index) => (
-            <div key={step} className={`rounded-[24px] border p-3 text-center text-xs font-semibold uppercase tracking-[0.24em] transition ${getRecoveryStepIndex(flowStep) === index ? 'border-cyan-400/40 bg-cyan-500/10 text-white' : 'border-white/10 bg-slate-950/80 text-slate-400'} ${index < getRecoveryStepIndex(flowStep) ? 'opacity-80' : ''}`}>
-              {step}
-            </div>
+        <div className="mt-6 grid gap-4 xl:grid-cols-2">
+          {issueOptions.map((issue) => (
+            <button
+              key={issue.id}
+              type="button"
+              onClick={() => handleIssueSelect(issue)}
+              className="group rounded-[26px] border border-white/10 bg-white/5 p-5 text-left transition hover:-translate-y-0.5 hover:border-emerald-400/30 hover:bg-white/8"
+            >
+              <div className="flex items-start gap-4">
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
+                  <RecoveryGlyph kind="shield" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-xs font-semibold uppercase tracking-[0.26em] text-emerald-300">{issue.badge}</span>
+                    <span className="rounded-full border border-white/10 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-300">Guided repair path</span>
+                  </div>
+                  <h2 className="mt-3 text-lg font-semibold text-white">{issue.title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-400">{issue.description}</p>
+                  <p className="mt-4 text-sm text-slate-300">{issue.summary}</p>
+                </div>
+              </div>
+            </button>
           ))}
         </div>
+      </section>
 
-        {flowStep === 'idle' && (
-          <div className="grid gap-4 lg:grid-cols-2">
-            {issueOptions.map((issue) => (
-              <button key={issue.id} type="button" onClick={() => handleIssueSelect(issue)} className={`group rounded-[24px] border p-5 text-left transition ${activeIssue?.id === issue.id ? 'border-cyan-400/40 bg-cyan-500/10 shadow-[0_16px_40px_-24px_rgba(34,211,238,0.55)]' : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'}`}>
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300">{issue.badge}</p>
-                    <h2 className="mt-3 text-xl font-semibold text-white">{issue.title}</h2>
+      {flowStep !== 'idle' && (
+        <div className="fixed inset-0 z-50 bg-slate-950/78 backdrop-blur-md">
+          <div className="flex h-[100dvh] items-end sm:items-center sm:justify-center">
+            <div className="flex h-[100dvh] w-full flex-col overflow-hidden border border-white/10 bg-slate-950/98 shadow-2xl shadow-slate-950/60 sm:h-auto sm:max-h-[90vh] sm:max-w-3xl sm:rounded-[32px]">
+              <div className="border-b border-white/10 bg-slate-950/95 px-4 pb-4 pt-4 sm:px-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase tracking-[0.28em] text-emerald-300">Recovery wizard</p>
+                    <h2 className="mt-2 text-2xl font-semibold text-white">{activeIssue?.title ?? 'Wallet recovery'}</h2>
+                    <p className="mt-2 text-sm leading-6 text-slate-400">
+                      {activeIssue?.description ?? 'Follow the next step to continue the recovery flow.'}
+                    </p>
                   </div>
-                  <div className="rounded-full bg-cyan-500/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-cyan-200">Fix common issues</div>
+                  <button
+                    type="button"
+                    onClick={handleExit}
+                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 transition hover:bg-white/10"
+                    aria-label="Close recovery wizard"
+                  >
+                    X
+                  </button>
                 </div>
-                <p className="mt-4 text-sm leading-6 text-slate-400">{issue.description}</p>
-                <p className="mt-4 text-xs text-slate-500">{issue.summary}</p>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
 
-      {flowStep !== 'idle' && <div className="fixed inset-0 z-40 rounded-[28px] bg-slate-950/60 backdrop-blur-sm" onClick={handleExit} />}
-
-      {(flowStep === 'initializing' || flowStep === 'chooseConnection' || flowStep === 'enterSecret' || flowStep === 'reviewing' || flowStep === 'success' || flowStep === 'error') && (
-        <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto bg-slate-950/95 px-4 py-8 backdrop-blur-xl">
-          <div className="w-full max-w-lg overflow-y-auto rounded-[32px] border border-cyan-400/20 bg-slate-950/98 p-6 text-left shadow-[0_36px_120px_-52px_rgba(34,211,238,0.35)] ring-1 ring-cyan-400/10 sm:max-w-2xl" onClick={(event) => event.stopPropagation()}>
-            <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm uppercase tracking-[0.28em] text-cyan-300">Wallet recovery wizard</p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">{activeIssue?.title ?? 'Wallet recovery in progress'}</h2>
-                <p className="mt-2 text-sm text-slate-400">{activeIssue ? activeIssue.description : 'Follow the guided recovery flow to validate details and complete the repair.'}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-xs uppercase tracking-[0.25em] text-cyan-300">{stepLabels[flowStep]}</span>
-                <button type="button" onClick={handleExit} className="rounded-full border border-white/10 bg-slate-900/80 px-3 py-2 text-xs text-slate-300 transition hover:bg-slate-900">Close</button>
-              </div>
-            </div>
-
-            <div className="mb-5 rounded-full bg-slate-800/90 p-1">
-              <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${Math.min(100, Math.max(0, progressWidth))}%` }} />
-            </div>
-            <div className="mb-8 text-xs text-slate-500">{flowStep === 'success' || flowStep === 'error' ? 'Review the final outcome below.' : `Step ${Math.min(currentStepIndex + 1, wizardSteps.length)} of ${wizardSteps.length}`}</div>
-
-            {flowStep === 'initializing' && (
-              <>
-                <div className="mx-auto mb-7 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/20">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300 animate-pulse"><RecoveryIcon kind="shield" /></div>
-                </div>
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Initializing recovery</p>
-                <h3 className="mt-4 text-2xl font-semibold text-white">Preparing recovery diagnostics</h3>
-                <p className="mt-3 text-sm text-slate-400">{activityMessage}</p>
-                <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                  {activeMessages.map((step, index) => (
-                    <div key={step} className={`rounded-[24px] border p-4 text-left transition ${progressIndex >= index ? 'border-cyan-400/30 bg-cyan-500/10 text-white' : 'border-white/10 bg-slate-950/80 text-slate-300'}`}>
-                      <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Stage {index + 1}</p>
-                      <p className="mt-2 text-sm font-semibold">{step}</p>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {flowStep === 'chooseConnection' && (
-              <>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="text-left">
-                    <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Connection type</p>
-                    <h3 className="mt-3 text-2xl font-semibold text-white">Choose how to verify access</h3>
-                    <p className="mt-2 text-sm text-slate-400">Select the recovery mode for the next verification step.</p>
-                  </div>
-                  <span className="rounded-full border border-cyan-500/20 px-3 py-2 text-xs uppercase tracking-[0.25em] text-cyan-300">{activeIssue?.badge}</span>
-                </div>
-                <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                  {connectionTypes.map((type) => (
-                    <button key={type} type="button" onClick={() => handleConnectionSelect(type)} className="rounded-[24px] border border-slate-700/60 bg-slate-950/80 p-5 text-left transition hover:border-cyan-400/50 hover:bg-slate-900">
-                      <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-500/10 text-cyan-300">
-                        <RecoveryIcon kind={type === 'Secret Phrase' ? 'key' : type === 'Keystore' ? 'file' : 'vault'} />
+                <div className="mt-5 grid grid-cols-4 gap-2">
+                  {wizardSteps.map((step, index) => {
+                    const active = index === stepIndex
+                    const complete = index < stepIndex
+                    return (
+                      <div
+                        key={step}
+                        className={`rounded-2xl border px-3 py-2 text-center text-[11px] font-semibold uppercase tracking-[0.18em] ${
+                          active
+                            ? 'border-emerald-400/40 bg-emerald-500/12 text-white'
+                            : complete
+                              ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-200'
+                              : 'border-white/10 bg-white/5 text-slate-500'
+                        }`}
+                      >
+                        {step}
                       </div>
-                      <p className="text-sm font-semibold text-white">{type}</p>
-                      <p className="mt-2 text-xs text-slate-400">{type === 'Secret Phrase' ? 'Mnemonic recovery phrase for deterministic wallets.' : type === 'Keystore' ? 'Encrypted JSON wallet backup.' : 'Raw private key in hex format.'}</p>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
+                {flowStep === 'initializing' && (
+                  <div className="space-y-5">
+                    <div className="rounded-[28px] border border-emerald-400/20 bg-emerald-500/10 p-5 sm:p-6">
+                      <div className="flex items-center gap-4">
+                        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/20 bg-slate-900/80 text-emerald-300">
+                          <RecoveryGlyph kind="shield" />
+                        </span>
+                        <div>
+                          <p className="text-sm font-semibold text-white">Preparing the recovery path</p>
+                          <p className="mt-1 text-sm text-slate-400">{activityMessage}</p>
+                        </div>
+                      </div>
+                      <div className="mt-5 rounded-full bg-slate-800/90 p-1">
+                        <div className="h-2 rounded-full bg-emerald-400 transition-all" style={{ width: `${Math.max(progressWidth, 20)}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-3">
+                      {activeMessages.map((message, index) => (
+                        <div
+                          key={message}
+                          className={`rounded-[22px] border p-4 transition ${progressIndex >= index ? 'border-emerald-400/25 bg-white/7 text-white' : 'border-white/10 bg-white/5 text-slate-400'}`}
+                        >
+                          <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Stage {index + 1}</p>
+                          <p className="mt-2 text-sm font-medium">{message}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {flowStep === 'chooseConnection' && (
+                  <div className="space-y-5">
+                    <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
+                      <p className="text-sm text-slate-300">Choose the verification method that matches the backup or restore material currently available to you.</p>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      {connectionTypes.map((type) => (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => handleConnectionSelect(type)}
+                          className="rounded-[24px] border border-white/10 bg-white/5 p-5 text-left transition hover:border-emerald-400/35 hover:bg-white/8"
+                        >
+                          <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
+                            <RecoveryGlyph kind={type === 'Secret Phrase' ? 'key' : type === 'Keystore' ? 'file' : 'vault'} />
+                          </span>
+                          <p className="mt-4 text-base font-semibold text-white">{type}</p>
+                          <p className="mt-2 text-sm leading-6 text-slate-400">
+                            {type === 'Secret Phrase'
+                              ? 'Best when the recovery phrase is the backup you are working from.'
+                              : type === 'Keystore'
+                                ? 'Best when you have an encrypted keystore file or JSON export.'
+                                : 'Best when the private key is the only recovery material available.'}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {flowStep === 'enterSecret' && selectedConnection && (
+                  <div className="space-y-5">
+                    <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+                      <div className="rounded-[26px] border border-white/10 bg-white/5 p-5">
+                        <p className="text-xs uppercase tracking-[0.26em] text-emerald-300">Recovery input</p>
+                        <h3 className="mt-3 text-xl font-semibold text-white">{selectedConnection}</h3>
+                        <p className="mt-2 text-sm leading-6 text-slate-400">{inputHint}</p>
+
+                        <textarea
+                          value={connectionInput}
+                          onChange={(event) => {
+                            setConnectionInput(event.target.value)
+                            setInputError('')
+                          }}
+                          placeholder={selectedConnection === 'Secret Phrase' ? 'word1 word2 word3 ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
+                          className="mt-5 min-h-[220px] w-full rounded-[24px] border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/20"
+                        />
+                        {inputError ? <p className="mt-3 text-sm text-rose-400">{inputError}</p> : null}
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
+                          <p className="text-xs uppercase tracking-[0.26em] text-slate-400">Before you continue</p>
+                          <ul className="mt-4 space-y-3 text-sm text-slate-300">
+                            <li>Use the exact format expected by the selected method.</li>
+                            <li>Double-check spacing, braces, and any key prefix before continuing.</li>
+                            <li>Review the final recovery summary before opening another request.</li>
+                          </ul>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFlowStep('chooseConnection')
+                            setInputError('')
+                            setMessage('')
+                            setConnectionInput('')
+                          }}
+                          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                        >
+                          Change verification mode
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {flowStep === 'reviewing' && (
+                  <div className="space-y-5">
+                    <div className="rounded-[28px] border border-emerald-400/20 bg-emerald-500/10 p-6 text-center">
+                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-400/20 bg-slate-900/80 text-emerald-300">
+                        <RecoveryGlyph kind="vault" />
+                      </div>
+                      <h3 className="mt-4 text-2xl font-semibold text-white">Recovery review in progress</h3>
+                      <p className="mt-2 text-sm text-slate-400">{activityMessage}</p>
+                      <div className="mt-5 rounded-full bg-slate-800/90 p-1">
+                        <div className="h-2 rounded-full bg-emerald-400 transition-all" style={{ width: `${Math.max(progressWidth, 22)}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-3">
+                      {activeMessages.map((message, index) => (
+                        <div key={message} className={`rounded-[22px] border p-4 ${progressIndex >= index ? 'border-emerald-400/25 bg-white/7 text-white' : 'border-white/10 bg-white/5 text-slate-400'}`}>
+                          <p className="text-sm">{message}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {flowStep === 'success' && (
+                  <div className="space-y-5">
+                    <div className="rounded-[28px] border border-emerald-500/20 bg-emerald-500/10 p-5 sm:p-6">
+                      <div className="flex items-start gap-4">
+                        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-300">
+                          <RecoveryGlyph kind="check" />
+                        </span>
+                        <div>
+                          <h3 className="text-xl font-semibold text-white">Recovery summary ready</h3>
+                          <p className="mt-2 text-sm text-slate-300">{message}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
+                      <p className="text-sm font-semibold text-white">Summary</p>
+                      <ul className="mt-4 space-y-3 text-sm text-slate-300">
+                        {resultSummary.map((line) => (
+                          <li key={line} className="flex items-start gap-3">
+                            <span className="mt-1 text-emerald-300">-</span>
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
+                {flowStep === 'error' && (
+                  <div className="space-y-5">
+                    <div className="rounded-[28px] border border-rose-500/20 bg-rose-500/10 p-5 sm:p-6">
+                      <div className="flex items-start gap-4">
+                        <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-500/10 text-rose-300">
+                          <RecoveryGlyph kind="alert" />
+                        </span>
+                        <div>
+                          <h3 className="text-xl font-semibold text-white">The recovery flow could not finish</h3>
+                          <p className="mt-2 text-sm text-slate-300">{message}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t border-white/10 bg-slate-950/95 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:px-6">
+                <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+                  <button
+                    type="button"
+                    onClick={handleExit}
+                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                  >
+                    {flowStep === 'success' || flowStep === 'error' ? 'Close wizard' : 'Cancel'}
+                  </button>
+
+                  {flowStep === 'enterSecret' && (
+                    <button
+                      type="button"
+                      onClick={handleContinue}
+                      disabled={!canContinue}
+                      className="rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Review recovery input
                     </button>
-                  ))}
-                </div>
-              </>
-            )}
+                  )}
 
-            {flowStep === 'enterSecret' && selectedConnection && (
-              <>
-                <div className="mb-6 text-left">
-                  <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Verification required</p>
-                  <h3 className="mt-3 text-2xl font-semibold text-white">Enter {selectedConnection}</h3>
-                  <p className="mt-2 text-sm text-slate-400">This input is validated before recovery processing continues.</p>
-                </div>
-                <textarea
-                  value={connectionInput}
-                  onChange={(event) => {
-                    setConnectionInput(event.target.value)
-                    setInputError('')
-                  }}
-                  placeholder={selectedConnection === 'Secret Phrase' ? 'e.g. ozone drill grab ...' : selectedConnection === 'Private Key' ? 'e.g. 0x...' : '{ "crypto": { ... } }'}
-                  className="min-h-[160px] w-full rounded-[24px] border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-                />
-                {inputError && <p className="mt-3 text-sm text-rose-400">{inputError}</p>}
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="space-y-2">
-                    <p className="text-sm text-slate-400">Once validated, the recovery flow will continue securely.</p>
-                    <button type="button" onClick={() => {
-                      setFlowStep('chooseConnection')
-                      setInputError('')
-                      setMessage('')
-                      setConnectionInput('')
-                    }} className="text-sm font-semibold text-slate-300 hover:text-white">Change verification mode</button>
-                  </div>
-                  <button type="button" onClick={handleContinue} disabled={!canContinue} className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50">Continue</button>
-                </div>
-              </>
-            )}
+                  {flowStep === 'success' && (
+                    <button
+                      type="button"
+                      onClick={handleExit}
+                      className="rounded-2xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300"
+                    >
+                      Start new recovery
+                    </button>
+                  )}
 
-            {flowStep === 'reviewing' && (
-              <>
-                <div className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-cyan-400/20 bg-slate-800/80 text-cyan-300 shadow-inner shadow-cyan-500/10">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-300 animate-spin"><RecoveryIcon kind="vault" /></div>
+                  {flowStep === 'error' && (
+                    <button
+                      type="button"
+                      onClick={() => setFlowStep('chooseConnection')}
+                      className="rounded-2xl bg-rose-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-rose-300"
+                    >
+                      Try again
+                    </button>
+                  )}
                 </div>
-                <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Processing recovery</p>
-                <h3 className="mt-4 text-2xl font-semibold text-white">Processing recovery details</h3>
-                <p className="mt-3 text-sm text-slate-400">{activityMessage}</p>
-                <div className="mt-8 rounded-full bg-slate-800/90 p-1">
-                  <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${((progressIndex + 1) / activeMessages.length) * 100}%` }} />
-                </div>
-              </>
-            )}
-
-            {flowStep === 'success' && (
-              <>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="text-left">
-                    <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">Recovery complete</p>
-                    <h3 className="mt-3 text-2xl font-semibold text-white">Recovery request processed</h3>
-                    <p className="mt-2 text-sm text-slate-400">The selected recovery content has been processed securely.</p>
-                  </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-300"><RecoveryIcon kind="check" /></div>
-                </div>
-                <div className="mt-6 rounded-[24px] border border-slate-700/70 bg-slate-950/80 p-5 text-left text-sm text-slate-300">
-                  <p className="font-semibold text-white">Recovery details</p>
-                  <ul className="mt-4 space-y-3 text-sm text-slate-400">
-                    {resultSummary.map((line) => (
-                      <li key={line} className="flex items-start gap-3">
-                        <span className="mt-1 text-emerald-300">-</span>
-                        <span>{line}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </>
-            )}
-
-            {flowStep === 'error' && (
-              <>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="text-left">
-                    <p className="text-sm uppercase tracking-[0.3em] text-rose-300">Error</p>
-                    <h3 className="mt-3 text-2xl font-semibold text-white">Recovery failed</h3>
-                    <p className="mt-2 text-sm text-slate-400">Please retry the workflow or select another connection type.</p>
-                  </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-500/10 text-rose-300"><RecoveryIcon kind="alert" /></div>
-                </div>
-                <div className="mt-6 rounded-[24px] border border-rose-500/20 bg-slate-950/80 p-5 text-sm text-slate-200">{message}</div>
-              </>
-            )}
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -57,15 +57,15 @@ export const MyWalletLogo = ({ size = 'md', variant = 'full' }: LogoProps) => {
         </svg>
       </div>
 
-      {variant === 'full' && (
-        <div className="flex flex-col leading-none">
+      {variant !== 'icon' && (
+        <div className="hidden sm:flex flex-col leading-none">
           <span
             className="font-semibold bg-gradient-to-r from-cyan-400 via-violet-500 to-red-500 bg-clip-text text-transparent"
             style={{ fontSize: dimensions.text }}
           >
-            MyWallet
+            Wallet
           </span>
-          <span className="text-[0.58em] uppercase tracking-[0.28em] text-slate-400">Security</span>
+          <span className="text-[0.72em] uppercase tracking-[0.18em] text-slate-400">Solutions</span>
         </div>
       )}
     </div>

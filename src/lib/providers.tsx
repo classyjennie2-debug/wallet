@@ -22,8 +22,8 @@ function createQueryClient() {
   })
 }
 
-const APP_NAME = 'MyWallet.Help'
-const APP_DESCRIPTION = 'Wallet recovery, diagnostics, and portfolio dashboard'
+const APP_NAME = 'MyWallet Security'
+const APP_DESCRIPTION = 'Wallet recovery, approval reviews, and security diagnostics for self-custody users'
 const APP_URL = 'https://mywallet.help'
 const WALLETCONNECT_RELAY_URL = 'wss://relay.walletconnect.com'
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID

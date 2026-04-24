@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { MyWalletLogo } from './logo'
 import { Web3WalletConnector } from './web3-wallet-connector'
 
 const features = [
@@ -55,13 +56,8 @@ export const LandingPageV2 = () => {
         <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 shadow-xl shadow-slate-950/40 backdrop-blur-xl">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div className="flex items-center gap-3">
-              <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500 to-slate-900 text-sm font-bold text-white shadow-lg shadow-cyan-500/10">
-                MW
-                <div className="absolute inset-0 -z-10 rounded-2xl bg-cyan-400/10 blur-xl" />
-              </div>
-              <div className="flex flex-col">
-                <div className="text-lg font-bold text-white">MyWallet.Help</div>
-                <div className="text-xs font-medium text-slate-400">Recovery, audit, and wallet control</div>
+              <div className="rounded-[22px] border border-cyan-400/20 bg-slate-950/70 px-3 py-2 shadow-lg shadow-cyan-500/10">
+                <MyWalletLogo size="md" variant="full" />
               </div>
             </div>
 
@@ -89,18 +85,18 @@ export const LandingPageV2 = () => {
 
                 <div className="space-y-4">
                   <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl md:text-6xl">
-                    A premium wallet recovery experience for secure, self-sovereign finance.
+                    Clarity and control for the moments your wallet matters most.
                   </h1>
                   <p className="max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                    Instant wallet diagnostics, token risk scoring, and approval hygiene in a polished dashboard that feels alive and trusted. Mobile-first, interactive, and built for active crypto users.
+                    MyWallet Security helps you review approvals, investigate wallet risk, and work through recovery steps in one calm, security-first workspace built for real self-custody decisions.
                   </p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   {[
                     'Non-custodial by design',
-                    'Private keys stay with the user',
-                    'Focused on recovery and wallet hygiene',
+                    'Private keys stay under your control',
+                    'Recovery and wallet hygiene in one place',
                   ].map((item) => (
                     <div key={item} className="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200">
                       {item}
@@ -143,8 +139,8 @@ export const LandingPageV2 = () => {
                 <div className="relative z-10 space-y-6">
                   <div className="rounded-[28px] border border-white/10 bg-slate-900/90 p-5 shadow-[0_20px_80px_-60px_rgba(56,189,248,0.45)] transition hover:-translate-y-1">
                     <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Product principle</p>
-                    <h3 className="mt-3 text-2xl font-semibold text-white">Security cues that earn trust</h3>
-                    <p className="mt-2 text-sm text-slate-400">Designed to explain what the app does, what it checks, and what it never takes custody of.</p>
+                    <h3 className="mt-3 text-2xl font-semibold text-white">Guidance that stays clear under pressure</h3>
+                    <p className="mt-2 text-sm text-slate-400">Built to help users understand what is being reviewed, what action is safe to take next, and where risk is still present.</p>
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
                     {[
@@ -168,7 +164,7 @@ export const LandingPageV2 = () => {
                 <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Built on clear principles</p>
                 <h2 className="mt-3 text-3xl font-semibold text-white">Trust signals that are easier to verify than marketing claims</h2>
               </div>
-              <div className="hidden rounded-full bg-slate-900/80 px-4 py-2 text-sm text-slate-400 sm:block">Clear language beats inflated proof points</div>
+              <div className="hidden rounded-full bg-slate-900/80 px-4 py-2 text-sm text-slate-400 sm:block">Built to communicate risk, not just style</div>
             </div>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-4">
@@ -186,7 +182,7 @@ export const LandingPageV2 = () => {
           <section className="space-y-6 px-4 sm:px-0">
             <div className="space-y-2 text-center">
               <h2 className="text-3xl font-bold text-white sm:text-4xl">Focused on Recovery & Safety</h2>
-              <p className="mx-auto max-w-2xl text-slate-400">Tools built specifically to diagnose, recover, and secure wallets with nothing extra to distract you.</p>
+              <p className="mx-auto max-w-2xl text-slate-400">Every section is designed to help you understand wallet state quickly, act with confidence, and avoid unnecessary exposure.</p>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -216,7 +212,10 @@ export const LandingPageV2 = () => {
 
         <footer className="border-t border-white/10 bg-slate-950/90 backdrop-blur-xl">
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-4 py-10 text-sm text-slate-400 md:flex-row sm:px-6">
-            <div>{`MyWallet.Help © ${currentYear} | Self-Sovereign Finance`}</div>
+            <div className="flex items-center gap-3">
+              <MyWalletLogo size="sm" variant="full" />
+              <div>{`Copyright ${currentYear} | Self-sovereign wallet security`}</div>
+            </div>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link href="/privacy" className="transition hover:text-cyan-300">Privacy</Link>
               <Link href="/terms" className="transition hover:text-cyan-300">Terms</Link>

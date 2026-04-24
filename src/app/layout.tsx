@@ -5,14 +5,14 @@ import { Providers } from "@/lib/providers";
 import { MobileWalletHelper } from "@/components/mobile-wallet-helper";
 
 export const metadata: Metadata = {
-  title: "MyWallet.Help - Fix Your Wallet Issues",
-  description: "Professional wallet recovery and issue resolution platform. Detect dead coins, fix transaction errors, and manage your crypto safely.",
-  keywords: "wallet help, crypto recovery, dead coin detector, blockchain support",
+  title: "MyWallet Security - Wallet Recovery, Review, and Risk Clarity",
+  description: "Review wallet risk, inspect approvals, and move through recovery steps with clear guidance built for self-custody users.",
+  keywords: "wallet security, wallet recovery, crypto approvals, self-custody, wallet diagnostics",
   openGraph: {
-    title: "MyWallet.Help - Crypto Wallet Issues Fixed",
-    description: "Fix wallet issues, recover funds, and manage your cryptocurrency portfolio safely",
+    title: "MyWallet Security - Wallet Recovery, Review, and Risk Clarity",
+    description: "A security-first workspace for wallet recovery, approval reviews, and safer self-custody decisions.",
     url: "https://mywallet.help",
-    siteName: "MyWallet.Help",
+    siteName: "MyWallet Security",
   },
 };
 

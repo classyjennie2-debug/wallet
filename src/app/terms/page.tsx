@@ -1,13 +1,14 @@
 import React from 'react'
+import { MyWalletLogo } from '@/components/logo'
 
 const sections = [
   {
     title: 'Agreement to Terms',
-    body: 'By accessing and using MyWallet.Help, you accept and agree to be bound by these terms. If you do not agree, please do not use the service.',
+    body: 'By accessing and using MyWallet Security, you accept and agree to be bound by these terms. If you do not agree, please do not use the service.',
   },
   {
     title: 'Use License',
-    body: 'Permission is granted to temporarily view one copy of the materials on MyWallet.Help for personal, non-commercial use only.',
+    body: 'Permission is granted to temporarily view one copy of the materials on MyWallet Security for personal, non-commercial use only.',
     items: [
       'Do not modify or copy the materials for redistribution.',
       'Do not use the materials for commercial or public display.',
@@ -18,19 +19,19 @@ const sections = [
   },
   {
     title: 'Disclaimer',
-    body: 'The materials on MyWallet.Help are provided on an as-is basis without warranties of any kind, express or implied.',
+    body: 'The materials on MyWallet Security are provided on an as-is basis without warranties of any kind, express or implied.',
   },
   {
     title: 'Limitations of Liability',
-    body: 'MyWallet.Help and its suppliers are not liable for losses arising from the use or inability to use the service, including trading losses, incorrect price data, outages, or corrupted wallet information.',
+    body: 'MyWallet Security and its suppliers are not liable for losses arising from the use or inability to use the service, including trading losses, incorrect price data, outages, or corrupted wallet information.',
   },
   {
     title: 'Materials and Content',
-    body: 'You are responsible for protecting your wallet private keys, seed phrases, and authentication credentials. MyWallet.Help is not liable for unauthorized access to your wallet or accounts.',
+    body: 'You are responsible for protecting your wallet private keys, seed phrases, and authentication credentials. MyWallet Security is not liable for unauthorized access to your wallet or accounts.',
   },
   {
     title: 'Not Financial Advice',
-    body: 'MyWallet.Help provides tools and information for cryptocurrency management. It does not provide financial, investment, or legal advice.',
+    body: 'MyWallet Security provides tools and information for cryptocurrency management. It does not provide financial, investment, or legal advice.',
   },
   {
     title: 'Questions',
@@ -44,6 +45,9 @@ export default function Terms() {
       <section className="border-b border-white/10 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.14),_transparent_44%)]">
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="max-w-3xl space-y-5">
+            <div className="inline-flex rounded-[22px] border border-white/10 bg-slate-950/60 px-3 py-2">
+              <MyWalletLogo size="md" variant="full" />
+            </div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-300">Terms</p>
             <h1 className="text-4xl font-semibold text-white sm:text-5xl">Straightforward terms for using the workspace.</h1>
             <p className="text-base text-slate-400">Last updated: January 2024</p>

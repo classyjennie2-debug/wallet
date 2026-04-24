@@ -1,0 +1,22 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shieldGradient" x1="6" y1="6" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#06B6D4" />
+      <stop offset="60%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#EF4444" />
+    </linearGradient>
+    <linearGradient id="walletGradient" x1="16" y1="18" x2="38" y2="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0EA5A4" />
+      <stop offset="100%" stop-color="#22C55E" />
+    </linearGradient>
+  </defs>
+  <path d="M32 6C39.2 10.6 50 13 50 21C50 34 41.2 43 32 47C22.8 43 14 34 14 21C14 13 24.8 10.6 32 6Z" fill="url(#shieldGradient)" />
+  <g transform="translate(10 18)">
+    <rect x="4" y="6" width="40" height="22" rx="6" fill="#0F172A" fill-opacity="0.12" />
+    <rect x="2" y="0" width="36" height="18" rx="5" fill="white" fill-opacity="0.08" />
+    <rect x="6" y="8" width="26" height="12" rx="4" fill="url(#walletGradient)" />
+    <circle cx="34" cy="14" r="5.2" fill="#0F172A" fill-opacity="0.16" />
+    <path d="M10 14H24" stroke="white" stroke-width="1.8" stroke-linecap="round" />
+  </g>
+  <path d="M22 34L28 40L42 22" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
