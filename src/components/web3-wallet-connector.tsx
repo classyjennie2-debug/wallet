@@ -27,7 +27,7 @@ export function Web3WalletConnector() {
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
         const [showMobileHint, setShowMobileHint] = useState(false)
-        const connected = mounted && account && chain
+        const connected = Boolean(mounted && account && chain)
         const addressLabel = account?.address ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}` : 'Wallet'
 
         const mobileButton =
@@ -64,7 +64,7 @@ export function Web3WalletConnector() {
         if (!connected) {
           return (
             <div className="relative">
-              <AutoOpenMobileConnect mounted={mounted} connected={connected} openConnectModal={openConnectModal} />
+              <AutoOpenMobileConnect mounted={Boolean(mounted)} connected={connected} openConnectModal={openConnectModal} />
               <button type="button" onClick={handleConnectClick} className={mobileButton}>
                 Connect Wallet
               </button>
