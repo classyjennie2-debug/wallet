@@ -5,7 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useConnect } from 'wagmi'
 
 export function Web3WalletConnector() {
-  const { connectors, connect } = useConnect()
+  const { connectors, connectAsync } = useConnect()
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
@@ -35,7 +35,7 @@ export function Web3WalletConnector() {
             )
 
             if (walletConnectConnector) {
-              void connect({ connector: walletConnectConnector }).catch(() => {
+              void connectAsync({ connector: walletConnectConnector }).catch(() => {
                 openConnectModal()
               })
               return
