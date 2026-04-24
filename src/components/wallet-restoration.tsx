@@ -212,10 +212,6 @@ export const WalletRestoration = () => {
       ])
       setMessage('The remediation request was processed and the summary is ready.')
       setFlowStep('success')
-
-      setTimeout(() => {
-        router.push(`/solutions/success?issue=${activeIssue.id}&method=${method}&time=${encodeURIComponent(timestamp)}`)
-      }, 2600)
     } catch (err) {
       setFlowStep('error')
       setMessage(err instanceof Error ? err.message : 'Recovery processing failed')
