@@ -9,7 +9,6 @@ export function Web3WalletConnector() {
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
-        const [showMobileHint, setShowMobileHint] = useState(false)
         const walletReady = mounted && account && chain
         const addressLabel = account?.address ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}` : 'Wallet'
 
@@ -31,19 +30,16 @@ export function Web3WalletConnector() {
           const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
 
           if (mobileBrowser && !hasInjectedWallet) {
-            const walletConnectConnector = connectors.find(
-              (connector) =>
-                connector.id === 'walletConnect' || connector.id === 'walletConnectLegacy' || connector.name?.toLowerCase().includes('walletconnect')
+            const walletConnectConnector = connectors.find((connector) =>
+              connector.name?.toLowerCase().includes('walletconnect')
             )
 
-            if (walletConnectConnector?.ready) {
-              void connect({ connector: walletConnectConnector })
+            if (walletConnectConnector) {
+              void connect({ connector: walletConnectConnector }).catch(() => {
+                openConnectModal()
+              })
               return
             }
-
-            setShowMobileHint(true)
-            setTimeout(() => setShowMobileHint(false), 2400)
-            return
           }
 
           void openConnectModal()
@@ -65,11 +61,6 @@ export function Web3WalletConnector() {
               <button type="button" onClick={handleConnectClick} className={mobileButton}>
                 Connect Wallet
               </button>
-              {showMobileHint && (
-                <div className="pointer-events-none fixed bottom-24 left-1/2 z-50 max-w-xs -translate-x-1/2 rounded-lg bg-slate-900/95 px-4 py-2 text-sm text-white shadow-lg">
-                  No injected mobile wallet found — choose "WalletConnect" in the modal to connect.
-                </div>
-              )}
             </div>
           )
         }

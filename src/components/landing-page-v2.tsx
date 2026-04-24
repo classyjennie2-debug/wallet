@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAccount } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { MyWalletLogo } from './logo'
 import { Web3WalletConnector } from './web3-wallet-connector'
@@ -23,13 +24,34 @@ const principles = [
 export const LandingPageV2 = () => {
   const router = useRouter()
   const { isConnected } = useAccount()
+  const { connect, connectors } = useConnect()
   const { openConnectModal } = useConnectModal()
   const currentYear = new Date().getFullYear()
 
-  const handleLaunch = () => {
+  const isMobileBrowser = useMemo(() => {
+    if (typeof navigator === 'undefined') return false
+    return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)
+  }, [])
+
+  const handleLaunch = async () => {
     if (isConnected) {
       router.replace('/')
       return
+    }
+
+    const mobileBrowser = isMobileBrowser && typeof window !== 'undefined'
+    const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
+
+    if (mobileBrowser && !hasInjectedWallet) {
+      const walletConnectConnector = connectors.find((connector) => connector.name?.toLowerCase().includes('walletconnect'))
+      if (walletConnectConnector?.ready) {
+        try {
+          await connect({ connector: walletConnectConnector })
+          return
+        } catch {
+          // fall back to the standard modal if WalletConnect fails
+        }
+      }
     }
 
     openConnectModal?.()
@@ -68,8 +90,8 @@ export const LandingPageV2 = () => {
 
         <section className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-20 sm:px-6 sm:py-24">
           <div className="rounded-[32px] border border-white/10 bg-slate-950/90 p-8 shadow-[0_40px_120px_-70px_rgba(14,165,233,0.8)] sm:p-12">
-            <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-              <div className="space-y-8">
+            <div className="grid gap-8 xl:grid-cols-[1.2fr_0.8fr] lg:items-center">
+              <div className="space-y-8 min-w-0">
                 <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-cyan-200 shadow-sm shadow-cyan-500/10">
                   <span className="h-2 w-2 rounded-full bg-cyan-300 animate-pulse" />
                   Security-first wallet recovery
@@ -103,23 +125,23 @@ export const LandingPageV2 = () => {
                     'Read-only risk checks',
                     'Private data stays on device',
                   ].map((item) => (
-                    <div key={item} className="rounded-3xl bg-slate-950/80 px-4 py-3 text-slate-200">
+                    <div key={item} className="rounded-3xl bg-slate-950/80 px-4 py-3 text-slate-200 min-w-0">
                       {item}
                     </div>
                   ))}
                 </div>
 
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <button
                     type="button"
                     onClick={handleLaunch}
-                    className="inline-flex items-center justify-center rounded-3xl bg-gradient-to-r from-cyan-500 to-sky-500 px-8 py-3 text-base font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:shadow-xl"
+                    className="inline-flex w-full items-center justify-center rounded-3xl bg-gradient-to-r from-cyan-500 to-sky-500 px-8 py-3 text-base font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:shadow-xl sm:w-auto"
                   >
                     Start wallet review
                   </button>
                   <Link
                     href="/privacy"
-                    className="inline-flex items-center justify-center rounded-3xl border border-white/10 bg-white/5 px-8 py-3 text-base font-semibold text-white transition hover:border-cyan-300 hover:bg-white/10"
+                    className="inline-flex w-full items-center justify-center rounded-3xl border border-white/10 bg-white/5 px-8 py-3 text-base font-semibold text-white transition hover:border-cyan-300 hover:bg-white/10 sm:w-auto"
                   >
                     Read privacy guide
                   </Link>
