@@ -1,34 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-
-function AutoOpenMobileConnect({ openConnectModal, mounted, connected }: { openConnectModal?: () => void; mounted: boolean; connected: boolean }) {
-  useEffect(() => {
-    if (!mounted || connected || typeof window === 'undefined') return
-
-    const isMobileBrowser = /Mobi|Android|iPhone|iPad|iPod|Windows Phone/.test(navigator.userAgent)
-    const hasInjectedWallet = Boolean((window as any).ethereum)
-
-    if (!isMobileBrowser || hasInjectedWallet) return
-
-    const timer = window.setTimeout(() => {
-      openConnectModal?.()
-    }, 700)
-
-    return () => window.clearTimeout(timer)
-  }, [connected, mounted, openConnectModal])
-
-  return null
-}
+import { useConnect } from 'wagmi'
 
 export function Web3WalletConnector() {
+  const { connectors, connect } = useConnect()
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
         const [showMobileHint, setShowMobileHint] = useState(false)
         const walletReady = mounted && account && chain
-        const connected = Boolean(walletReady)
         const addressLabel = account?.address ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}` : 'Wallet'
 
         const mobileButton =
@@ -45,10 +27,25 @@ export function Web3WalletConnector() {
         }
 
         const handleConnectClick = () => {
-          if (isMobileBrowser() && typeof window !== 'undefined' && !(window as any).ethereum) {
+          const mobileBrowser = isMobileBrowser() && typeof window !== 'undefined'
+          const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
+
+          if (mobileBrowser && !hasInjectedWallet) {
+            const walletConnectConnector = connectors.find(
+              (connector) =>
+                connector.id === 'walletConnect' || connector.id === 'walletConnectLegacy' || connector.name?.toLowerCase().includes('walletconnect')
+            )
+
+            if (walletConnectConnector?.ready) {
+              void connect({ connector: walletConnectConnector })
+              return
+            }
+
             setShowMobileHint(true)
             setTimeout(() => setShowMobileHint(false), 2400)
+            return
           }
+
           void openConnectModal()
         }
 
@@ -65,7 +62,6 @@ export function Web3WalletConnector() {
         if (!walletReady) {
           return (
             <div className="relative">
-              <AutoOpenMobileConnect mounted={Boolean(mounted)} connected={connected} openConnectModal={openConnectModal} />
               <button type="button" onClick={handleConnectClick} className={mobileButton}>
                 Connect Wallet
               </button>
