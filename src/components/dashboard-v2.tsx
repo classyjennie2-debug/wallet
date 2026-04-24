@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useErrorHandler } from '@/lib/error-handler'
 
-type Tab = 'dashboard' | 'alerts' | 'security' | 'recovery'
+type Tab = 'dashboard' | 'alerts' | 'security' | 'solutions'
 
 interface DashboardV2Props {
   onNavigate?: (tab: Tab) => void
