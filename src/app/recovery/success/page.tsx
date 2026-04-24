@@ -5,53 +5,74 @@ interface Props {
 }
 
 export default function RecoverySuccess({ searchParams }: Props) {
-  const method = searchParams?.method || 'unknown'
-  const time = searchParams?.time || new Date().toISOString()
+  const method = searchParams?.method || 'Recovery verification'
+  const time = searchParams?.time ? new Date(searchParams.time) : new Date()
+  const processedAt = Number.isNaN(time.getTime()) ? 'Unknown time' : time.toLocaleString()
 
   return (
-    <main className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-      <div className="max-w-3xl w-full bg-gradient-to-b from-slate-900/60 to-slate-900/80 border border-purple-800/40 rounded-2xl p-8 shadow-2xl">
-        <div className="flex items-center gap-4">
-          <div className="rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 p-3 shadow-lg">
-            <span className="text-white text-2xl">OK</span>
+    <main className="min-h-screen bg-slate-950 py-10 px-4 sm:px-6">
+      <div className="mx-auto w-full max-w-3xl rounded-[32px] border border-white/10 bg-slate-900/95 p-6 shadow-[0_40px_120px_-60px_rgba(14,165,233,0.6)] sm:p-10">
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_auto] lg:items-center">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-3 rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-200 shadow-sm shadow-emerald-500/10">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-slate-950">✓</span>
+              Recovery complete
+            </div>
+            <div>
+              <h1 className="text-3xl font-semibold text-white sm:text-4xl">Recovery request received</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+                Your recovery request is processed securely. No private keys were stored, and the validation summary is ready for your next step.
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">Recovery Processed</h1>
-            <p className="text-sm text-slate-300 mt-1">Your restoration request was processed and the review summary is ready.</p>
+
+          <div className="rounded-[28px] border border-white/10 bg-slate-950/80 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Result</p>
+                <p className="mt-2 text-lg font-semibold text-white">Validated</p>
+              </div>
+              <div className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-200">Success</div>
+            </div>
+            <div className="mt-5 space-y-3 text-sm text-slate-300">
+              <div className="rounded-2xl bg-slate-900/90 p-4">
+                <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500">Method</p>
+                <p className="mt-2 font-medium text-white">{method}</p>
+              </div>
+              <div className="rounded-2xl bg-slate-900/90 p-4">
+                <p className="text-[11px] uppercase tracking-[0.3em] text-slate-500">Processed</p>
+                <p className="mt-2 font-medium text-white">{processedAt}</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        <section className="mt-6 bg-slate-900/40 border border-white/5 rounded-lg p-4">
-          <h2 className="text-lg font-semibold text-white">Audit Summary</h2>
-          <ul className="mt-3 space-y-2 text-sm text-slate-300">
-            <li><strong>Method:</strong> {method}</li>
-            <li><strong>Processed at:</strong> {new Date(time).toLocaleString()}</li>
-            <li><strong>Status:</strong> complete</li>
-          </ul>
-        </section>
-
-        <section className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 bg-gradient-to-br from-white/2 to-white/1 border border-white/5 rounded-lg">
-            <h3 className="text-sm font-semibold text-white">What we checked</h3>
-            <ul className="mt-2 text-xs text-slate-300 space-y-1">
-              <li>- Format validation (seed / keystore)</li>
-              <li>- Entropy and word-count checks</li>
-              <li>- Keystore JSON structure</li>
+        <section className="mt-8 grid gap-4 lg:grid-cols-2">
+          <div className="rounded-[28px] border border-white/10 bg-slate-950/80 p-5 shadow-[0_20px_60px_-30px_rgba(14,165,233,0.2)]">
+            <h2 className="text-base font-semibold text-white">What was verified</h2>
+            <ul className="mt-4 space-y-3 text-sm text-slate-300">
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-3">Seed phrase or key input format.</li>
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-3">Backup material structure and entropy.</li>
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-3">No sensitive data stored after validation.</li>
             </ul>
           </div>
-          <div className="p-4 bg-gradient-to-br from-white/2 to-white/1 border border-white/5 rounded-lg">
-            <h3 className="text-sm font-semibold text-white">Next steps</h3>
-            <ul className="mt-2 text-xs text-slate-300 space-y-1">
-              <li>- Review the validated summary</li>
-              <li>- Retry with a different method if needed</li>
-              <li>- Return to the dashboard to continue</li>
+          <div className="rounded-[28px] border border-white/10 bg-slate-950/80 p-5 shadow-[0_20px_60px_-30px_rgba(14,165,233,0.12)]">
+            <h2 className="text-base font-semibold text-white">Ready for next steps</h2>
+            <ul className="mt-4 space-y-3 text-sm text-slate-300">
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-3">Go back to the dashboard and continue wallet review.</li>
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-3">Try a different recovery method if you need a second pass.</li>
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-3">Check alerts and approvals before making new changes.</li>
             </ul>
           </div>
         </section>
 
-        <div className="mt-6 flex justify-between items-center">
-          <Link href="/" className="text-xs text-slate-300 hover:text-white">Back to Dashboard</Link>
-          <Link href="/" className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm">Done</Link>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Link href="/" className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
+            Back to dashboard
+          </Link>
+          <Link href="/" className="inline-flex items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">
+            Continue wallet review
+          </Link>
         </div>
       </div>
     </main>
