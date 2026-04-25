@@ -64,26 +64,25 @@ export const LandingPageV2 = () => {
 
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-xl shadow-slate-200/40 backdrop-blur-xl">
-          <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <div className="flex items-center gap-3">
-              <div className="rounded-[22px] border border-cyan-200/70 bg-white px-3 py-2 shadow-sm shadow-slate-200/60">
-                <MyWalletLogo size="md" variant="full" />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <nav className="flex flex-wrap items-center justify-center gap-3 text-sm text-slate-600 sm:justify-end">
-                <Link href="/about" className="transition hover:text-cyan-600">About</Link>
-                <Link href="/help" className="transition hover:text-cyan-600">Guide</Link>
-                <Link href="/privacy" className="transition hover:text-cyan-600">Privacy</Link>
-              </nav>
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
+                <div className="rounded-[22px] border border-cyan-200/70 bg-white px-3 py-2 shadow-sm shadow-slate-200/60">
+                  <MyWalletLogo size="md" variant="full" />
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
                 <ThemeToggle />
-                <div className="w-full sm:w-auto">
+                <div className="min-w-0 w-full sm:w-auto">
                   <Web3WalletConnector />
                 </div>
               </div>
             </div>
+            <nav className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-600 sm:justify-end sm:text-sm">
+              <Link href="/about" className="transition hover:text-cyan-600">About</Link>
+              <Link href="/help" className="transition hover:text-cyan-600">Guide</Link>
+              <Link href="/privacy" className="transition hover:text-cyan-600">Privacy</Link>
+            </nav>
           </div>
         </header>
 
@@ -177,10 +176,10 @@ export const LandingPageV2 = () => {
                   </div>
 
                   <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-5 shadow-sm">
-                    <div className="mb-5 flex items-center justify-between gap-4">
-                      <div>
+                    <div className="mb-5 flex flex-col gap-3 rounded-3xl bg-white px-4 py-3 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                      <div className="min-w-0">
                         <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Connected wallet</p>
-                        <p className="mt-2 text-lg font-semibold text-slate-950">0xA3...F1D2</p>
+                        <p className="mt-2 truncate text-lg font-semibold text-slate-950">0xA3...F1D2</p>
                       </div>
                       <div className="rounded-3xl bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-700 shadow-sm">High trust</div>
                     </div>
@@ -201,32 +200,24 @@ export const LandingPageV2 = () => {
                     </div>
 
                     <div className="mt-5 rounded-[24px] border border-slate-200 bg-white p-4">
-                      <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-slate-500">
+                      <div className="flex flex-col gap-2 text-xs uppercase tracking-[0.24em] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
                         <span>Approval review</span>
                         <span className="text-slate-400">3 flagged</span>
                       </div>
-                      <div className="mt-4 space-y-3">
-                        <div className="flex items-center justify-between rounded-2xl bg-slate-50 px-3 py-3 text-sm text-slate-700">
-                          <div>
-                            <p className="font-semibold">Unusual permit</p>
-                            <p className="text-xs text-slate-500">0x8F…B2 approved</p>
+                      <div className="mt-4 grid gap-3">
+                        {[
+                          { title: 'Unusual permit', subtitle: '0x8F…B2 approved', tone: 'bg-orange-100 text-orange-700', label: 'Review' },
+                          { title: 'Cross-chain spend', subtitle: 'Stable token access', tone: 'bg-emerald-100 text-emerald-700', label: 'Safe' },
+                          { title: 'Recovery path', subtitle: '2-step readiness', tone: 'bg-sky-100 text-sky-700', label: 'Verified' },
+                        ].map((item) => (
+                          <div key={item.title} className="flex flex-col gap-2 rounded-2xl bg-slate-50 px-3 py-3 text-sm text-slate-700 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="min-w-0">
+                              <p className="font-semibold truncate">{item.title}</p>
+                              <p className="text-xs text-slate-500">{item.subtitle}</p>
+                            </div>
+                            <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${item.tone}`}>{item.label}</span>
                           </div>
-                          <span className="rounded-full bg-orange-100 px-2 py-1 text-[11px] font-semibold text-orange-700">Review</span>
-                        </div>
-                        <div className="flex items-center justify-between rounded-2xl bg-slate-50 px-3 py-3 text-sm text-slate-700">
-                          <div>
-                            <p className="font-semibold">Cross-chain spend</p>
-                            <p className="text-xs text-slate-500">Stable token access</p>
-                          </div>
-                          <span className="rounded-full bg-emerald-100 px-2 py-1 text-[11px] font-semibold text-emerald-700">Safe</span>
-                        </div>
-                        <div className="flex items-center justify-between rounded-2xl bg-slate-50 px-3 py-3 text-sm text-slate-700">
-                          <div>
-                            <p className="font-semibold">Recovery path</p>
-                            <p className="text-xs text-slate-500">2-step readiness</p>
-                          </div>
-                          <span className="rounded-full bg-sky-100 px-2 py-1 text-[11px] font-semibold text-sky-700">Verified</span>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>

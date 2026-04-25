@@ -31,7 +31,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={nextLabel}
-      className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold transition shadow-sm ${
+      className={`inline-flex items-center justify-center gap-2 rounded-full border px-2.5 py-2 text-xs font-semibold transition shadow-sm min-h-[38px] ${
         theme === 'dark'
           ? 'border-slate-700 bg-slate-950 text-slate-100 hover:bg-slate-900'
           : 'border-slate-200 bg-white text-slate-900 hover:bg-slate-50'

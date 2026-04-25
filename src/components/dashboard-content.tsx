@@ -126,9 +126,9 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 shadow-2xl backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-3 py-3 sm:px-4 sm:py-3">
-            <div className="flex items-start justify-between gap-3 sm:items-center">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-3">
                   <MyWalletLogo size="md" variant="full" />
                   <div className="min-w-0">
                       <p className="hidden text-[11px] text-slate-400 md:block">Local wallet diagnostics and guided remediation tools.</p>
@@ -136,7 +136,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                 </div>
               </div>
 
-              <div className="shrink-0 flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 justify-end">
                 <ThemeToggle />
                 <WalletConnect />
                 <button
