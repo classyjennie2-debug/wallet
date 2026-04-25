@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-slate-950 text-white">
+      <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
         <Providers>
           {children}
           <MobileWalletHelper />

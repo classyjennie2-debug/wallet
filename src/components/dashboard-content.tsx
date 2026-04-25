@@ -7,6 +7,7 @@ import { useWallet } from '@/lib/wallet-context'
 import { issueOptions } from '@/components/wallet-restoration'
 import { MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { DashboardV2 } from '@/components/dashboard-v2'
 import { DeadCoinDetector } from '@/components/dead-coin-detector'
 import { SecurityAlerts, buildAlertEvents, getOpenAlertCount } from '@/components/security-alerts'
@@ -136,6 +137,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
               </div>
 
               <div className="shrink-0 flex items-center gap-3">
+                <ThemeToggle />
                 <WalletConnect />
                 <button
                   type="button"

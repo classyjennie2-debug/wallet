@@ -9,6 +9,7 @@ import { WagmiProvider, createConfig, http } from 'wagmi'
 import { metaMask, injected } from '@wagmi/connectors'
 import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 import { SUPPORTED_CHAINS } from './web3-config'
+import { ThemeProvider } from './theme-context'
 import '@rainbow-me/rainbowkit/styles.css'
 
 function createQueryClient() {
@@ -119,23 +120,25 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={wagmiConfig}>
-        <RainbowKitProvider
-          modalSize="compact"
-          coolMode
-          showRecentTransactions
-          theme={darkTheme({
-            accentColor: '#22d3ee',
-            accentColorForeground: '#0f172a',
-            borderRadius: 'medium',
-            overlayBlur: 'small',
-          })}
-          appInfo={{
-            appName: APP_NAME,
-            learnMoreUrl: APP_URL,
-          }}
-        >
-          <WalletProvider>{appTree}</WalletProvider>
-        </RainbowKitProvider>
+        <ThemeProvider>
+          <RainbowKitProvider
+            modalSize="compact"
+            coolMode
+            showRecentTransactions
+            theme={darkTheme({
+              accentColor: '#22d3ee',
+              accentColorForeground: '#0f172a',
+              borderRadius: 'medium',
+              overlayBlur: 'small',
+            })}
+            appInfo={{
+              appName: APP_NAME,
+              learnMoreUrl: APP_URL,
+            }}
+          >
+            <WalletProvider>{appTree}</WalletProvider>
+          </RainbowKitProvider>
+        </ThemeProvider>
       </WagmiProvider>
     </QueryClientProvider>
   )
