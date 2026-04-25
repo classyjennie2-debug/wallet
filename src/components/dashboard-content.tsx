@@ -122,16 +122,16 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
   }, [showScanModal])
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       <div className="relative z-10">
-        <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/95 shadow-2xl backdrop-blur-xl">
+        <header className="sticky top-0 z-40 border-b border-[var(--border-color)] bg-[var(--surface)] shadow-2xl backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-3 py-3 sm:px-4 sm:py-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
                   <MyWalletLogo size="md" variant="full" />
                   <div className="min-w-0">
-                      <p className="hidden text-[11px] text-slate-400 md:block">Local wallet diagnostics and guided remediation tools.</p>
+                      <p className="hidden text-[11px] text-muted md:block">Local wallet diagnostics and guided remediation tools.</p>
                   </div>
                 </div>
               </div>
@@ -147,7 +147,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                     setScanProgress(0)
                   }}
                   aria-label="Scan wallet"
-                  className="rounded-2xl p-2 text-sm font-semibold bg-white/6 text-white hover:bg-white/10 transition"
+                  className="rounded-2xl p-2 text-sm font-semibold bg-[rgba(255,255,255,0.06)] text-[var(--foreground)] hover:bg-[rgba(255,255,255,0.1)] transition"
                 >
                   <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <circle cx="11" cy="11" r="7" />
@@ -161,7 +161,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
 
           <nav className="hidden sm:block">
             <div className="mx-auto max-w-7xl px-3 pb-3 sm:px-4">
-              <div className="overflow-hidden rounded-full border border-white/10 bg-slate-950/90 px-2 py-1 shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)] backdrop-blur-xl">
+              <div className="overflow-hidden rounded-full border border-[var(--border-color)] bg-[var(--surface)] px-2 py-1 shadow-[0_12px_40px_-24px_rgba(15,23,42,0.9)] backdrop-blur-xl">
                 <div className="flex gap-2 overflow-x-auto px-1" role="tablist">
                   {tabs.map((tab) => (
                     <button
@@ -170,20 +170,20 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                       onClick={() => setActiveTab(tab.id)}
                       className={`relative flex min-h-[44px] items-center gap-2 rounded-full px-3 py-2 text-[13px] font-semibold whitespace-nowrap transition-all ${
                         activeTab === tab.id
-                          ? 'bg-gradient-to-r from-cyan-500/20 via-slate-950/80 to-cyan-500/20 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
-                          : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                          ? 'bg-gradient-to-r from-cyan-500/20 via-[rgba(15,23,42,0.8)] to-cyan-500/20 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
+                          : 'text-muted hover:bg-[rgba(255,255,255,0.05)] hover:text-[var(--foreground)]'
                       }`}
                       role="tab"
                       aria-selected={activeTab === tab.id}
                     >
                       <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full border ${
-                        activeTab === tab.id ? 'border-cyan-400/20 bg-cyan-500/10 text-cyan-300' : 'border-white/10 bg-white/5 text-slate-300'
+                        activeTab === tab.id ? 'border-cyan-400/20 bg-cyan-500/10 text-cyan-300' : 'border-[var(--border-color)] bg-[var(--surface)]/80 text-muted'
                       }`}>
                         <AppIcon kind={tab.icon} />
                       </span>
                       <span className="text-left leading-tight">
                         <span>{tab.label}</span>
-                        <span className={`mt-0.5 block text-[10px] font-medium ${activeTab === tab.id ? 'text-slate-200' : 'text-slate-500'}`}>
+                        <span className={`mt-0.5 block text-[10px] font-medium ${activeTab === tab.id ? 'text-[var(--foreground)]' : 'text-muted'}`}>
                           {tab.description}
                         </span>
                       </span>
@@ -201,9 +201,9 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
         {showScanModal && (
           <div className="fixed inset-0 z-50 flex items-end justify-center px-4 py-6 sm:items-center sm:py-12">
             <div className="absolute inset-0 bg-black/60" onClick={() => setShowScanModal(false)} />
-            <div className="relative w-full max-w-lg rounded-lg bg-slate-900/95 p-5 shadow-lg">
-              <h3 className="text-lg font-semibold text-white">Scan wallet</h3>
-              <p className="mt-2 text-sm text-slate-300">Review your connected wallet for approvals, network issues, and potential risks.</p>
+            <div className="relative w-full max-w-lg rounded-lg bg-[var(--surface)]/95 p-5 shadow-lg">
+              <h3 className="text-lg font-semibold text-[var(--foreground)]">Scan wallet</h3>
+              <p className="mt-2 text-sm text-muted">Review your connected wallet for approvals, network issues, and potential risks.</p>
               <div className="mt-4">
                 {!scanResult ? (
                   <div className="space-y-4">
@@ -214,15 +214,15 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                         <path d="M44 44L58 58" />
                       </svg>
                     </div>
-                    <div className="rounded-md bg-slate-800/80 p-3">
-                      <div className="flex items-center justify-between text-sm text-slate-300">
+                    <div className="rounded-md bg-[var(--surface-muted)]/80 p-3">
+                      <div className="flex items-center justify-between text-sm text-muted">
                         <div>Scanning components</div>
                         <div>{scanProgress}%</div>
                       </div>
-                      <div className="mt-2 h-2 w-full rounded-full bg-slate-700/80">
+                      <div className="mt-2 h-2 w-full rounded-full bg-[rgba(15,23,42,0.08)]">
                         <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${scanProgress}%` }} />
                       </div>
-                      <ul className="mt-3 grid gap-2 text-sm text-slate-400">
+                      <ul className="mt-3 grid gap-2 text-sm text-muted">
                         <li>Checking connected dApps and approvals</li>
                         <li>Validating RPC and chain integrity</li>
                         <li>Scanning contract interactions and token approvals</li>
@@ -232,8 +232,8 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                   </div>
                 ) : (
                   <div>
-                    <div className="text-sm text-slate-200 font-semibold">Recommended remediation</div>
-                    <div className="mt-2 text-sm text-slate-300">{scanResult.title}</div>
+                    <div className="text-sm text-muted font-semibold">Recommended remediation</div>
+                    <div className="mt-2 text-sm text-muted">{scanResult.title}</div>
                     <div className="mt-3 flex gap-2">
                       <button
                         onClick={() => {
@@ -241,11 +241,11 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                           setShowScanModal(false)
                           setTimeout(() => setActiveTab('solutions'), 80)
                         }}
-                        className="rounded-lg bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-900"
+                        className="rounded-lg bg-cyan-500 px-3 py-2 text-sm font-semibold text-[var(--foreground)]"
                       >
                         Open remediation
                       </button>
-                      <button onClick={() => setShowScanModal(false)} className="rounded-lg px-3 py-2 text-sm text-slate-300 bg-white/5">Close</button>
+                      <button onClick={() => setShowScanModal(false)} className="rounded-lg px-3 py-2 text-sm text-muted bg-[var(--surface)]/60">Close</button>
                     </div>
                   </div>
                 )}
@@ -256,14 +256,14 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
 
         <div className="mx-auto max-w-7xl px-3 py-4 pb-28 sm:px-4 sm:py-8 sm:pb-32">
           {activeTab !== 'dashboard' && (
-            <section className="mb-5 rounded-[26px] border border-white/10 bg-white/5 p-4 shadow-[0_24px_70px_-54px_rgba(15,23,42,0.5)] sm:mb-6 sm:p-5">
+            <section className="mb-5 rounded-[26px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-4 shadow-[0_24px_70px_-54px_rgba(15,23,42,0.5)] sm:mb-6 sm:p-5">
               <div className="flex items-start gap-4">
                 <span className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl border ${activeMeta.tone}`}>
                   <AppIcon kind={tabs.find((tab) => tab.id === activeTab)?.icon ?? 'dashboard'} />
                 </span>
                 <div>
-                  <h1 className="text-2xl font-bold text-white sm:text-3xl">{activeMeta.title}</h1>
-                  <p className="mt-1 text-sm leading-6 text-slate-400">{activeMeta.description}</p>
+                  <h1 className="text-2xl font-bold text-[var(--foreground)] sm:text-3xl">{activeMeta.title}</h1>
+                  <p className="mt-1 text-sm leading-6 text-muted">{activeMeta.description}</p>
                 </div>
               </div>
             </section>
@@ -296,7 +296,7 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
           )}
         </div>
 
-        <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-slate-950/96 px-2 pt-2 shadow-[0_-8px_24px_-16px_rgba(15,23,42,0.9)] backdrop-blur-xl sm:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--border-color)] bg-[var(--surface)]/96 px-2 pt-2 shadow-[0_-8px_24px_-16px_rgba(15,23,42,0.9)] backdrop-blur-xl sm:hidden">
           <div className="mx-auto flex max-w-4xl items-center justify-between gap-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
             {tabs.map((tab) => (
               <button
@@ -305,14 +305,14 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex min-h-[60px] min-w-[0] flex-1 flex-col items-center justify-center rounded-[22px] px-1.5 py-2 text-[10px] font-semibold transition ${
                   activeTab === tab.id
-                    ? 'bg-white/10 text-white shadow-[0_10px_28px_-20px_rgba(255,255,255,0.35)]'
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                    ? 'bg-[var(--surface)]/10 text-[var(--foreground)] shadow-[0_10px_28px_-20px_rgba(0,0,0,0.15)]'
+                    : 'text-muted hover:bg-[var(--surface)]/70 hover:text-[var(--foreground)]'
                 }`}
                 role="tab"
                 aria-selected={activeTab === tab.id}
               >
                 <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full border ${
-                  activeTab === tab.id ? 'border-white/20 bg-white/10 text-white' : 'border-white/10 bg-white/5 text-slate-300'
+                  activeTab === tab.id ? 'border-[var(--border-color)] bg-[var(--surface)]/60 text-[var(--foreground)]' : 'border-[var(--border-color)] bg-[var(--surface)]/90 text-muted'
                 }`}>
                   <AppIcon kind={tab.icon} />
                 </span>

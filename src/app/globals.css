@@ -6,6 +6,7 @@
   --foreground: #0b1b26; /* deep slate */
   --surface: #ffffff;
   --surface-muted: #eef3f6; /* subtle cool muted */
+  --surface-alt: #f1f5f9;
   --border-color: rgba(11, 27, 38, 0.08);
   --brand-primary: #22d3ee; /* calm cyan accent */
   --brand-secondary: #64748b; /* slate-muted support */
@@ -26,6 +27,7 @@
   --foreground: #dbeaf6; /* soft off-white */
   --surface: #071624; /* deep slate surface */
   --surface-muted: #0c2636;
+  --surface-alt: #0c2636;
   --border-color: rgba(219, 234, 246, 0.08);
   --brand-primary: #22d3ee;
   --brand-secondary: #94a3b8;
@@ -124,6 +126,30 @@ button, a[role="button"], input[type="button"], input[type="submit"] {
 
 .safe-area-right {
   padding-right: var(--safe-area-inset-right);
+}
+
+.bg-surface {
+  background-color: var(--surface) !important;
+}
+
+.bg-surface-muted {
+  background-color: var(--surface-muted) !important;
+}
+
+.bg-surface-alt {
+  background-color: var(--surface-alt) !important;
+}
+
+.text-foreground {
+  color: var(--foreground) !important;
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+.border-surface {
+  border-color: var(--border-color) !important;
 }
 
 /* Prevent zooming on input focus */
