@@ -4,21 +4,14 @@ import { useEffect, useState } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 export function Web3WalletConnector() {
-  const [showWalletConnectHint, setShowWalletConnectHint] = useState(false)
+  const [showWalletConnectError, setShowWalletConnectError] = useState(false)
 
   useEffect(() => {
-    const isMobileBrowser = () => {
-      try {
-        return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/.test(navigator.userAgent)
-      } catch {
-        return false
-      }
-    }
+    if (!showWalletConnectError) return
 
-    const mobileBrowser = isMobileBrowser()
-    const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
-    setShowWalletConnectHint(mobileBrowser && !hasInjectedWallet)
-  }, [])
+    const timer = window.setTimeout(() => setShowWalletConnectError(false), 4500)
+    return () => window.clearTimeout(timer)
+  }, [showWalletConnectError])
 
   return (
     <ConnectButton.Custom>
@@ -32,31 +25,61 @@ export function Web3WalletConnector() {
           'w-full sm:w-auto rounded-2xl px-3 py-2 text-sm font-semibold text-white bg-slate-900/90 hover:bg-slate-800 transition'
 
         const handleConnectClick = () => {
+          const isMobileBrowser = () => {
+            try {
+              return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/.test(navigator.userAgent)
+            } catch {
+              return false
+            }
+          }
+
+          const mobileBrowser = isMobileBrowser()
+          const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
+
+          if (mobileBrowser && !hasInjectedWallet) {
+            setShowWalletConnectError(true)
+          }
+
           openConnectModal()
         }
 
         if (!mounted) {
           return (
-            <div className="relative">
-              <button type="button" disabled className={desktopButton + ' opacity-60 cursor-not-allowed'}>
-                Connect Wallet
-              </button>
-            </div>
+            <>
+              <div className="relative">
+                <button type="button" disabled className={desktopButton + ' opacity-60 cursor-not-allowed'}>
+                  Connect Wallet
+                </button>
+              </div>
+              {showWalletConnectError ? (
+                <div className="fixed inset-x-0 bottom-4 z-50 px-4 sm:bottom-6">
+                  <div className="mx-auto max-w-md rounded-3xl border border-cyan-300/20 bg-slate-950/95 px-4 py-3 text-sm text-slate-100 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
+                    <p className="font-semibold text-white">Browser wallet unavailable</p>
+                    <p className="mt-1 text-xs text-slate-300">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
+                  </div>
+                </div>
+              ) : null}
+            </>
           )
         }
 
         if (!walletReady) {
           return (
-            <div className="relative">
-              <button type="button" onClick={handleConnectClick} className={mobileButton}>
-                Connect Wallet
-              </button>
-              {showWalletConnectHint ? (
-                <p className="mt-2 text-xs text-slate-400">
-                  In browser mode, choose the WalletConnect option from the connector modal.
-                </p>
+            <>
+              <div className="relative">
+                <button type="button" onClick={handleConnectClick} className={mobileButton}>
+                  Connect Wallet
+                </button>
+              </div>
+              {showWalletConnectError ? (
+                <div className="fixed inset-x-0 bottom-4 z-50 px-4 sm:bottom-6">
+                  <div className="mx-auto max-w-md rounded-3xl border border-cyan-300/20 bg-slate-950/95 px-4 py-3 text-sm text-slate-100 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
+                    <p className="font-semibold text-white">Browser wallet unavailable</p>
+                    <p className="mt-1 text-xs text-slate-300">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
+                  </div>
+                </div>
               ) : null}
-            </div>
+            </>
           )
         }
 

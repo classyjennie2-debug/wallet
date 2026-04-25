@@ -125,8 +125,8 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-[var(--border-color)] bg-[var(--surface)] shadow-2xl backdrop-blur-xl">
-          <div className="mx-auto max-w-7xl px-3 py-3 sm:px-4 sm:py-3">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mx-auto max-w-7xl px-3 py-1.5 sm:px-4 sm:py-3">
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
                   <MyWalletLogo size="md" variant="full" />

@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
@@ -27,21 +26,6 @@ export const LandingPageV2 = () => {
   const { isConnected } = useAccount()
   const { openConnectModal } = useConnectModal()
   const currentYear = new Date().getFullYear()
-  const [showWalletConnectNote, setShowWalletConnectNote] = useState(false)
-
-  useEffect(() => {
-    const isMobileBrowser = () => {
-      try {
-        return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)
-      } catch {
-        return false
-      }
-    }
-
-    const mobileBrowser = isMobileBrowser()
-    const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
-    setShowWalletConnectNote(mobileBrowser && !hasInjectedWallet)
-  }, [])
 
   const handleLaunch = () => {
     if (isConnected) {
@@ -64,10 +48,10 @@ export const LandingPageV2 = () => {
 
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-surface bg-surface/95 shadow-xl shadow-slate-200/40 backdrop-blur-xl">
-          <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="rounded-[22px] border border-surface bg-surface px-3 py-2 shadow-sm shadow-slate-200/60">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-4 py-1.5 sm:px-6 sm:py-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="rounded-[22px] border border-surface bg-surface px-3 py-1.5 shadow-sm shadow-slate-200/60">
                   <MyWalletLogo size="md" variant="full" />
                 </div>
               </div>
@@ -86,10 +70,10 @@ export const LandingPageV2 = () => {
           </div>
         </header>
 
-        <section className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-5 py-16 sm:px-6 sm:py-24">
-          <div className="w-full rounded-[32px] border border-surface bg-surface shadow-[0_40px_120px_-70px_rgba(15,23,42,0.08)] p-8 sm:p-12">
-            <div className="grid gap-8 xl:grid-cols-[1.2fr_0.8fr] lg:items-center">
-              <div className="space-y-8 min-w-0">
+        <section className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-12 sm:px-5 sm:py-16">
+          <div className="w-full rounded-[28px] border border-surface bg-surface shadow-[0_30px_70px_-40px_rgba(15,23,42,0.08)] p-6 sm:p-8">
+            <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr] lg:items-center">
+              <div className="space-y-6 min-w-0">
                 <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-cyan-700 shadow-sm shadow-cyan-200/60">
                   <span className="h-2 w-2 rounded-full bg-cyan-500 animate-pulse" />
                   Security-first wallet recovery
@@ -129,27 +113,21 @@ export const LandingPageV2 = () => {
                   ))}
                 </div>
 
-                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <button
                     type="button"
                     onClick={handleLaunch}
-                    className="inline-flex w-full items-center justify-center rounded-3xl bg-gradient-to-r from-cyan-500 to-sky-500 px-8 py-3 text-base font-semibold text-foreground shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:shadow-xl sm:w-auto"
+                    className="inline-flex w-full items-center justify-center rounded-3xl bg-gradient-to-r from-cyan-500 to-sky-500 px-7 py-3 text-base font-semibold text-foreground shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:shadow-xl sm:w-auto"
                   >
                     Start wallet review
                   </button>
                   <Link
                     href="/privacy"
-                    className="inline-flex w-full items-center justify-center rounded-3xl border border-surface bg-surface px-8 py-3 text-base font-semibold text-foreground transition hover:border-cyan-300 hover:bg-cyan-50 sm:w-auto"
+                    className="inline-flex w-full items-center justify-center rounded-3xl border border-surface bg-surface px-7 py-3 text-base font-semibold text-foreground transition hover:border-cyan-300 hover:bg-cyan-50 sm:w-auto"
                   >
                     Read privacy guide
                   </Link>
                 </div>
-                {showWalletConnectNote ? (
-                  <p className="mt-3 text-sm text-muted">
-                    In browser mode, choose WalletConnect from the connector modal so the app can connect without an injected wallet.
-                  </p>
-                ) : null}
-
                 <div className="grid gap-4 sm:grid-cols-2">
                   {[
                     { label: 'Recovery readiness', value: 'Automated wallet health signals' },
@@ -226,7 +204,7 @@ export const LandingPageV2 = () => {
             </div>
           </div>
 
-          <section className="rounded-[32px] border border-surface bg-surface p-8 shadow-2xl shadow-slate-200/40 sm:p-10">
+          <section className="rounded-[28px] border border-surface bg-surface p-6 shadow-2xl shadow-slate-200/30 sm:p-8">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.28em] text-muted">Built on clear principles</p>
@@ -247,7 +225,7 @@ export const LandingPageV2 = () => {
             </div>
           </section>
 
-          <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+          <section className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
             <div className="grid gap-6 text-center md:grid-cols-3">
               {stats.map((stat) => (
                 <div key={stat.label} className="rounded-3xl border border-surface bg-surface p-6 shadow-[0_20px_60px_-45px_rgba(56,189,248,0.15)] transition hover:-translate-y-1 hover:border-cyan-300">
@@ -262,7 +240,7 @@ export const LandingPageV2 = () => {
         </section>
 
         <footer className="border-t border-surface bg-surface/90 backdrop-blur-xl">
-          <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-6 px-4 py-10 text-sm text-muted md:flex-row sm:px-6">
+          <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-6 px-4 py-10 text-sm text-muted md:flex-row sm:px-6">
             <div className="flex items-center gap-3">
               <MyWalletLogo size="sm" variant="full" />
               <div>{`Copyright ${currentYear} | Self-sovereign wallet security`}</div>
