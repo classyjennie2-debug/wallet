@@ -5,6 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 export function Web3WalletConnector() {
   const [showWalletConnectError, setShowWalletConnectError] = useState(false)
+  const [awaitingWalletChoice, setAwaitingWalletChoice] = useState(false)
 
   useEffect(() => {
     if (!showWalletConnectError) return
@@ -12,6 +13,37 @@ export function Web3WalletConnector() {
     const timer = window.setTimeout(() => setShowWalletConnectError(false), 4500)
     return () => window.clearTimeout(timer)
   }, [showWalletConnectError])
+
+  useEffect(() => {
+    if (!awaitingWalletChoice) return
+
+    const clickListener = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null
+      if (!target) return
+
+      const dialog = target.closest('[role="dialog"]') as HTMLElement | null
+      if (!dialog) return
+
+      const walletTarget = target.closest('button, [role="button"]') as HTMLElement | null
+      if (!walletTarget) return
+
+      const label = walletTarget.textContent?.trim() ?? ''
+      const unsupported = /MetaMask|Coinbase|Trust Wallet|Rabby|Phantom|OKX|Injected/i.test(label)
+      const walletConnect = /WalletConnect/i.test(label)
+
+      if (unsupported && !walletConnect) {
+        setShowWalletConnectError(true)
+        setAwaitingWalletChoice(false)
+      }
+
+      if (walletConnect) {
+        setAwaitingWalletChoice(false)
+      }
+    }
+
+    document.addEventListener('click', clickListener, true)
+    return () => document.removeEventListener('click', clickListener, true)
+  }, [awaitingWalletChoice])
 
   return (
     <ConnectButton.Custom>
@@ -37,7 +69,7 @@ export function Web3WalletConnector() {
           const hasInjectedWallet = mobileBrowser && Boolean((window as any).ethereum)
 
           if (mobileBrowser && !hasInjectedWallet) {
-            setShowWalletConnectError(true)
+            setAwaitingWalletChoice(true)
           }
 
           openConnectModal()
