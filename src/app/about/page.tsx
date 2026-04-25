@@ -94,11 +94,11 @@ export default function About() {
           <div className="grid gap-5 md:grid-cols-2">
             <div className="rounded-[24px] border border-violet-400/20 bg-violet-500/10 p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-300">GitHub</p>
-              <p className="mt-3 font-mono text-lg text-white">github.com/mywallet-help</p>
+              <p className="mt-3 font-mono text-lg text-[var(--foreground)]">github.com/mywallet-help</p>
             </div>
             <div className="rounded-[24px] border border-cyan-400/20 bg-cyan-500/10 p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">Docs</p>
-              <p className="mt-3 font-mono text-lg text-white">docs.mywallet.help</p>
+              <p className="mt-3 font-mono text-lg text-[var(--foreground)]">docs.mywallet.help</p>
             </div>
           </div>
           <div className="mt-10 border-t border-[var(--border-color)] pt-6 text-sm text-[var(--text-muted)]">

@@ -123,8 +123,8 @@ export default function DocsPage() {
                   desc: 'Detect and resolve network configuration issues that block wallet connections.',
                 },
               ].map((feature) => (
-                <div key={feature.title} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                  <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
+                <div key={feature.title} className="rounded-2xl border border-[var(--border-color)] bg-[var(--surface)]/80 p-6">
+                  <h3 className="text-xl font-semibold text-[var(--foreground)]">{feature.title}</h3>
                   <p className="mt-2 text-[var(--text-muted)]">{feature.desc}</p>
                 </div>
               ))}

@@ -61,7 +61,7 @@ export default function Privacy() {
                 'To monitor usage patterns and trends',
                 'To protect against fraud and security threats',
               ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-gray-300">
+                <li key={i} className="flex items-start gap-3 text-[var(--text-muted)]">
                   <span className="text-cyan-400 font-bold mt-1">✓</span>
                   <span>{item}</span>
                 </li>
@@ -115,7 +115,7 @@ export default function Privacy() {
           {/* Contact Us */}
           <div className="relative overflow-hidden rounded-lg p-6 bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/30">
             <h2 className="text-xl font-bold text-purple-300 mb-3">Contact Us</h2>
-            <p className="text-gray-300">
+            <p className="text-[var(--text-muted)]">
               If you have any questions about this Privacy Policy or our privacy practices, please contact us at: <span className="font-mono text-cyan-400">privacy@mywallet.help</span>
             </p>
           </div>

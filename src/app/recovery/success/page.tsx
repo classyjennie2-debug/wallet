@@ -29,8 +29,8 @@ export default function RecoverySuccess({ searchParams }: Props) {
           <div className="rounded-[28px] border border-[var(--border-color)] bg-[var(--surface)]/85 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Result</p>
-                <p className="mt-2 text-lg font-semibold text-white">Validated</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-[var(--text-muted)]">Result</p>
+                <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">Validated</p>
               </div>
               <div className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-200">Success</div>
             </div>

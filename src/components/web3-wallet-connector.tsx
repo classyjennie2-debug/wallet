@@ -84,7 +84,7 @@ export function Web3WalletConnector() {
                 </button>
               </div>
               {showWalletConnectError ? (
-                <div className="fixed inset-x-0 bottom-4 z-[9999] px-4 sm:bottom-6">
+                <div className="fixed inset-x-4 top-4 z-[9999] px-4">
                   <div className="mx-auto max-w-md rounded-3xl border border-[var(--accent)]/20 bg-[var(--surface)]/95 px-4 py-3 text-sm text-[var(--foreground)] shadow-2xl shadow-[rgba(34,211,238,0.15)] backdrop-blur-xl">
                     <p className="font-semibold text-[var(--foreground)]">Browser wallet unavailable</p>
                     <p className="mt-1 text-xs text-[var(--text-muted)]">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
@@ -104,7 +104,7 @@ export function Web3WalletConnector() {
                 </button>
               </div>
               {showWalletConnectError ? (
-                <div className="fixed inset-x-0 bottom-4 z-[9999] px-4 sm:bottom-6">
+                <div className="fixed inset-x-4 top-4 z-[9999] px-4">
                   <div className="mx-auto max-w-md rounded-3xl border border-[var(--accent)]/20 bg-[var(--surface)]/95 px-4 py-3 text-sm text-[var(--foreground)] shadow-2xl shadow-[rgba(34,211,238,0.15)] backdrop-blur-xl">
                     <p className="font-semibold text-[var(--foreground)]">Browser wallet unavailable</p>
                     <p className="mt-1 text-xs text-[var(--text-muted)]">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
