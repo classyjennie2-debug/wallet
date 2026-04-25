@@ -7,9 +7,9 @@ import { AlertProvider } from './alert-context'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import { metaMask, injected } from '@wagmi/connectors'
-import { connectorsForWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
+import { connectorsForWallets, RainbowKitProvider, darkTheme, lightTheme } from '@rainbow-me/rainbowkit'
 import { SUPPORTED_CHAINS } from './web3-config'
-import { ThemeProvider } from './theme-context'
+import { ThemeProvider, useTheme } from './theme-context'
 import '@rainbow-me/rainbowkit/styles.css'
 
 function createQueryClient() {
@@ -114,30 +114,48 @@ export function Providers({ children }: { children: ReactNode }) {
   )
 
   if (!wagmiConfig) {
-    return <div className="min-h-screen bg-slate-950" />
+    return <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]" />
+  }
+
+  const ThemedRainbowKit = ({ children }: { children: React.ReactNode }) => {
+    const { theme } = useTheme()
+    const rainbowKitTheme = theme === 'dark'
+      ? darkTheme({
+          accentColor: '#22d3ee',
+          accentColorForeground: '#0f172a',
+          borderRadius: 'medium',
+          overlayBlur: 'small',
+        })
+      : lightTheme({
+          accentColor: '#22d3ee',
+          accentColorForeground: '#0f172a',
+          borderRadius: 'medium',
+          overlayBlur: 'small',
+        })
+
+    return (
+      <RainbowKitProvider
+        modalSize="compact"
+        coolMode
+        showRecentTransactions
+        theme={rainbowKitTheme}
+        appInfo={{
+          appName: APP_NAME,
+          learnMoreUrl: APP_URL,
+        }}
+      >
+        {children}
+      </RainbowKitProvider>
+    )
   }
 
   return (
     <QueryClientProvider client={queryClient}>
       <WagmiProvider config={wagmiConfig}>
         <ThemeProvider>
-          <RainbowKitProvider
-            modalSize="compact"
-            coolMode
-            showRecentTransactions
-            theme={darkTheme({
-              accentColor: '#22d3ee',
-              accentColorForeground: '#0f172a',
-              borderRadius: 'medium',
-              overlayBlur: 'small',
-            })}
-            appInfo={{
-              appName: APP_NAME,
-              learnMoreUrl: APP_URL,
-            }}
-          >
+          <ThemedRainbowKit>
             <WalletProvider>{appTree}</WalletProvider>
-          </RainbowKitProvider>
+          </ThemedRainbowKit>
         </ThemeProvider>
       </WagmiProvider>
     </QueryClientProvider>

@@ -41,16 +41,16 @@ const sections = [
 
 export default function Terms() {
   return (
-    <main className="min-h-screen bg-slate-950">
-      <section className="border-b border-white/10 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.14),_transparent_44%)]">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+      <section className="border-b border-[var(--border-color)] bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.14),_transparent_44%)]">
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="max-w-3xl space-y-5">
-            <div className="inline-flex rounded-[22px] border border-white/10 bg-slate-950/60 px-3 py-2">
+            <div className="inline-flex rounded-[22px] border border-[var(--border-color)] bg-[var(--surface-muted)]/80 px-3 py-2">
               <MyWalletLogo size="md" variant="full" />
             </div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-300">Terms</p>
-            <h1 className="text-4xl font-semibold text-white sm:text-5xl">Straightforward terms for using the workspace.</h1>
-            <p className="text-base text-slate-400">Last updated: January 2024</p>
+            <h1 className="text-4xl font-semibold text-[var(--foreground)] sm:text-5xl">Straightforward terms for using the workspace.</h1>
+            <p className="text-base text-[var(--text-muted)]">Last updated: January 2024</p>
           </div>
         </div>
       </section>
@@ -59,16 +59,16 @@ export default function Terms() {
         <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="space-y-5">
             {sections.map((section, index) => (
-              <article key={section.title} className="rounded-[24px] border border-white/10 bg-white/5 p-6">
+              <article key={section.title} className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface)] p-6">
                 <div className="flex items-start gap-4">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-950/80 text-sm font-semibold text-slate-300">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--surface-muted)]/80 text-sm font-semibold text-[var(--text-muted)]">
                     {index + 1}
                   </span>
                   <div className="min-w-0">
-                    <h2 className="text-xl font-semibold text-white">{section.title}</h2>
-                    <p className="mt-3 text-sm leading-7 text-slate-300">{section.body}</p>
+                    <h2 className="text-xl font-semibold text-[var(--foreground)]">{section.title}</h2>
+                    <p className="mt-3 text-sm leading-7 text-[var(--text-muted)]">{section.body}</p>
                     {section.items && (
-                      <ul className="mt-4 space-y-2 text-sm text-slate-300">
+                      <ul className="mt-4 space-y-2 text-sm text-[var(--text-muted)]">
                         {section.items.map((item) => (
                           <li key={item} className="flex items-start gap-3">
                             <span className="mt-2 inline-block h-2 w-2 rounded-full bg-emerald-300" />

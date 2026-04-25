@@ -52,9 +52,9 @@ export function Web3WalletConnector() {
         const addressLabel = account?.address ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}` : 'Wallet'
 
         const mobileButton =
-          'w-full rounded-2xl px-3 py-2 text-sm font-semibold text-slate-950 bg-cyan-500 hover:bg-cyan-400 transition sm:w-auto'
+          'w-full rounded-2xl px-3 py-2 text-sm font-semibold text-[var(--foreground)] bg-[var(--accent)] hover:bg-[rgba(34,211,238,0.82)] transition sm:w-auto'
         const desktopButton =
-          'w-full sm:w-auto rounded-2xl px-3 py-2 text-sm font-semibold text-white bg-slate-900/90 hover:bg-slate-800 transition'
+          'w-full sm:w-auto rounded-2xl px-3 py-2 text-sm font-semibold text-[var(--foreground)] bg-[var(--surface)]/90 hover:bg-[var(--surface-muted)] transition'
 
         const handleConnectClick = () => {
           const isMobileBrowser = () => {
@@ -84,10 +84,10 @@ export function Web3WalletConnector() {
                 </button>
               </div>
               {showWalletConnectError ? (
-                <div className="fixed inset-x-0 bottom-4 z-50 px-4 sm:bottom-6">
-                  <div className="mx-auto max-w-md rounded-3xl border border-cyan-300/20 bg-slate-950/95 px-4 py-3 text-sm text-slate-100 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
-                    <p className="font-semibold text-white">Browser wallet unavailable</p>
-                    <p className="mt-1 text-xs text-slate-300">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
+                <div className="fixed inset-x-0 bottom-4 z-[9999] px-4 sm:bottom-6">
+                  <div className="mx-auto max-w-md rounded-3xl border border-[var(--accent)]/20 bg-[var(--surface)]/95 px-4 py-3 text-sm text-[var(--foreground)] shadow-2xl shadow-[rgba(34,211,238,0.15)] backdrop-blur-xl">
+                    <p className="font-semibold text-[var(--foreground)]">Browser wallet unavailable</p>
+                    <p className="mt-1 text-xs text-[var(--text-muted)]">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
                   </div>
                 </div>
               ) : null}
@@ -104,10 +104,10 @@ export function Web3WalletConnector() {
                 </button>
               </div>
               {showWalletConnectError ? (
-                <div className="fixed inset-x-0 bottom-4 z-50 px-4 sm:bottom-6">
-                  <div className="mx-auto max-w-md rounded-3xl border border-cyan-300/20 bg-slate-950/95 px-4 py-3 text-sm text-slate-100 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
-                    <p className="font-semibold text-white">Browser wallet unavailable</p>
-                    <p className="mt-1 text-xs text-slate-300">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
+                <div className="fixed inset-x-0 bottom-4 z-[9999] px-4 sm:bottom-6">
+                  <div className="mx-auto max-w-md rounded-3xl border border-[var(--accent)]/20 bg-[var(--surface)]/95 px-4 py-3 text-sm text-[var(--foreground)] shadow-2xl shadow-[rgba(34,211,238,0.15)] backdrop-blur-xl">
+                    <p className="font-semibold text-[var(--foreground)]">Browser wallet unavailable</p>
+                    <p className="mt-1 text-xs text-[var(--text-muted)]">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
                   </div>
                 </div>
               ) : null}
@@ -120,7 +120,7 @@ export function Web3WalletConnector() {
             <button
               type="button"
               onClick={openAccountModal}
-              className="rounded-2xl px-3 py-2 bg-slate-900/95 text-left text-xs sm:text-sm text-white shadow-xl shadow-cyan-500/10 transition hover:bg-slate-800"
+              className="rounded-2xl px-3 py-2 bg-[var(--surface)]/95 text-left text-xs sm:text-sm text-[var(--foreground)] shadow-xl shadow-[rgba(34,211,238,0.15)] transition hover:bg-[var(--surface-muted)]"
             >
               <div className="font-semibold truncate">{account.displayName ?? addressLabel}</div>
               <div className="text-[11px] text-slate-400 hidden sm:block">Connected</div>
@@ -128,7 +128,7 @@ export function Web3WalletConnector() {
             <button
               type="button"
               onClick={openChainModal}
-              className="rounded-2xl px-3 py-2 bg-white/10 text-xs sm:text-sm text-white transition hover:bg-white/15"
+              className="rounded-2xl px-3 py-2 bg-[var(--surface-muted)]/90 text-xs sm:text-sm text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]"
             >
               <span className="block font-semibold">{chain?.name ?? 'Network'}</span>
               <span className="text-[11px] text-slate-400 hidden sm:block">Switch</span>

@@ -45,30 +45,30 @@ const toneStyles = {
 
 export default function Help() {
   return (
-    <main className="min-h-screen bg-slate-950">
-      <section className="border-b border-white/10 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.16),_transparent_42%)]">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+      <section className="border-b border-[var(--border-color)] bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.16),_transparent_42%)]">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="max-w-3xl space-y-5">
-            <div className="inline-flex rounded-[22px] border border-white/10 bg-slate-950/60 px-3 py-2">
+            <div className="inline-flex rounded-[22px] border border-[var(--border-color)] bg-[var(--surface-muted)]/80 px-3 py-2">
               <MyWalletLogo size="md" variant="full" />
             </div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-300">Help</p>
-            <h1 className="text-4xl font-semibold text-white sm:text-5xl">Answers, safety guidance, and support paths in one place.</h1>
-            <p className="max-w-2xl text-base text-slate-400">This page collects the most common product, wallet, and recovery questions so users can move quickly without digging through the app.</p>
+            <h1 className="text-4xl font-semibold text-[var(--foreground)] sm:text-5xl">Answers, safety guidance, and support paths in one place.</h1>
+            <p className="max-w-2xl text-base text-[var(--text-muted)]">This page collects the most common product, wallet, and recovery questions so users can move quickly without digging through the app.</p>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-white/10">
+      <section className="border-b border-[var(--border-color)]">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="grid gap-4">
             {faqs.map(([question, answer]) => (
-              <details key={question} className="group rounded-[24px] border border-white/10 bg-white/5 transition hover:border-white/20 open:border-cyan-400/20 open:bg-cyan-500/5">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left text-white">
+              <details key={question} className="group rounded-[24px] border border-[var(--border-color)] bg-[var(--surface)] transition hover:border-cyan-400/20 open:border-cyan-400/20 open:bg-cyan-500/5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left text-[var(--foreground)]">
                   <span className="font-semibold">{question}</span>
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-950/80 text-slate-300 transition-transform group-open:rotate-180">+</span>
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--surface-muted)]/80 text-[var(--text-muted)] transition-transform group-open:rotate-180">+</span>
                 </summary>
-                <div className="border-t border-white/10 px-5 py-5 text-sm leading-7 text-slate-300">
+                <div className="border-t border-[var(--border-color)] px-5 py-5 text-sm leading-7 text-[var(--text-muted)]">
                   {answer}
                 </div>
               </details>
@@ -77,28 +77,28 @@ export default function Help() {
         </div>
       </section>
 
-      <section className="border-b border-white/10">
+      <section className="border-b border-[var(--border-color)]">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="grid gap-5 md:grid-cols-3">
             {supportCards.map((card) => (
-              <a key={card.title} href={card.href} target="_blank" rel="noopener noreferrer" className="rounded-[24px] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-white/20">
+              <a key={card.title} href={card.href} target="_blank" rel="noopener noreferrer" className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface)] p-6 transition hover:-translate-y-1 hover:border-cyan-400/20">
                 <div className={`inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] ${toneStyles[card.tone as keyof typeof toneStyles]}`}>
                   {card.title}
                 </div>
-                <p className="mt-4 text-sm text-slate-300">{card.subtitle}</p>
+                <p className="mt-4 text-sm text-[var(--text-muted)]">{card.subtitle}</p>
               </a>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-b border-white/10">
+      <section className="border-b border-[var(--border-color)]">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
           <div className="grid gap-5 md:grid-cols-2">
             {safetyTips.map((tip) => (
               <article key={tip.title} className={`rounded-[24px] border p-6 ${toneStyles[tip.tone as keyof typeof toneStyles]}`}>
-                <h2 className="text-lg font-semibold text-white">{tip.title}</h2>
-                <p className="mt-3 text-sm leading-6 text-slate-200">{tip.text}</p>
+                <h2 className="text-lg font-semibold text-[var(--foreground)]">{tip.title}</h2>
+                <p className="mt-3 text-sm leading-6 text-[var(--text-muted)]">{tip.text}</p>
               </article>
             ))}
           </div>
