@@ -7,10 +7,12 @@
   --surface: #ffffff;
   --surface-muted: #eef3f6; /* subtle cool muted */
   --surface-alt: #f1f5f9;
-  --border-color: rgba(11, 27, 38, 0.08);
+  --border-color: rgba(15, 23, 42, 0.10);
   --brand-primary: #22d3ee; /* calm cyan accent */
   --brand-secondary: #64748b; /* slate-muted support */
-  --text-muted: #94a3b8; /* secondary text on dark surfaces */
+  --text-muted: #64748b; /* secondary text on surfaces */
+  --surface-hover: rgba(15, 23, 42, 0.04);
+  --overlay: rgba(15, 23, 42, 0.10);
   --accent: var(--brand-primary);
   --accent-soft: rgba(34, 211, 238, 0.14);
   --success-soft: rgba(38, 138, 102, 0.12);
@@ -32,8 +34,9 @@
   --brand-primary: #22d3ee;
   --brand-secondary: #94a3b8;
   --text-muted: #94a3b8;
+  --surface-hover: rgba(255, 255, 255, 0.08);
+  --overlay: rgba(0, 0, 0, 0.55);
   --accent: var(--brand-primary);
-  --accent-soft: rgba(34, 211, 238, 0.16);
   --success-soft: rgba(46, 160, 116, 0.14);
   --warning-soft: rgba(208, 140, 64, 0.14);
   --danger-soft: rgba(219, 84, 84, 0.10);

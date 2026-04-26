@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useWallet, type Token } from '@/lib/wallet-context'
+import { useWallet, type Token, type Approval } from '@/lib/wallet-context'
 import { useErrorHandler } from '@/lib/error-handler'
 
 interface AlertEvent {
@@ -17,82 +17,92 @@ interface AlertEvent {
   link?: string
 }
 
-const alertEvents: AlertEvent[] = [
-  {
-    id: 'alert-001',
+const buildRpcFailureEvent = (): AlertEvent => ({
+  id: 'alert-rpc-failure',
+  category: 'network',
+  title: 'RPC & Service Failures',
+  summary: 'A network provider or RPC endpoint is experiencing instability and may affect wallet actions.',
+  source: 'RPC monitor',
+  target: 'Connected RPC',
+  date: new Date().toISOString(),
+  status: 'open',
+  severity: 'medium',
+})
+
+const buildApprovalAlert = (approvals: Approval[]): AlertEvent => {
+  const count = approvals.length
+  const highestSeverity = approvals.some((approval) => approval.riskLevel === 'high')
+    ? 'high'
+    : approvals.some((approval) => approval.riskLevel === 'medium')
+    ? 'medium'
+    : 'low'
+
+  return {
+    id: 'alert-approval-risk',
     category: 'approvals',
-    title: 'Pending token approval detected',
-    summary: 'An active approval exists for a third-party contract on your wallet.',
-    source: '0x4fbd...9a12',
-    target: 'Uniswap V3 Router',
-    date: '2026-04-23T10:15:00Z',
-    status: 'open',
-    severity: 'high',
-    link: 'https://etherscan.io/address/0x4fbd...9a12',
-  },
-  {
-    id: 'alert-002',
-    category: 'suspicious',
-    title: 'Unusual funding pattern detected',
-    summary: 'Multiple small incoming transfers were received from an unknown address.',
-    source: '0x9d12...b7c0',
+    title: `Pending token approval${count !== 1 ? 's' : ''} detected`,
+    summary: `${count} active permission${count !== 1 ? 's are' : ' is'} currently granted to external contracts. Review and revoke unsafe approvals.`,
+    source: 'Allowance scanner',
     target: 'Your wallet',
-    date: '2026-04-22T18:42:00Z',
-    status: 'reviewed',
-    severity: 'medium',
-  },
-  {
-    id: 'alert-003',
-    category: 'network',
-    title: 'Unsupported chain warning',
-    summary: 'The wallet is connected to a network outside your normal usage pattern.',
-    source: 'Wallet connector',
-    target: 'Base Network',
-    date: '2026-04-21T14:08:00Z',
+    date: new Date().toISOString(),
     status: 'open',
-    severity: 'low',
-  },
-  {
-    id: 'alert-004',
-    category: 'recovery',
-    title: 'Recovery session initiated',
-    summary: 'A recovery flow was started for this wallet address.',
-    source: 'MyWallet Security recovery wizard',
-    target: 'Your wallet',
-    date: '2026-04-20T09:30:00Z',
-    status: 'resolved',
-    severity: 'low',
-  },
-]
+    severity: highestSeverity,
+  }
+}
 
-export const buildAlertEvents = (deadCoins: Token[]) => {
-  const events: AlertEvent[] = [...alertEvents]
-
-  if (deadCoins.length > 0) {
-    events.unshift({
-      id: 'alert-deadcoin',
-      category: 'suspicious',
-      title: `Dead Coin${deadCoins.length !== 1 ? 's' : ''} Detected`,
-      summary: `${deadCoins.length} token${deadCoins.length !== 1 ? 's are' : ' is'} flagged as inactive or low-liquidity.`,
-      source: 'Token risk scanner',
-      target: 'Your wallet',
-      date: new Date().toISOString(),
-      status: 'open',
-      severity: 'high',
-    })
+const buildWarningAlert = (warnings: string[]): AlertEvent | null => {
+  if (warnings.length === 0) {
+    return null
   }
 
-  events.unshift({
-    id: 'alert-rpc-failure',
-    category: 'network',
-    title: 'RPC & Service Failures',
-    summary: 'A network provider or RPC endpoint is experiencing instability and may affect wallet actions.',
-    source: 'RPC monitor',
-    target: 'Connected RPC',
+  return {
+    id: 'alert-wallet-warnings',
+    category: 'suspicious',
+    title: 'Wallet scan warnings detected',
+    summary: `${warnings.length} warning${warnings.length !== 1 ? 's were' : ' was'} generated while scanning your wallet state.`,
+    source: 'Wallet scan',
+    target: 'Connected wallet',
     date: new Date().toISOString(),
     status: 'open',
     severity: 'medium',
-  })
+  }
+}
+
+const buildDeadCoinAlert = (deadCoins: Token[]): AlertEvent | null => {
+  if (deadCoins.length === 0) {
+    return null
+  }
+
+  return {
+    id: 'alert-deadcoin',
+    category: 'suspicious',
+    title: `Dead Coin${deadCoins.length !== 1 ? 's' : ''} Detected`,
+    summary: `${deadCoins.length} token${deadCoins.length !== 1 ? 's are' : ' is'} flagged as inactive or low-liquidity.`,
+    source: 'Token risk scanner',
+    target: 'Your wallet',
+    date: new Date().toISOString(),
+    status: 'open',
+    severity: 'high',
+  }
+}
+
+export const buildAlertEvents = (deadCoins: Token[], approvals: Approval[] = [], warnings: string[] = []) => {
+  const events: AlertEvent[] = [buildRpcFailureEvent()]
+
+  const warningEvent = buildWarningAlert(warnings)
+  if (warningEvent) {
+    events.push(warningEvent)
+  }
+
+  const approvalEvent = approvals.length > 0 ? buildApprovalAlert(approvals) : null
+  if (approvalEvent) {
+    events.push(approvalEvent)
+  }
+
+  const deadCoinEvent = buildDeadCoinAlert(deadCoins)
+  if (deadCoinEvent) {
+    events.push(deadCoinEvent)
+  }
 
   return events
 }
@@ -139,21 +149,21 @@ const AlertIcon = ({ kind }: { kind: 'approvals' | 'suspicious' | 'recovery' | '
 }
 
 export const SecurityAlerts = ({ onNavigate }: { onNavigate?: (tab: 'dashboard' | 'alerts' | 'security' | 'solutions') => void }) => {
-  const { deadCoins, removeDeadCoin } = useWallet()
+  const { deadCoins, removeDeadCoin, approvals, revokeApproval, warnings } = useWallet()
   const { showSuccess } = useErrorHandler()
   const [filter, setFilter] = useState<'all' | 'approvals' | 'suspicious' | 'recovery' | 'network'>('all')
   const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [events, setEvents] = useState<AlertEvent[]>(() => buildAlertEvents(deadCoins))
+  const [events, setEvents] = useState<AlertEvent[]>(() => buildAlertEvents(deadCoins, approvals, warnings))
 
   useEffect(() => {
     setEvents((prev) => {
-      const next = buildAlertEvents(deadCoins)
+      const next = buildAlertEvents(deadCoins, approvals, warnings)
       return next.map((event) => {
         const previous = prev.find((prevEvent) => prevEvent.id === event.id)
         return previous ? { ...event, status: previous.status } : event
       })
     })
-  }, [deadCoins])
+  }, [deadCoins, approvals, warnings])
 
   const filtered = filter === 'all' ? events : events.filter((event) => event.category === filter)
 
@@ -226,6 +236,13 @@ export const SecurityAlerts = ({ onNavigate }: { onNavigate?: (tab: 'dashboard' 
   }
 
   const fixDeadCoinAlert = (id: string) => {
+    if (deadCoins.length === 0) return
+
+    const confirmed = window.confirm(
+      `Remove ${deadCoins.length} dead coin${deadCoins.length !== 1 ? 's' : ''} from wallet tracking?`
+    )
+    if (!confirmed) return
+
     deadCoins.forEach((coin) => {
       removeDeadCoin(coin.address)
     })
@@ -233,15 +250,23 @@ export const SecurityAlerts = ({ onNavigate }: { onNavigate?: (tab: 'dashboard' 
     showSuccess('Dead Coin Fixed', 'Dead coin alerts have been cleared from your portfolio.')
   }
 
+  const reviewApprovals = (id: string) => {
+    markReviewed(id)
+    setExpandedId(null)
+    onNavigate?.('security')
+    showSuccess('Review approvals', 'Open Security to inspect and revoke any risky token permissions.')
+  }
+
   const openRpcFix = (id: string) => {
     markResolved(id)
     onNavigate?.('solutions')
   }
 
-  const revokeApproval = (id: string) => {
-    // simulate revoke by resolving the alert
-    markResolved(id)
+  const reviewWarnings = (id: string) => {
+    markReviewed(id)
     setExpandedId(null)
+    onNavigate?.('alerts')
+    showSuccess('Warning reviewed', 'Review the wallet warnings and investigate any suspicious activity.')
   }
 
   const formatTime = (dateString: string) => {
@@ -343,14 +368,14 @@ export const SecurityAlerts = ({ onNavigate }: { onNavigate?: (tab: 'dashboard' 
                       <button type="button" onClick={() => setExpandedId(null)} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10">Close</button>
                       {event.category === 'approvals' && (
                         <>
-                          <button type="button" onClick={() => revokeApproval(event.id)} className="rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-200 transition hover:bg-rose-400/10">Revoke approval</button>
+                          <button type="button" onClick={() => reviewApprovals(event.id)} className="rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-200 transition hover:bg-rose-400/10">Review approvals</button>
                           <button type="button" onClick={() => markReviewed(event.id)} className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-400/20">Mark reviewed</button>
                         </>
                       )}
                       {event.category === 'suspicious' && (
                         <>
-                          <button type="button" onClick={() => snoozeAlert(event.id)} className="rounded-full border border-gray-500/20 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10">Snooze</button>
-                          <button type="button" onClick={() => markReviewed(event.id)} className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-400/20">Flag & review</button>
+                          <button type="button" onClick={() => reviewWarnings(event.id)} className="rounded-full border border-gray-500/20 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10">Review warnings</button>
+                          <button type="button" onClick={() => markReviewed(event.id)} className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-400/20">Mark reviewed</button>
                         </>
                       )}
                       {event.id === 'alert-deadcoin' && deadCoins.length > 0 && (
@@ -370,9 +395,6 @@ export const SecurityAlerts = ({ onNavigate }: { onNavigate?: (tab: 'dashboard' 
                         >
                           Open remediation
                         </button>
-                      )}
-                      {event.category === 'network' && event.id !== 'alert-rpc-failure' && (
-                        <button type="button" className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-200 transition hover:bg-emerald-400/20">Switch RPC</button>
                       )}
                       {event.category === 'recovery' && (
                         <button type="button" className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-200 transition hover:bg-emerald-400/20">Open remediation</button>

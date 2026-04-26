@@ -16,14 +16,27 @@ export interface Token {
   deadReasons?: string[]
 }
 
+export interface Approval {
+  id: string
+  token: string
+  spender: string
+  amount: string
+  riskLevel: 'low' | 'medium' | 'high'
+  isUnlimited?: boolean
+  source?: string
+}
+
 export interface WalletContextType {
   tokens: Token[]
   loading: boolean
   error: string | null
   totalBalance: number
   deadCoins: Token[]
+  approvals: Approval[]
+  warnings: string[]
   fetchTokens: () => Promise<void>
   removeDeadCoin: (address: string) => void
+  revokeApproval: (id: string) => void
   swapTokens: (fromToken: string, toToken: string, amount: string) => Promise<void>
   sendToken: (tokenAddress: string, toAddress: string, amount: string) => Promise<void>
 }
@@ -32,6 +45,8 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined)
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [tokens, setTokens] = useState<Token[]>([])
+  const [approvals, setApprovals] = useState<Approval[]>([])
+  const [warnings, setWarnings] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { address, isConnected } = useAccount()
@@ -54,11 +69,13 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     if (!isConnected || !address) {
       setError('Wallet not connected')
       setTokens([])
+      setWarnings([])
       return
     }
 
     setLoading(true)
     setError(null)
+    setWarnings([])
 
     try {
       const response = await fetch('/api/fetch-tokens', {
@@ -73,9 +90,11 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
       const portfolio: Portfolio = await response.json()
       setTokens(mapPortfolioTokens(portfolio))
+      setWarnings(portfolio.warnings ?? [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch tokens')
       setTokens([])
+      setWarnings([])
     } finally {
       setLoading(false)
     }
@@ -83,6 +102,10 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   const removeDeadCoin = useCallback((address: string) => {
     setTokens((prev) => prev.filter((token) => token.address !== address))
+  }, [])
+
+  const revokeApproval = useCallback((id: string) => {
+    setApprovals((prev) => prev.filter((approval) => approval.id !== id))
   }, [])
 
   const swapTokens = useCallback(
@@ -114,8 +137,11 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         error,
         totalBalance,
         deadCoins,
+        approvals,
+        warnings,
         fetchTokens,
         removeDeadCoin,
+        revokeApproval,
         swapTokens,
         sendToken,
       }}

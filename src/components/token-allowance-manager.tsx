@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useWallet } from '@/lib/wallet-context'
 
 interface Allowance {
   id: string
@@ -36,13 +37,13 @@ const AllowanceIcon = ({ kind }: { kind: 'info' | 'revoke' }) => {
 }
 
 export const TokenAllowanceManager = () => {
-  const [allowances, setAllowances] = useState<Allowance[]>([])
+  const { approvals, revokeApproval } = useWallet()
   const [revoking, setRevoking] = useState<string | null>(null)
 
   const handleRevoke = (id: string) => {
     setRevoking(id)
     setTimeout(() => {
-      setAllowances((current) => current.filter((allowance) => allowance.id !== id))
+      revokeApproval(id)
       setRevoking(null)
     }, 1500)
   }
@@ -74,8 +75,8 @@ export const TokenAllowanceManager = () => {
 
       <div className="space-y-3">
         <h3 className="text-lg font-bold text-white">Active Allowances</h3>
-        {allowances.length > 0 ? (
-          allowances.map((allowance) => (
+        {approvals.length > 0 ? (
+          approvals.map((allowance) => (
             <div
               key={allowance.id}
               className={`rounded-[24px] border bg-gradient-to-br p-4 sm:p-6 transition-all ${getRiskColor(allowance.riskLevel)} ${revoking === allowance.id ? 'opacity-50' : ''}`}
@@ -116,15 +117,15 @@ export const TokenAllowanceManager = () => {
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <div className="rounded-[24px] border border-red-500/30 bg-gradient-to-br from-red-500/20 to-red-500/5 p-4">
           <p className="mb-1 text-xs font-semibold uppercase text-red-300/70">High Risk</p>
-          <p className="text-2xl font-bold text-red-300">{allowances.filter((allowance) => allowance.riskLevel === 'high').length}</p>
+          <p className="text-2xl font-bold text-red-300">{approvals.filter((allowance) => allowance.riskLevel === 'high').length}</p>
         </div>
         <div className="rounded-[24px] border border-yellow-500/30 bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 p-4">
           <p className="mb-1 text-xs font-semibold uppercase text-yellow-300/70">Medium Risk</p>
-          <p className="text-2xl font-bold text-yellow-300">{allowances.filter((allowance) => allowance.riskLevel === 'medium').length}</p>
+          <p className="text-2xl font-bold text-yellow-300">{approvals.filter((allowance) => allowance.riskLevel === 'medium').length}</p>
         </div>
         <div className="rounded-[24px] border border-emerald-500/30 bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 p-4">
           <p className="mb-1 text-xs font-semibold uppercase text-emerald-300/70">Low Risk</p>
-          <p className="text-2xl font-bold text-emerald-300">{allowances.filter((allowance) => allowance.riskLevel === 'low').length}</p>
+          <p className="text-2xl font-bold text-emerald-300">{approvals.filter((allowance) => allowance.riskLevel === 'low').length}</p>
         </div>
       </div>
 

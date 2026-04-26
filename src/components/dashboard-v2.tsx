@@ -31,7 +31,7 @@ const DashboardGlyph = ({ tone = 'cyan' }: { tone?: 'cyan' | 'violet' | 'emerald
 }
 
 export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
-  const { tokens, loading, fetchTokens, deadCoins } = useWallet()
+  const { tokens, loading, fetchTokens, deadCoins, approvals, warnings } = useWallet()
   const { address, isConnected } = useAccount()
   const { handleError } = useErrorHandler()
   const [tokensExpanded, setTokensExpanded] = useState(false)
@@ -43,8 +43,8 @@ export const DashboardV2 = ({ onNavigate }: DashboardV2Props) => {
     riskSignals: deadCoins.length,
     signalMomentum: '+2.34%',
     recoveryReady: Math.max(58, 92 - deadCoins.length * 10),
-    openAlerts: getOpenAlertCount(buildAlertEvents(deadCoins)),
-  }), [tokens, deadCoins.length])
+    openAlerts: getOpenAlertCount(buildAlertEvents(deadCoins, approvals, warnings)),
+  }), [tokens, deadCoins.length, approvals, warnings])
 
   const shortAddress = (value: string) => `${value.slice(0, 6)}...${value.slice(-4)}`
 

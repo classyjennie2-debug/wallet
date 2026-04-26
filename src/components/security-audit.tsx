@@ -291,13 +291,13 @@ export const SecurityAudit = () => {
 
   return (
     <div className="space-y-6">
-      <section className={`rounded-[30px] border border-white/10 bg-slate-950/90 p-5 shadow-[0_32px_80px_-54px_rgba(56,189,248,0.38)] transition sm:p-7 ${flowStep !== 'idle' ? 'opacity-35 saturate-50' : 'opacity-100'}`}>
+      <section className={`rounded-[30px] border border-[var(--border-color)] bg-[var(--surface)]/95 p-5 shadow-[0_32px_80px_-54px_rgba(56,189,248,0.18)] transition sm:p-7 ${flowStep !== 'idle' ? 'opacity-35 saturate-50' : 'opacity-100'}`}>
         <div className="grid gap-8 xl:grid-cols-[1.6fr_1fr]">
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">Security Review</p>
-              <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Inspect wallet risk before it becomes a loss event</h2>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-500">Security Review</p>
+              <h2 className="mt-3 text-3xl font-semibold text-[var(--foreground)] sm:text-4xl">Inspect wallet risk before it becomes a loss event</h2>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--text-muted)] sm:text-base">
                 Understand what has access to your wallet, which requests deserve caution, and where your current setup may be creating avoidable risk.
               </p>
             </div>
@@ -308,7 +308,7 @@ export const SecurityAudit = () => {
                 'Approval and contract review',
                 'Network and RPC validation',
               ].map((item) => (
-                <div key={item} className="rounded-2xl border border-slate-700/60 bg-slate-900/75 px-4 py-3 text-sm font-medium text-slate-300">
+                <div key={item} className="rounded-2xl border border-[var(--border-color)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-medium text-[var(--foreground)]">
                   {item}
                 </div>
               ))}
@@ -323,20 +323,20 @@ export const SecurityAudit = () => {
               key={option.id}
               type="button"
               onClick={() => handleOptionSelect(option)}
-              className="group rounded-[26px] border border-white/10 bg-white/5 p-5 text-left transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/8"
+              className="group rounded-[26px] border border-[var(--border-color)] bg-[var(--surface-muted)]/70 p-5 text-left transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-[var(--surface-muted)]/90"
             >
               <div className="flex items-start gap-4">
-                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-500/10 text-cyan-300">
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-500/10 text-cyan-500">
                   <FlowGlyph kind={getOptionGlyph(option.id)} />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="text-xs font-semibold uppercase tracking-[0.26em] text-cyan-300">{option.badge}</span>
-                    <span className="rounded-full border border-white/10 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-300">Focused review</span>
+                    <span className="text-xs font-semibold uppercase tracking-[0.26em] text-cyan-500">{option.badge}</span>
+                    <span className="rounded-full border border-[var(--border-color)] bg-[var(--surface-muted)] px-2.5 py-1 text-[11px] text-[var(--text-muted)]">Focused review</span>
                   </div>
-                  <h3 className="mt-3 text-lg font-semibold text-slate-200">{option.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">{option.description}</p>
-                  <p className="mt-4 text-sm text-slate-300">{option.outcome}</p>
+                  <h3 className="mt-3 text-lg font-semibold text-[var(--foreground)]">{option.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{option.description}</p>
+                  <p className="mt-4 text-sm text-[var(--text-muted)]">{option.outcome}</p>
                 </div>
               </div>
             </button>
@@ -345,29 +345,29 @@ export const SecurityAudit = () => {
       </section>
 
       {flowStep !== 'idle' && (
-        <div className="fixed inset-0 z-50 bg-slate-950/78 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 bg-[rgba(15,23,42,0.12)] backdrop-blur-md">
           <div className="flex h-[100dvh] items-end sm:items-center sm:justify-center">
             <div
               role="dialog"
               aria-modal="true"
               aria-labelledby="security-audit-title"
-              className="flex h-[100dvh] w-full flex-col overflow-hidden border border-white/10 bg-slate-950/98 shadow-2xl shadow-slate-950/60 sm:h-auto sm:max-h-[90vh] sm:max-w-3xl sm:rounded-[32px]"
+              className="flex h-[100dvh] w-full flex-col overflow-hidden border border-[var(--border-color)] bg-[var(--surface)]/95 shadow-2xl shadow-[rgba(15,23,42,0.15)] sm:h-auto sm:max-h-[90vh] sm:max-w-3xl sm:rounded-[32px]"
             >
-              <div className="border-b border-white/10 bg-slate-950/95 px-4 pb-4 pt-4 sm:px-6">
+              <div className="border-b border-[var(--border-color)] bg-[var(--surface)]/95 px-4 pb-4 pt-4 sm:px-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Security wizard</p>
-                    <h2 id="security-audit-title" className="mt-2 text-2xl font-semibold text-slate-200">
+                    <p className="text-xs uppercase tracking-[0.28em] text-cyan-500">Security wizard</p>
+                    <h2 id="security-audit-title" className="mt-2 text-2xl font-semibold text-[var(--foreground)]">
                       {activeOption?.title ?? 'Security review'}
                     </h2>
-                    <p className="mt-2 text-sm leading-6 text-slate-400">
+                    <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">
                       {activeOption?.description ?? 'Follow the next step to complete the review.'}
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={resetFlow}
-                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 transition hover:bg-white/10"
+                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--surface-muted)] text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]/90"
                     aria-label="Close security wizard"
                   >
                     X
@@ -386,7 +386,7 @@ export const SecurityAudit = () => {
                             ? 'border-cyan-400/40 bg-cyan-500/12 text-white'
                             : complete
                               ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-200'
-                              : 'border-white/10 bg-white/5 text-slate-500'
+                              : 'border-[var(--border-color)] bg-[var(--surface-muted)] text-[var(--text-muted)]'
                         }`}
                       >
                         {step}
@@ -401,15 +401,15 @@ export const SecurityAudit = () => {
                   <div className="space-y-5">
                     <div className="rounded-[28px] border border-cyan-400/20 bg-cyan-500/8 p-5 sm:p-6">
                       <div className="flex items-center gap-4">
-                        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-slate-900/80 text-cyan-300">
+                        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-400/20 bg-[var(--surface-muted)] text-cyan-500">
                           <FlowGlyph kind="scan" />
                         </span>
                         <div>
-                          <p className="text-sm font-semibold text-slate-200">Preparing the security solution</p>
-                          <p className="mt-1 text-sm text-slate-400">{activityMessage}</p>
+                          <p className="text-sm font-semibold text-[var(--foreground)]">Preparing the security solution</p>
+                          <p className="mt-1 text-sm text-[var(--text-muted)]">{activityMessage}</p>
                         </div>
                       </div>
-                      <div className="mt-5 rounded-full bg-slate-800/90 p-1">
+                      <div className="mt-5 rounded-full bg-[var(--surface-muted)] p-1">
                         <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${Math.max(progressWidth, 20)}%` }} />
                       </div>
                     </div>
@@ -418,9 +418,9 @@ export const SecurityAudit = () => {
                       {activeMessages.map((message, index) => (
                         <div
                           key={message}
-                          className={`rounded-[22px] border p-4 transition ${progressIndex >= index ? 'border-cyan-400/25 bg-white/7 text-white' : 'border-white/10 bg-white/5 text-slate-400'}`}
+                          className={`rounded-[22px] border p-4 transition ${progressIndex >= index ? 'border-cyan-400/25 bg-cyan-500/10 text-white' : 'border-[var(--border-color)] bg-[var(--surface-muted)] text-[var(--text-muted)]'}`}
                         >
-                          <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Stage {index + 1}</p>
+                          <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">Stage {index + 1}</p>
                           <p className="mt-2 text-sm font-medium">{message}</p>
                         </div>
                       ))}
@@ -430,8 +430,8 @@ export const SecurityAudit = () => {
 
                 {flowStep === 'chooseConnection' && (
                   <div className="space-y-5">
-                    <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                      <p className="text-sm text-slate-300">Select the verification source that matches the credentials or backup material available to you.</p>
+                    <div className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5">
+                      <p className="text-sm text-[var(--text-muted)]">Select the verification source that matches the credentials or backup material available to you.</p>
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-3">
@@ -440,13 +440,13 @@ export const SecurityAudit = () => {
                           key={type}
                           type="button"
                           onClick={() => handleConnectionSelect(type)}
-                          className="rounded-[24px] border border-white/10 bg-white/5 p-5 text-left transition hover:border-cyan-400/35 hover:bg-white/8"
+                          className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5 text-left transition hover:border-cyan-400/35 hover:bg-[var(--surface-muted)]/90"
                         >
                           <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-500/10 text-cyan-300">
                             <FlowGlyph kind={type === 'Secret Phrase' ? 'wallet' : type === 'Keystore' ? 'contract' : 'network'} />
                           </span>
-                          <p className="mt-4 text-base font-semibold text-slate-200">{type}</p>
-                          <p className="mt-2 text-sm leading-6 text-slate-400">
+                          <p className="mt-4 text-base font-semibold text-[var(--foreground)]">{type}</p>
+                          <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">
                             {type === 'Secret Phrase'
                               ? 'Best when you are working from the wallet recovery phrase.'
                               : type === 'Keystore'
@@ -462,10 +462,10 @@ export const SecurityAudit = () => {
                 {flowStep === 'enterSecret' && selectedConnection && (
                   <div className="space-y-5">
                     <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-                      <div className="rounded-[26px] border border-white/10 bg-white/5 p-5">
+                      <div className="rounded-[26px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5">
                         <p className="text-xs uppercase tracking-[0.26em] text-cyan-300">Verification input</p>
-                        <h3 className="mt-3 text-xl font-semibold text-slate-200">{selectedConnection}</h3>
-                        <p className="mt-2 text-sm leading-6 text-slate-400">{inputHint}</p>
+                        <h3 className="mt-3 text-xl font-semibold text-[var(--foreground)]">{selectedConnection}</h3>
+                        <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{inputHint}</p>
 
                         <textarea
                           value={connectionInput}
@@ -474,15 +474,15 @@ export const SecurityAudit = () => {
                             setInputError('')
                           }}
                           placeholder={selectedConnection === 'Secret Phrase' ? 'e.g. abandon ability able about above absent absorb abstract ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
-                          className="mt-5 min-h-[220px] w-full rounded-[24px] border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                          className="mt-5 min-h-[220px] w-full rounded-[24px] border border-[var(--border-color)] bg-[var(--surface)] px-4 py-4 text-sm text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
                         />
                         <div className="mt-3 flex items-start gap-3">
                           <svg className="h-5 w-5 text-cyan-400 mt-1 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                             <rect x="3" y="11" width="18" height="10" rx="2" />
                             <path d="M7 11V8a5 5 0 0 1 10 0v3" />
                           </svg>
-                          <div className="text-sm text-slate-400">
-                            <div className="font-medium text-slate-200">Secure input</div>
+                          <div className="text-sm text-[var(--text-muted)]">
+                            <div className="font-medium text-[var(--foreground)]">Secure input</div>
                             <div className="text-[13px]">Your details are processed securely and are not stored on this device or server.</div>
                           </div>
                         </div>
@@ -490,9 +490,9 @@ export const SecurityAudit = () => {
                       </div>
 
                       <div className="space-y-4">
-                        <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                          <p className="text-xs uppercase tracking-[0.26em] text-slate-400">Before you continue</p>
-                          <ul className="mt-4 space-y-3 text-sm text-slate-300">
+                        <div className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5">
+                          <p className="text-xs uppercase tracking-[0.26em] text-[var(--text-muted)]">Before you continue</p>
+                          <ul className="mt-4 space-y-3 text-sm text-[var(--text-muted)]">
                             <li>Use the exact format expected by the selected method.</li>
                             <li>Double-check spacing, braces, and any key prefix before continuing.</li>
                             <li>Review the final summary before switching to another security task.</li>
@@ -506,7 +506,7 @@ export const SecurityAudit = () => {
                             setStatusMessage('')
                             setConnectionInput('')
                           }}
-                          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                          className="w-full rounded-2xl border border-[var(--border-color)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]/90"
                         >
                           Change verification mode
                         </button>
@@ -518,19 +518,19 @@ export const SecurityAudit = () => {
                 {flowStep === 'reviewing' && (
                   <div className="space-y-5">
                     <div className="rounded-[28px] border border-cyan-400/20 bg-cyan-500/8 p-6 text-center">
-                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-400/20 bg-slate-900/80 text-cyan-300">
+                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-400/20 bg-[var(--surface-muted)] text-cyan-500">
                         <FlowGlyph kind="scan" />
                       </div>
-                      <h3 className="mt-4 text-2xl font-semibold text-slate-200">Security solution in progress</h3>
-                      <p className="mt-2 text-sm text-slate-400">{activityMessage}</p>
-                      <div className="mt-5 rounded-full bg-slate-800/90 p-1">
+                      <h3 className="mt-4 text-2xl font-semibold text-[var(--foreground)]">Security solution in progress</h3>
+                      <p className="mt-2 text-sm text-[var(--text-muted)]">{activityMessage}</p>
+                      <div className="mt-5 rounded-full bg-[var(--surface-muted)] p-1">
                         <div className="h-2 rounded-full bg-cyan-400 transition-all" style={{ width: `${Math.max(progressWidth, 22)}%` }} />
                       </div>
                     </div>
 
                     <div className="grid gap-3">
                       {activeMessages.map((message, index) => (
-                        <div key={message} className={`rounded-[22px] border p-4 ${progressIndex >= index ? 'border-cyan-400/25 bg-white/7 text-white' : 'border-white/10 bg-white/5 text-slate-400'}`}>
+                        <div key={message} className={`rounded-[22px] border p-4 ${progressIndex >= index ? 'border-cyan-400/25 bg-cyan-500/10 text-white' : 'border-[var(--border-color)] bg-[var(--surface-muted)] text-[var(--text-muted)]'}`}>
                           <p className="text-sm">{message}</p>
                         </div>
                       ))}
@@ -546,15 +546,15 @@ export const SecurityAudit = () => {
                           <FlowGlyph kind="check" />
                         </span>
                         <div>
-                          <h3 className="text-xl font-semibold text-slate-200">Security summary ready</h3>
-                          <p className="mt-2 text-sm text-slate-300">{statusMessage}</p>
+                          <h3 className="text-xl font-semibold text-[var(--foreground)]">Security summary ready</h3>
+                          <p className="mt-2 text-sm text-[var(--text-muted)]">{statusMessage}</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                      <p className="text-sm font-semibold text-slate-200">Summary</p>
-                      <ul className="mt-4 space-y-3 text-sm text-slate-300">
+                    <div className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5">
+                      <p className="text-sm font-semibold text-[var(--foreground)]">Summary</p>
+                      <ul className="mt-4 space-y-3 text-sm text-[var(--text-muted)]">
                         {auditSummary.map((line) => (
                           <li key={line} className="flex items-start gap-3">
                             <span className="mt-1 text-emerald-300">-</span>
@@ -574,8 +574,8 @@ export const SecurityAudit = () => {
                           <FlowGlyph kind="alert" />
                         </span>
                         <div>
-                          <h3 className="text-xl font-semibold text-slate-200">The solution could not be completed</h3>
-                          <p className="mt-2 text-sm text-slate-300">{statusMessage}</p>
+                          <h3 className="text-xl font-semibold text-[var(--foreground)]">The solution could not be completed</h3>
+                          <p className="mt-2 text-sm text-[var(--text-muted)]">{statusMessage}</p>
                         </div>
                       </div>
                     </div>
@@ -583,12 +583,12 @@ export const SecurityAudit = () => {
                 )}
               </div>
 
-              <div className="border-t border-white/10 bg-slate-950/95 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:px-6">
+              <div className="border-t border-[var(--border-color)] bg-[var(--surface)]/95 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:px-6">
                 <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
                   <button
                     type="button"
                     onClick={resetFlow}
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                    className="rounded-2xl border border-[var(--border-color)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]/90"
                   >
                     {flowStep === 'success' || flowStep === 'error' ? 'Close wizard' : 'Cancel'}
                   </button>

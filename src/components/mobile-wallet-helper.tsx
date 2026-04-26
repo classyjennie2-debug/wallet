@@ -51,8 +51,8 @@ export function MobileWalletHelper() {
   }
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent p-4">
-      <div className="mx-auto flex max-w-xl items-start justify-between gap-3 rounded-3xl border border-white/10 bg-slate-950/95 p-3 shadow-2xl shadow-slate-950/40 backdrop-blur-xl text-sm text-slate-200">
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--border-color)] bg-gradient-to-t from-[rgba(15,23,42,0.12)] via-[rgba(15,23,42,0.08)] to-transparent p-4">
+      <div className="mx-auto flex max-w-xl items-start justify-between gap-3 rounded-3xl border border-[var(--border-color)] bg-[var(--surface)]/95 p-3 shadow-2xl shadow-[rgba(15,23,42,0.12)] backdrop-blur-xl text-sm text-[var(--foreground)]">
         <div className="flex-1">
           {detectedWallets.length > 0 ? (
             <>
@@ -69,7 +69,7 @@ export function MobileWalletHelper() {
         <button
           type="button"
           onClick={() => setVisible(false)}
-          className="rounded-full border border-white/10 bg-slate-900/90 px-3 py-2 text-xs text-slate-300 transition hover:bg-slate-800"
+          className="rounded-full border border-[var(--border-color)] bg-[var(--surface-muted)] px-3 py-2 text-xs text-[var(--foreground)] transition hover:bg-[var(--surface)]"
           aria-label="Dismiss wallet helper"
         >
           Close

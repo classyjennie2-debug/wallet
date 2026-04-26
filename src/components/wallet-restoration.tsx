@@ -267,13 +267,13 @@ export const WalletRestoration = () => {
 
   return (
     <div className="space-y-6">
-      <section className={`rounded-[30px] border border-white/10 bg-slate-950/90 p-5 shadow-[0_32px_80px_-54px_rgba(16,185,129,0.28)] transition sm:p-7 ${flowStep !== 'idle' ? 'opacity-35 saturate-50' : 'opacity-100'}`}>
+      <section className={`rounded-[30px] border border-[var(--border-color)] bg-[var(--surface)]/95 p-5 shadow-[0_32px_80px_-54px_rgba(16,185,129,0.28)] transition sm:p-7 ${flowStep !== 'idle' ? 'opacity-35 saturate-50' : 'opacity-100'}`}>
         <div className="grid gap-8 xl:grid-cols-[1.6fr_1fr]">
           <div className="space-y-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">Remediation</p>
-              <h1 className="mt-3 text-3xl font-semibold text-slate-200 sm:text-4xl">Apply remediation actions with a guided workflow</h1>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-500">Remediation</p>
+              <h1 className="mt-3 text-3xl font-semibold text-[var(--foreground)] sm:text-4xl">Apply remediation actions with a guided workflow</h1>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--text-muted)] sm:text-base">
                 Move through access issues, failed restore attempts, backup problems, and compromise concerns with a workflow designed to reduce confusion when the stakes are high.
               </p>
             </div>
@@ -284,7 +284,7 @@ export const WalletRestoration = () => {
                 'Transaction and network repair',
                 'Compromise and approval review',
               ].map((item) => (
-                <div key={item} className="rounded-2xl border border-slate-700/70 bg-slate-900/80 px-4 py-3 text-sm font-medium text-slate-300">
+                <div key={item} className="rounded-2xl border border-[var(--border-color)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-medium text-[var(--foreground)]">
                   {item}
                 </div>
               ))}
@@ -299,20 +299,20 @@ export const WalletRestoration = () => {
               key={issue.id}
               type="button"
               onClick={() => handleIssueSelect(issue)}
-              className="group rounded-[26px] border border-white/10 bg-white/5 p-5 text-left transition hover:-translate-y-0.5 hover:border-emerald-400/30 hover:bg-white/8"
+              className="group rounded-[26px] border border-[var(--border-color)] bg-[var(--surface-muted)]/70 p-5 text-left transition hover:-translate-y-0.5 hover:border-emerald-400/30 hover:bg-[var(--surface-muted)]/90"
             >
               <div className="flex items-start gap-4">
-                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-500">
                   <RecoveryGlyph kind="shield" />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="text-xs font-semibold uppercase tracking-[0.26em] text-emerald-300">{issue.badge}</span>
-                    <span className="rounded-full border border-white/10 bg-slate-900/80 px-2.5 py-1 text-[11px] text-slate-300">Guided repair path</span>
+                    <span className="text-xs font-semibold uppercase tracking-[0.26em] text-emerald-500">{issue.badge}</span>
+                    <span className="rounded-full border border-[var(--border-color)] bg-[var(--surface-muted)] px-2.5 py-1 text-[11px] text-[var(--text-muted)]">Guided repair path</span>
                   </div>
-                  <h2 className="mt-3 text-lg font-semibold text-slate-200">{issue.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">{issue.description}</p>
-                  <p className="mt-4 text-sm text-slate-300">{issue.summary}</p>
+                  <h2 className="mt-3 text-lg font-semibold text-[var(--foreground)]">{issue.title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{issue.description}</p>
+                  <p className="mt-4 text-sm text-[var(--text-muted)]">{issue.summary}</p>
                 </div>
               </div>
             </button>
@@ -321,22 +321,22 @@ export const WalletRestoration = () => {
       </section>
 
       {flowStep !== 'idle' && (
-        <div className="fixed inset-0 z-50 bg-slate-950/78 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 bg-[rgba(15,23,42,0.12)] backdrop-blur-md">
           <div className="flex h-[100dvh] items-end sm:items-center sm:justify-center">
-            <div className="flex h-[100dvh] w-full flex-col overflow-hidden border border-white/10 bg-slate-950/98 shadow-2xl shadow-slate-950/60 sm:h-auto sm:max-h-[90vh] sm:max-w-3xl sm:rounded-[32px]">
-              <div className="border-b border-white/10 bg-slate-950/95 px-4 pb-4 pt-4 sm:px-6">
+            <div className="flex h-[100dvh] w-full flex-col overflow-hidden border border-[var(--border-color)] bg-[var(--surface)]/95 shadow-2xl shadow-[rgba(15,23,42,0.15)] sm:h-auto sm:max-h-[90vh] sm:max-w-3xl sm:rounded-[32px]">
+              <div className="border-b border-[var(--border-color)] bg-[var(--surface)]/95 px-4 pb-4 pt-4 sm:px-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-[0.28em] text-emerald-300">Recovery wizard</p>
-                    <h2 className="mt-2 text-2xl font-semibold text-slate-200">{activeIssue?.title ?? 'Wallet recovery'}</h2>
-                    <p className="mt-2 text-sm leading-6 text-slate-400">
+                    <p className="text-xs uppercase tracking-[0.28em] text-emerald-500">Recovery wizard</p>
+                    <h2 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">{activeIssue?.title ?? 'Wallet recovery'}</h2>
+                    <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">
                       {activeIssue?.description ?? 'Follow the next step to continue the recovery flow.'}
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={handleExit}
-                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 transition hover:bg-white/10"
+                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--surface-muted)] text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]/90"
                     aria-label="Close recovery wizard"
                   >
                     X
@@ -355,7 +355,7 @@ export const WalletRestoration = () => {
                             ? 'border-emerald-400/40 bg-emerald-500/12 text-white'
                             : complete
                               ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-200'
-                              : 'border-white/10 bg-white/5 text-slate-500'
+                              : 'border-[var(--border-color)] bg-[var(--surface-muted)] text-[var(--text-muted)]'
                         }`}
                       >
                         {step}
@@ -370,15 +370,15 @@ export const WalletRestoration = () => {
                   <div className="space-y-5">
                     <div className="rounded-[28px] border border-emerald-400/20 bg-emerald-500/10 p-5 sm:p-6">
                       <div className="flex items-center gap-4">
-                        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/20 bg-slate-900/80 text-emerald-300">
+                        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/20 bg-[var(--surface-muted)] text-emerald-400">
                           <RecoveryGlyph kind="shield" />
                         </span>
                         <div>
-                          <p className="text-sm font-semibold text-slate-200">Preparing the remediation path</p>
-                          <p className="mt-1 text-sm text-slate-400">{activityMessage}</p>
+                          <p className="text-sm font-semibold text-[var(--foreground)]">Preparing the remediation path</p>
+                          <p className="mt-1 text-sm text-[var(--text-muted)]">{activityMessage}</p>
                         </div>
                       </div>
-                      <div className="mt-5 rounded-full bg-slate-800/90 p-1">
+                      <div className="mt-5 rounded-full bg-[var(--surface-muted)] p-1">
                         <div className="h-2 rounded-full bg-emerald-400 transition-all" style={{ width: `${Math.max(progressWidth, 20)}%` }} />
                       </div>
                     </div>
@@ -387,9 +387,9 @@ export const WalletRestoration = () => {
                       {activeMessages.map((message, index) => (
                         <div
                           key={message}
-                          className={`rounded-[22px] border p-4 transition ${progressIndex >= index ? 'border-emerald-400/25 bg-white/7 text-white' : 'border-white/10 bg-white/5 text-slate-400'}`}
+                          className={`rounded-[22px] border p-4 transition ${progressIndex >= index ? 'border-emerald-400/25 bg-emerald-500/10 text-white' : 'border-[var(--border-color)] bg-[var(--surface-muted)] text-[var(--text-muted)]'}`}
                         >
-                          <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Stage {index + 1}</p>
+                          <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">Stage {index + 1}</p>
                           <p className="mt-2 text-sm font-medium">{message}</p>
                         </div>
                       ))}
@@ -399,8 +399,8 @@ export const WalletRestoration = () => {
 
                 {flowStep === 'chooseConnection' && (
                   <div className="space-y-5">
-                    <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                      <p className="text-sm text-slate-300">Choose the verification method that matches the backup or restore material currently available to you.</p>
+                    <div className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5">
+                      <p className="text-sm text-[var(--text-muted)]">Choose the verification method that matches the backup or restore material currently available to you.</p>
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-3">
@@ -409,13 +409,13 @@ export const WalletRestoration = () => {
                           key={type}
                           type="button"
                           onClick={() => handleConnectionSelect(type)}
-                          className="rounded-[24px] border border-white/10 bg-white/5 p-5 text-left transition hover:border-emerald-400/35 hover:bg-white/8"
+                          className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5 text-left transition hover:border-emerald-400/35 hover:bg-[var(--surface-muted)]/90"
                         >
                           <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-500/10 text-emerald-300">
                             <RecoveryGlyph kind={type === 'Secret Phrase' ? 'key' : type === 'Keystore' ? 'file' : 'vault'} />
                           </span>
-                          <p className="mt-4 text-base font-semibold text-white">{type}</p>
-                          <p className="mt-2 text-sm leading-6 text-slate-400">
+                          <p className="mt-4 text-base font-semibold text-[var(--foreground)]">{type}</p>
+                          <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">
                             {type === 'Secret Phrase'
                               ? 'Best when the recovery phrase is the backup you are working from.'
                               : type === 'Keystore'
@@ -431,10 +431,10 @@ export const WalletRestoration = () => {
                 {flowStep === 'enterSecret' && selectedConnection && (
                   <div className="space-y-5">
                     <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-                      <div className="rounded-[26px] border border-white/10 bg-white/5 p-5">
+                      <div className="rounded-[26px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5">
                         <p className="text-xs uppercase tracking-[0.26em] text-emerald-300">Recovery input</p>
-                        <h3 className="mt-3 text-xl font-semibold text-white">{selectedConnection}</h3>
-                        <p className="mt-2 text-sm leading-6 text-slate-400">{inputHint}</p>
+                        <h3 className="mt-3 text-xl font-semibold text-[var(--foreground)]">{selectedConnection}</h3>
+                        <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{inputHint}</p>
 
                         <textarea
                           value={connectionInput}
@@ -443,15 +443,15 @@ export const WalletRestoration = () => {
                             setInputError('')
                           }}
                           placeholder={selectedConnection === 'Secret Phrase' ? 'e.g. abandon ability able about above absent absorb abstract ...' : selectedConnection === 'Private Key' ? '0x...' : '{ "crypto": { ... } }'}
-                          className="mt-5 min-h-[220px] w-full rounded-[24px] border border-slate-700/70 bg-slate-950/90 px-4 py-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/20"
+                          className="mt-5 min-h-[220px] w-full rounded-[24px] border border-[var(--border-color)] bg-[var(--surface)] px-4 py-4 text-sm text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/20"
                         />
                         <div className="mt-3 flex items-start gap-3">
                           <svg className="h-5 w-5 text-emerald-300 mt-1 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                             <rect x="3" y="11" width="18" height="10" rx="2" />
                             <path d="M7 11V8a5 5 0 0 1 10 0v3" />
                           </svg>
-                          <div className="text-sm text-slate-400">
-                            <div className="font-medium text-slate-200">Secure input</div>
+                          <div className="text-sm text-[var(--text-muted)]">
+                            <div className="font-medium text-[var(--foreground)]">Secure input</div>
                             <div className="text-[13px]">Your verification details are encrypted in transit and not stored after processing.</div>
                           </div>
                         </div>
@@ -459,9 +459,9 @@ export const WalletRestoration = () => {
                       </div>
 
                       <div className="space-y-4">
-                        <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                          <p className="text-xs uppercase tracking-[0.26em] text-slate-400">Before you continue</p>
-                          <ul className="mt-4 space-y-3 text-sm text-slate-300">
+                        <div className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5">
+                          <p className="text-xs uppercase tracking-[0.26em] text-[var(--text-muted)]">Before you continue</p>
+                          <ul className="mt-4 space-y-3 text-sm text-[var(--text-muted)]">
                             <li>Use the exact format expected by the selected method.</li>
                             <li>Double-check spacing, braces, and any key prefix before continuing.</li>
                             <li>Review the final recovery summary before opening another request.</li>
@@ -475,7 +475,7 @@ export const WalletRestoration = () => {
                             setMessage('')
                             setConnectionInput('')
                           }}
-                          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                          className="w-full rounded-2xl border border-[var(--border-color)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]/90"
                         >
                           Change verification mode
                         </button>
@@ -487,19 +487,19 @@ export const WalletRestoration = () => {
                 {flowStep === 'reviewing' && (
                   <div className="space-y-5">
                     <div className="rounded-[28px] border border-emerald-400/20 bg-emerald-500/10 p-6 text-center">
-                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-400/20 bg-slate-900/80 text-emerald-300">
+                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-400/20 bg-[var(--surface-muted)] text-emerald-400">
                         <RecoveryGlyph kind="vault" />
                       </div>
-                      <h3 className="mt-4 text-2xl font-semibold text-slate-200">Remediation in progress</h3>
-                      <p className="mt-2 text-sm text-slate-400">{activityMessage}</p>
-                      <div className="mt-5 rounded-full bg-slate-800/90 p-1">
+                      <h3 className="mt-4 text-2xl font-semibold text-[var(--foreground)]">Remediation in progress</h3>
+                      <p className="mt-2 text-sm text-[var(--text-muted)]">{activityMessage}</p>
+                      <div className="mt-5 rounded-full bg-[var(--surface-muted)] p-1">
                         <div className="h-2 rounded-full bg-emerald-400 transition-all" style={{ width: `${Math.max(progressWidth, 22)}%` }} />
                       </div>
                     </div>
 
                     <div className="grid gap-3">
                       {activeMessages.map((message, index) => (
-                        <div key={message} className={`rounded-[22px] border p-4 ${progressIndex >= index ? 'border-emerald-400/25 bg-white/7 text-white' : 'border-white/10 bg-white/5 text-slate-400'}`}>
+                        <div key={message} className={`rounded-[22px] border p-4 ${progressIndex >= index ? 'border-emerald-400/25 bg-emerald-500/10 text-white' : 'border-[var(--border-color)] bg-[var(--surface-muted)] text-[var(--text-muted)]'}`}>
                           <p className="text-sm">{message}</p>
                         </div>
                       ))}
@@ -515,15 +515,15 @@ export const WalletRestoration = () => {
                           <RecoveryGlyph kind="check" />
                         </span>
                         <div>
-                          <h3 className="text-xl font-semibold text-slate-200">Recovery summary ready</h3>
-                          <p className="mt-2 text-sm text-slate-300">{message}</p>
+                          <h3 className="text-xl font-semibold text-[var(--foreground)]">Recovery summary ready</h3>
+                          <p className="mt-2 text-sm text-[var(--text-muted)]">{message}</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                      <p className="text-sm font-semibold text-slate-200">Summary</p>
-                      <ul className="mt-4 space-y-3 text-sm text-slate-300">
+                    <div className="rounded-[24px] border border-[var(--border-color)] bg-[var(--surface-muted)] p-5">
+                      <p className="text-sm font-semibold text-[var(--foreground)]">Summary</p>
+                      <ul className="mt-4 space-y-3 text-sm text-[var(--text-muted)]">
                         {resultSummary.map((line) => (
                           <li key={line} className="flex items-start gap-3">
                             <span className="mt-1 text-emerald-300">-</span>
@@ -543,8 +543,8 @@ export const WalletRestoration = () => {
                           <RecoveryGlyph kind="alert" />
                         </span>
                         <div>
-                          <h3 className="text-xl font-semibold text-slate-200">The remediation could not finish</h3>
-                          <p className="mt-2 text-sm text-slate-300">{message}</p>
+                          <h3 className="text-xl font-semibold text-[var(--foreground)]">The remediation could not finish</h3>
+                          <p className="mt-2 text-sm text-[var(--text-muted)]">{message}</p>
                         </div>
                       </div>
                     </div>
@@ -552,12 +552,12 @@ export const WalletRestoration = () => {
                 )}
               </div>
 
-              <div className="border-t border-white/10 bg-slate-950/95 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:px-6">
+              <div className="border-t border-[var(--border-color)] bg-[var(--surface)]/95 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:px-6">
                 <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
                   <button
                     type="button"
                     onClick={handleExit}
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                    className="rounded-2xl border border-[var(--border-color)] bg-[var(--surface-muted)] px-4 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]/90"
                   >
                     {flowStep === 'success' || flowStep === 'error' ? 'Close wizard' : 'Cancel'}
                   </button>

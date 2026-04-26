@@ -50,6 +50,9 @@ export const DeadCoinDetector = () => {
   const { showSuccess } = useErrorHandler()
 
   const handleRemove = (address: string) => {
+    const confirmed = window.confirm('Remove this dead coin from your portfolio tracking?')
+    if (!confirmed) return
+
     try {
       setRemovingAddress(address)
       removeDeadCoin(address)

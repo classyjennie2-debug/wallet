@@ -1,9 +1,32 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 
-export function Web3WalletConnector() {
+const WalletConnectError = ({ show }: { show: boolean }) => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!show || !mounted) {
+    return null
+  }
+
+  return createPortal(
+    <div className="fixed inset-x-4 top-4 z-[2147483647] px-4" role="status" aria-live="polite">
+      <div className="mx-auto max-w-md rounded-3xl border border-[var(--accent)]/20 bg-[var(--surface)]/95 px-4 py-3 text-sm text-[var(--foreground)] shadow-2xl shadow-[rgba(34,211,238,0.15)] backdrop-blur-xl">
+        <p className="font-semibold text-[var(--foreground)]">Browser wallet unavailable</p>
+        <p className="mt-1 text-xs text-[var(--text-muted)]">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
+      </div>
+    </div>,
+    document.body
+  )
+}
+
+export function Web3WalletConnector({ compact }: { compact?: boolean }) {
   const [showWalletConnectError, setShowWalletConnectError] = useState(false)
   const [awaitingWalletChoice, setAwaitingWalletChoice] = useState(false)
 
@@ -51,10 +74,12 @@ export function Web3WalletConnector() {
         const walletReady = mounted && account && chain
         const addressLabel = account?.address ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}` : 'Wallet'
 
-        const mobileButton =
-          'w-full rounded-2xl px-3 py-2 text-sm font-semibold text-[var(--foreground)] bg-[var(--accent)] hover:bg-[rgba(34,211,238,0.82)] transition sm:w-auto'
-        const desktopButton =
-          'w-full sm:w-auto rounded-2xl px-3 py-2 text-sm font-semibold text-[var(--foreground)] bg-[var(--surface)]/90 hover:bg-[var(--surface-muted)] transition'
+        const mobileButton = compact
+          ? 'rounded-2xl px-3 py-2 text-sm font-semibold text-[var(--foreground)] bg-[var(--accent)] hover:bg-[rgba(34,211,238,0.82)] transition'
+          : 'w-full rounded-2xl px-3 py-2 text-sm font-semibold text-[var(--foreground)] bg-[var(--accent)] hover:bg-[rgba(34,211,238,0.82)] transition sm:w-auto'
+        const desktopButton = compact
+          ? 'rounded-2xl px-3 py-2 text-sm font-semibold text-[var(--foreground)] bg-[var(--surface)]/90 hover:bg-[var(--surface-muted)] transition'
+          : 'w-full sm:w-auto rounded-2xl px-3 py-2 text-sm font-semibold text-[var(--foreground)] bg-[var(--surface)]/90 hover:bg-[var(--surface-muted)] transition'
 
         const handleConnectClick = () => {
           const isMobileBrowser = () => {
@@ -79,18 +104,11 @@ export function Web3WalletConnector() {
           return (
             <>
               <div className="relative">
-                <button type="button" disabled className={desktopButton + ' opacity-60 cursor-not-allowed'}>
+                <button type="button" disabled className={(compact ? desktopButton : desktopButton) + ' opacity-60 cursor-not-allowed'}>
                   Connect Wallet
                 </button>
               </div>
-              {showWalletConnectError ? (
-                <div className="fixed inset-x-4 top-4 z-[9999] px-4">
-                  <div className="mx-auto max-w-md rounded-3xl border border-[var(--accent)]/20 bg-[var(--surface)]/95 px-4 py-3 text-sm text-[var(--foreground)] shadow-2xl shadow-[rgba(34,211,238,0.15)] backdrop-blur-xl">
-                    <p className="font-semibold text-[var(--foreground)]">Browser wallet unavailable</p>
-                    <p className="mt-1 text-xs text-[var(--text-muted)]">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
-                  </div>
-                </div>
-              ) : null}
+              <WalletConnectError show={showWalletConnectError} />
             </>
           )
         }
@@ -103,14 +121,7 @@ export function Web3WalletConnector() {
                   Connect Wallet
                 </button>
               </div>
-              {showWalletConnectError ? (
-                <div className="fixed inset-x-4 top-4 z-[9999] px-4">
-                  <div className="mx-auto max-w-md rounded-3xl border border-[var(--accent)]/20 bg-[var(--surface)]/95 px-4 py-3 text-sm text-[var(--foreground)] shadow-2xl shadow-[rgba(34,211,238,0.15)] backdrop-blur-xl">
-                    <p className="font-semibold text-[var(--foreground)]">Browser wallet unavailable</p>
-                    <p className="mt-1 text-xs text-[var(--text-muted)]">Use WalletConnect from the connect modal to open a mobile wallet app.</p>
-                  </div>
-                </div>
-              ) : null}
+              <WalletConnectError show={showWalletConnectError} />
             </>
           )
         }
@@ -124,14 +135,6 @@ export function Web3WalletConnector() {
             >
               <div className="font-semibold truncate">{account.displayName ?? addressLabel}</div>
               <div className="text-[11px] text-slate-400 hidden sm:block">Connected</div>
-            </button>
-            <button
-              type="button"
-              onClick={openChainModal}
-              className="rounded-2xl px-3 py-2 bg-[var(--surface-muted)]/90 text-xs sm:text-sm text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]"
-            >
-              <span className="block font-semibold">{chain?.name ?? 'Network'}</span>
-              <span className="text-[11px] text-slate-400 hidden sm:block">Switch</span>
             </button>
           </div>
         )

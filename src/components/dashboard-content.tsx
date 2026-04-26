@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAccount } from 'wagmi'
 import { useWallet } from '@/lib/wallet-context'
 import { issueOptions } from '@/components/wallet-restoration'
-import { MyWalletLogo } from '@/components/logo'
+import { MyWalletIconOnly, MyWalletLogo } from '@/components/logo'
 import { WalletConnect } from '@/components/wallet-connect'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { DashboardV2 } from '@/components/dashboard-v2'
@@ -94,12 +94,16 @@ const tabHeadings: Record<Tab, { title: string; description: string; tone: strin
 export default function DashboardContent({ activeTab, setActiveTab }: DashboardContentProps) {
   const router = useRouter()
   const { isConnected } = useAccount()
-  const { deadCoins } = useWallet()
+  const { deadCoins, approvals, warnings } = useWallet()
   const activeMeta = tabHeadings[activeTab]
   const [showScanModal, setShowScanModal] = useState(false)
+  const [showSettingsPanel, setShowSettingsPanel] = useState(false)
   const [scanResult, setScanResult] = useState<any>(null)
   const [scanProgress, setScanProgress] = useState(0)
-  const openAlertCount = useMemo(() => getOpenAlertCount(buildAlertEvents(deadCoins)), [deadCoins])
+  const openAlertCount = useMemo(
+    () => getOpenAlertCount(buildAlertEvents(deadCoins, approvals, warnings)),
+    [deadCoins, approvals, warnings]
+  )
 
   useEffect(() => {
     if (!showScanModal) return
@@ -126,19 +130,17 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-[var(--border-color)] bg-[var(--surface)] shadow-2xl backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-3 py-1.5 sm:px-4 sm:py-3">
-            <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-3">
-                  <MyWalletLogo size="md" variant="full" />
-                  <div className="min-w-0">
-                      <p className="hidden text-[11px] text-muted md:block">Local wallet diagnostics and guided remediation tools.</p>
-                  </div>
+            <div className="flex items-center justify-between gap-2 overflow-x-auto sm:gap-3">
+              <div className="flex items-center gap-2">
+                <div className="sm:hidden">
+                  <MyWalletIconOnly size="lg" />
+                </div>
+                <div className="hidden sm:block">
+                  <MyWalletLogo size="lg" variant="full" />
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 justify-end">
-                <ThemeToggle />
-                <WalletConnect />
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -147,14 +149,28 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                     setScanProgress(0)
                   }}
                   aria-label="Scan wallet"
-                  className="rounded-2xl p-2 text-sm font-semibold bg-[rgba(255,255,255,0.06)] text-[var(--foreground)] hover:bg-[rgba(255,255,255,0.1)] transition"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]"
                 >
-                  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <circle cx="11" cy="11" r="7" />
                     <path d="M21 21l-4.35-4.35" />
-                    <path d="M3 11h4" strokeOpacity="0.6" />
                   </svg>
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setShowSettingsPanel(true)}
+                  aria-label="Open dashboard settings"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[var(--border-color)] bg-[var(--surface)] text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]"
+                >
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+                    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a.9.9 0 0 1 0 1.3l-1.2 1.2a.9.9 0 0 1-1.3 0l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a.9.9 0 0 1-.9.9h-1.5a.9.9 0 0 1-.9-.9v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a.9.9 0 0 1-1.3 0L4 18.3a.9.9 0 0 1 0-1.3l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a.9.9 0 0 1-.9-.9V12.1A.9.9 0 0 1 3 11.2h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a.9.9 0 0 1 0-1.3L5.2 4.8a.9.9 0 0 1 1.3 0l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3.9a.9.9 0 0 1 .9-.9H11a.9.9 0 0 1 .9.9v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a.9.9 0 0 1 1.3 0l1.2 1.2a.9.9 0 0 1 0 1.3l-.1.1a1.7 1.7 0 0 0-.3 1.8 1.7 1.7 0 0 0 1.5 1H21a.9.9 0 0 1 .9.9v1.5a.9.9 0 0 1-.9.9h-.2a1.7 1.7 0 0 0-1.5 1Z" />
+                  </svg>
+                </button>
+                <div className="hidden sm:flex items-center gap-2">
+                  <ThemeToggle />
+                </div>
+                <WalletConnect compact />
               </div>
             </div>
           </div>
@@ -249,6 +265,43 @@ export default function DashboardContent({ activeTab, setActiveTab }: DashboardC
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+
+
+        {showSettingsPanel && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center px-4 py-6 sm:items-center sm:py-12">
+            <div className="absolute inset-0 bg-black/60" onClick={() => setShowSettingsPanel(false)} />
+            <div className="relative w-full max-w-sm rounded-3xl bg-[var(--surface)]/95 p-5 shadow-2xl">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--foreground)]">Settings</h3>
+                  <p className="text-sm text-muted">Quick access to theme and wallet tools.</p>
+                </div>
+                <button type="button" onClick={() => setShowSettingsPanel(false)} className="rounded-full p-2 text-[var(--foreground)] hover:bg-[var(--surface-muted)]">
+                  <span aria-hidden="true">×</span>
+                  <span className="sr-only">Close settings</span>
+                </button>
+              </div>
+              <div className="mt-5 space-y-4">
+                <div className="rounded-3xl border border-[var(--border-color)] bg-[var(--surface-muted)] p-4">
+                  <div className="mb-3 text-sm font-semibold text-[var(--foreground)]">Display</div>
+                  <ThemeToggle />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowSettingsPanel(false)
+                    setShowScanModal(true)
+                    setScanResult(null)
+                    setScanProgress(0)
+                  }}
+                  className="inline-flex w-full items-center justify-center rounded-2xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:bg-cyan-400"
+                >
+                  Scan wallet
+                </button>
               </div>
             </div>
           </div>
